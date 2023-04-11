@@ -1,0 +1,117 @@
+.login-background {
+  min-height: 100vh;
+  position: relative;
+  background: #27262C;
+  overflow: hidden;
+}
+.login-background .login-container {
+  width: 400px !important;
+}
+.login-background .login-container .title-login {
+  text-align: left;
+  margin-bottom: 60px;
+}
+.login-background .login-container .title-login .title-form {
+  font-family: "JK Abode", sans-serif;
+  color: white;
+  font-size: 96px;
+  line-height: 96px;
+  font-weight: 400;
+}
+.login-background .login-container .title-login img {
+  width: 190px;
+  object-fit: cover;
+}
+.login-background .login-container .input-container {
+  color: #999999;
+}
+.login-background .login-container .input-container input {
+  width: 100%;
+  margin-bottom: 30px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #FFFFFF;
+  padding: 10px 0;
+  outline: none;
+  color: white;
+  font-size: 24px;
+  line-height: 36px;
+}
+.login-background .login-container .input-container input::placeholder {
+  font-weight: 400;
+}
+.login-background .login-container .input-container .password-wrapper {
+  position: relative;
+}
+.login-background .login-container .input-container .password-wrapper i {
+  position: absolute;
+  font-size: 20px;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+.login-background .login-container .btn-login {
+  padding: 10px 0;
+  background: #4044ED;
+  color: white;
+  border: none;
+  outline: none;
+  margin-bottom: 10px;
+  transition: all 0.5s linear;
+}
+.login-background .login-container .btn-login:hover {
+  opacity: 0.8;
+}
+.login-background .login-container .register-container > a {
+  color: #999999;
+  font-size: 20px;
+  font-weight: bold;
+}
+.login-background .img-decoration-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.login-background .img-decoration-container img {
+  position: absolute;
+  object-fit: cover;
+}
+.login-background .img-decoration-container .img-ellipse-wrapper {
+  position: relative;
+  top: 50%;
+  transform: translateY(-40%);
+  width: 100%;
+  height: 100%;
+}
+.login-background .img-decoration-container .img-ellipse-wrapper .img-ellipse1 {
+  height: 600px;
+  left: 0;
+}
+.login-background .img-decoration-container .img-ellipse-wrapper .img-ellipse2 {
+  height: 50px;
+  left: 100px;
+  top: 65px;
+}
+.login-background .img-decoration-container .img-subtract {
+  top: 0;
+  right: 0;
+  width: 300px;
+}
+.login-background .img-decoration-container .img-polygon1 {
+  width: 150px;
+  bottom: 30px;
+  right: 60px;
+}
+.login-background .img-decoration-container .img-polygon2 {
+  width: 150px;
+  bottom: 0;
+  right: 0;
+}
+.login-background .img-decoration-container .img-polygon3 {
+  width: 150px;
+  bottom: -55px;
+  right: -65px;
+}
+
+/*# sourceMappingURL=login.css.map */
