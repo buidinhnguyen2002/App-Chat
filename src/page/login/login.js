@@ -68,14 +68,14 @@ class Login extends React.Component {
                                 <i className={this.state.showPassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
                             </span>
                         </div>
-                        <div className="password-wrapper">
+                        {this.state.status === 'register' && <div className="password-wrapper">
                             <input className="d-block" type={this.state.showRetypePassword ? 'text' : 'password'} name="retypePassword"
                                    placeholder="Retype password" value={this.state.retypePassword}
                                    onChange={(event) => this.handleOnchangeInput(event)}/>
                             <span style={{cursor: 'pointer'}} name="showRetypePassword" onClick={this.toggleShowPassword}>
                                 <i className={this.state.showRetypePassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
                             </span>
-                        </div>
+                        </div>}
                     </div>
                     <button className="btn-login col-12"
                             onClick={this.handleLogin}>{this.state.status === 'login' ? 'Login' : 'Register'}</button>
