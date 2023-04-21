@@ -1,0 +1,40 @@
+@import "src/Assets/css/base";
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.toggle-item {
+    margin: 10px;
+  }
+
+  .img-toggle {
+    width: 40px;
+    height: 24px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #ccc;
+
+    img {
+      width: 40px;
+      height: 24px;
+      border-radius: 12px;
+      transition: all 0.3s ease-in-out;
+    }
+  }
+
+  &.active {
+    .img-toggle {
+      background-color: #007bff;
+      justify-content: flex-end;
+
+      img {
+        margin-left: 0;
+        margin-right: 2px;
+        transform: translateX(16px);
+      }
+    }
+  }
+}
