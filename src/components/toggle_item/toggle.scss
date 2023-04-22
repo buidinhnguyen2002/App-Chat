@@ -1,40 +1,51 @@
 @import "src/Assets/css/base";
-.toggle-switch {
+
+input[type=checkbox] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 100px;
+  height: 50px;
+  background: grey;
+  display: block;
+  border-radius: 100px;
+  position: relative;
+}
+
+label:after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 90px;
+  transition: 0.3s;
+}
+
+input:checked + label {
+  background: #5b96f7;
+}
+
+input:checked + label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+
+label:active:after {
+  width: 130px;
+}
+
+// centering
+body {
   display: flex;
-  align-items: center;
   justify-content: center;
-
-  &.toggle-item {
-    margin: 10px;
-  }
-
-  .img-toggle {
-    width: 40px;
-    height: 24px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    background-color: #ccc;
-
-    img {
-      width: 40px;
-      height: 24px;
-      border-radius: 12px;
-      transition: all 0.3s ease-in-out;
-    }
-  }
-
-  &.active {
-    .img-toggle {
-      background-color: #007bff;
-      justify-content: flex-end;
-
-      img {
-        margin-left: 0;
-        margin-right: 2px;
-        transform: translateX(16px);
-      }
-    }
-  }
+  align-items: center;
+  height: 100vh;
 }

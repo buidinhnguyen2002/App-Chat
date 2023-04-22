@@ -5,10 +5,11 @@ import Toggle_item from "../../components/toggle_item/toggle_item";
 
 function Components_Trung() {
     return (
-        <div className="d-flex">
+        <div className="toggle">
             <Toggle_item/>
         </div>
     );
 }
+
 export default Components_Trung;
 

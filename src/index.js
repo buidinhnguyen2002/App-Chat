@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Components_Nguyen from "./page/TestComponent/components_Nguyen";
-import Components_Trung from "./page/TestComponent/components-Trung";
+import Components_Trung from "./page-t/TestComponent/components-Trung";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
