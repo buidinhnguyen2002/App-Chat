@@ -1,0 +1,28 @@
+@import "src/Assets/css/base";
+.h-chats {
+  height: 60px;
+  width: 340px;
+  align-items: center;
+  background-color: #f8faff;
+  border-radius: 5px;
+}
+h2{
+  padding: 24px 29px 20px 19px;
+  font-size:28px;
+  font-weight: bold;
+  line-height: 14.12px;
+}
+
+.outer-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  border: 4px dashed #7C7C7D;
+  position: relative;
+  left: 290px;
+  top: 15px;
+}
+.header{
+position: absolute;
+
+}
