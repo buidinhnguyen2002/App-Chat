@@ -4,6 +4,8 @@ import 'mdbreact/dist/css/mdb.css';
 import Toggle_item from "../../components/toggle_item/toggle_item";
 import Header from "../../components/header/header-chat"
 import Archive_item from "../../components/archive-item/archive_item";
+import MessagesPage from "../../components/message-page/messages-page";
+
 
 function Components_Trung() {
     return (
@@ -13,6 +15,9 @@ function Components_Trung() {
                 <Header/>
                 <div className="archive">
                     <Archive_item/>
+                </div>
+                <div className="msg-bottom">
+                    <MessagesPage/>
                 </div>
             </div>
         </div>
