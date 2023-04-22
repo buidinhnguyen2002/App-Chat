@@ -1,0 +1,25 @@
+@import "src/Assets/css/base";
+
+.archive {
+  margin: 20px 0 0 0;
+  height: 60px;
+  width: 340px;
+  background-color: #f8faff;
+  border-radius: 5px;
+}
+
+
+.a-name {
+  font-weight: bold;
+  color: #7ca5e8;
+  position: relative;
+  left: 50px;
+  bottom: 8px;
+}
+
+.icon-a {
+  font-size: 24px;
+  position: relative;
+  top: 18px;
+  left: 10px
+}
