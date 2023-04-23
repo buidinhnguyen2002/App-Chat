@@ -4,12 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Components_Nguyen from "./page/TestComponent/components_Nguyen";
+import ConponentD from "./page/ComponentD/conponentD";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     {/*<App />*/}
-      <Components_Nguyen/>
+    {/*  <Components_Nguyen/>*/}
+      <ConponentD/>
   </React.StrictMode>
 );
 
