@@ -1,8 +1,10 @@
+@import "variable";
+@import "color";
+@import "font";
+@import "mixins";
 *{
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: $font-Manrope;
 }
-@import "variable";
-@import "color";
-@import "font";

@@ -1,0 +1,34 @@
+@import "src/Assets/css/base";
+.search_bar{
+  position: relative;
+  height: 100%;
+  .searchBar-input {
+    padding: 14px 54px 14px 54px;
+    @include dimension(327px, 50px);
+    border-radius: 20px;
+    background-color: $color-blue-02;
+    @include styleText(600,16px, 22px, $color-blue-03);
+    border: none;
+  }
+  .searchBar-input:focus{
+    outline: none;
+  }
+  .searchBar-input::placeholder{
+    color: $color-blue-03;
+  }
+  i {
+    position: absolute;
+    top: 50%;
+    left: 18px;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: $color-blue-03;
+    &:before{
+      font-weight: 600;
+    }
+  }
+  img {
+    @include positionAbsolute(50%,none,26px,none);
+    transform: translateY(-50%);
+  }
+}
