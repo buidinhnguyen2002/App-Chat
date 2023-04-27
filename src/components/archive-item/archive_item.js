@@ -1,7 +1,7 @@
 import React from "react";
 import "./archive.scss";
 
-class NavigationItem extends React.Component {
+class ArchiveItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,4 +21,4 @@ class NavigationItem extends React.Component {
 }
 
 
-export default NavigationItem;
+export default ArchiveItem;

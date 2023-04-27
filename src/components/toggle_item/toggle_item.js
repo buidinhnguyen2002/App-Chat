@@ -1,7 +1,7 @@
 import React from "react";
 import "./toggle.scss";
 
-class NavigationItem extends React.Component {
+class ToggleItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,4 +20,4 @@ class NavigationItem extends React.Component {
 }
 
 
-export default NavigationItem;
+export default ToggleItem;

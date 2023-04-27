@@ -1,7 +1,7 @@
 import React from "react";
 import "./messages.scss";
 
-class NavigationItem extends React.Component {
+class MessagesPageItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,4 +28,4 @@ class NavigationItem extends React.Component {
 }
 
 
-export default NavigationItem;
+export default MessagesPageItem;

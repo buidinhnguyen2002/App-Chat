@@ -1,7 +1,7 @@
 import React from "react";
 import "./header.scss";
 
-class NavigationItem extends React.Component {
+class HeaderChat extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,4 +22,4 @@ class NavigationItem extends React.Component {
 }
 
 
-export default NavigationItem;
+export default HeaderChat;
