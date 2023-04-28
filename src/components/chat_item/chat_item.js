@@ -5,14 +5,14 @@ class NavigationItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            active: props.active,
+            isChoose: props.isChoose,
             icon: props.icon,
         }
     }
 
     render() {
         return (
-            <div className="chat_item chat_item-round d-flex">
+            <div className={`chat_item chat_item-round d-flex ${this.state.isChoose ? 'chat_item-bgBlue':'chat_item-bgWhite'}`} >
                 <div className="chat_avatar-wrapper">
                     <div className="chat_avatar chat_avatar-circle">
                         <div className="img-wrapper">
@@ -24,14 +24,17 @@ class NavigationItem extends React.Component {
                 <div className="chat-wrapper">
                     <div className="chat_content-wrapper">
                         <div className="chat_name ">
-                            <h4 >Pink Panda</h4>
+                            <h4 className={`${this.state.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>Pink Panda</h4>
                         </div>
                         <div className="chat_message">
-                            <h5>You: thnx!</h5>
+                            <h5 className={`${this.state.isChoose ? 'chat_message-clWhite':'chat_message-clGrey'}`}>You: thnx!</h5>
                         </div>
                     </div>
-                    <div className="chat_time chat_time-txtGrey">
-                        <span>9:36</span>
+                    <div className="chat_time">
+                        <span className={`${this.state.isChoose ? 'chat_time-clWhite':'chat_time-clGrey'}`}>9:36</span>
+                        <div style={{visibility: this.state.isChoose ? "hidden": "visible"}} className="num-unread-message">
+                            <span>2</span>
+                        </div>
                     </div>
                 </div>
             </div>
