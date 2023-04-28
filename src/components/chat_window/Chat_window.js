@@ -1,7 +1,14 @@
 import React, { Component } from "react";
 import "./Chat_window.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faVideo, faTimes, faPaperPlane, faPhone, faMagnifyingGlass,} from "@fortawesome/free-solid-svg-icons";
+import {
+    faVideo,
+    faTimes,
+    faPaperPlane,
+    faPhone,
+    faMagnifyingGlass,
+    faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import MessageReply from "./MessageReply";
 
@@ -63,11 +70,13 @@ class ChatWindow extends Component {
                         </div>
                     </div>
                     <div className="board-chat__icon">
-                        <button className="board-chat__icon" onClick={this.handleVideoCall}>
-                            <FontAwesomeIcon icon={faVideo}/>
-                            <FontAwesomeIcon icon={faPhone}/>
-                            <FontAwesomeIcon icon={faMagnifyingGlass} />
-                        </button>
+                            <button className="board-chat__icon" onClick={this.handleVideoCall}>
+                                <FontAwesomeIcon icon={faVideo}/>
+                                <FontAwesomeIcon icon={faPhone}/>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                                <span className="vertical-divider"></span>
+                                <FontAwesomeIcon icon={faChevronDown} />
+                            </button>
                     </div>
                 </div>
                 <div className="board-chat__body flex-grow1 overflow-auto px-4">

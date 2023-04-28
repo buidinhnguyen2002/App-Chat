@@ -67,7 +67,7 @@ $board-chat-title-color: #fff;
   }
 
   &__icon {
-    margin-right: 1rem;
+    margin-right: 0rem;
     color: #27262C;
 
   }
@@ -139,6 +139,7 @@ $board-chat-title-color: #fff;
   }
 .board-chat__icon > svg {
   margin-right: 20px;
+
 }
   .board-chat__icon {
     border: none;
@@ -146,6 +147,12 @@ $board-chat-title-color: #fff;
     .i {
       margin-right: 2rem;
       color: #27262C;
+    }
+    .vertical-divider {
+      width: 1px;
+      height: 20px;
+      margin: 0 10px;
+      border-left: 1px solid #ccc;
     }
   }
  .board-chat__icon:focus {
