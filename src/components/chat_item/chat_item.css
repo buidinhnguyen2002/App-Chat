@@ -3,7 +3,7 @@
  * 1 | @import "src/Assets/css/base";
  *   |         ^^^^^^^^^^^^^^^^^^^^^
  *   '
- *   toggle.scss 1:9  root stylesheet */
+ *   chat_item.scss 1:9  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
