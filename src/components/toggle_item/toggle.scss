@@ -1,51 +1,52 @@
 @import "src/Assets/css/base";
+$x: 0px;
+$y: 0px;
+$w: 129px;
+$h: 982px;
+$radius: 4px;
+$shadow-offset-x: 0px;
+$shadow-offset-y: 0px;
+$shadow-blur: 4px;
+$shadow-color: rgba(0, 0, 0, 0.25);
 
-input[type=checkbox] {
-  height: 0;
-  width: 0;
-  visibility: hidden;
-}
-
-label {
-  cursor: pointer;
-  text-indent: -9999px;
-  width: 50px;
-  height: 25px;
-  background: grey;
-  display: block;
-  border-radius: 100px;
-  position: relative;
-}
-
-label:after {
-  content: '';
+.rectangle-1 {
   position: absolute;
-  top: 5px;
-  left: 5px;
-  width: 16px;
-  height: 16px;
-  background: #fff;
-  border-radius: 90px;
-  transition: 0.3s;
+  left: $x;
+  top: $y;
+  width: $w;
+  height: $h;
+  border-radius: $radius;
+  background-color: #F0F4FA;
+  box-shadow: $shadow-offset-x $shadow-offset-y $shadow-blur $shadow-color;
 }
 
-input:checked + label {
-  background: #5b96f7;
+$x: 33px;
+$y: 800px;
+$w: 53px;
+$h: 28px;
+$radius: 20px;
+
+.rectangle-6 {
+  position: absolute;
+  left: $x;
+  top: $y;
+  width: $w;
+  height: $h;
+  border-radius: $radius;
+  transform: scale(var(--x, 1), var(--y, 1));
+  background-color: #5B96F7;
 }
 
-input:checked + label:after {
-  left: calc(100% - 5px);
-  transform: translateX(-100%);
-}
-
-label:active:after {
-  width: 130px;
-}
-
-// centering
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+$x: 61px;
+$y: 804px;
+$size: 20px;
+.ellipse-2 {
+  position: absolute;
+  left: $x;
+  top: $y;
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  transform: scale(var(--x, 1), var(--y, 1));
+  background-color: #FFFFFF;
 }

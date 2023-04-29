@@ -12,8 +12,9 @@ class ToggleItem extends React.Component {
 
     render() {
         return (
-            <div>
-                <input type="checkbox" id="switch" class="toggle"/><label htmlFor="switch">Toggle</label>
+            <div className="rectangle-1">
+                <div className="rectangle-6"></div>
+                <div className="ellipse-2"></div>
             </div>
         )
     }

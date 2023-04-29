@@ -12,9 +12,18 @@ class HeaderChat extends React.Component {
 
     render() {
         return (
-            <div className="h-chats">
-               <h2 class="header">Chats</h2>
-                <div class="header" className="outer-circle">
+            <div className="rectangle-2">
+                <div className="chats">
+                    <span>Chats</span>
+                </div>
+                <div className="circle-dashed">
+                    <div className="vector1"></div>
+                    <div className="vector2"></div>
+                    <div className="vector3"></div>
+                    <div className="vector4"></div>
+                    <div className="vector5"></div>
+                    <div className="vector6"></div>
+                    <div className="vector7"></div>
                 </div>
             </div>
         )
