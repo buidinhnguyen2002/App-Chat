@@ -1,25 +1,4 @@
 @import "src/Assets/css/base";
-$x: 0px;
-$y: 0px;
-$w: 129px;
-$h: 982px;
-$radius: 4px;
-$shadow-offset-x: 0px;
-$shadow-offset-y: 0px;
-$shadow-blur: 4px;
-$shadow-color: rgba(0, 0, 0, 0.25);
-
-.rectangle-1 {
-  position: absolute;
-  left: $x;
-  top: $y;
-  width: $w;
-  height: $h;
-  border-radius: $radius;
-  background-color: #F0F4FA;
-  box-shadow: $shadow-offset-x $shadow-offset-y $shadow-blur $shadow-color;
-}
-
 $x: 33px;
 $y: 800px;
 $w: 53px;
