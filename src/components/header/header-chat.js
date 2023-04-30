@@ -10,23 +10,15 @@ class HeaderChat extends React.Component {
         }
     }
 
-    render() {
+render() {
         return (
-            <div className="rectangle-2">
+            <div className="container">
                 <div className="chats">
                     <span>Chats</span>
-                </div>
-                <div className="circle-dashed">
-                    <div className="vector1"></div>
-                    <div className="vector2"></div>
-                    <div className="vector3"></div>
-                    <div className="vector4"></div>
-                    <div className="vector5"></div>
-                    <div className="vector6"></div>
-                    <div className="vector7"></div>
+                    <div className="outer-circle"></div>
                 </div>
             </div>
-        )
+        );
     }
 }
 

@@ -1,97 +1,32 @@
 @import "src/Assets/css/base";
 
-.rectangle-2 {
-  position: absolute;
-  left: 129px;
-  top: 0px;
-  width: 384px;
-  height: 982px;
-  background-color: #F8FAFF;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
+.container {
+  display: flex;
+  align-items: center;
+}
 
-  .chats {
-    position: absolute;
-    left: 158px;
-    top: 35px;
-    width: 95px;
-    height: 44px;
-    font-family: 'Manrope', sans-serif;
-    font-style: normal;
-    font-size: 32px;
-    line-height: 44px;
-    color: #000000;
+.chats {
+  display: flex;
+  align-items: center;
+  font-family: 'Manrope', sans-serif;
+  font-style: normal;
+  font-size: 32px;
+  line-height: 44px;
+  color: #000000;
+}
 
-    span {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-    }
-  }
+span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 95px;
+  height: 44px;
+}
 
-  .circle-dashed {
-    position: absolute;
-    left: 453px;
-    top: 38px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px dashed #000000;
-
-    .vector1, .vector2, .vector3, .vector4, .vector5, .vector6, .vector7 {
-      position: absolute;
-      border: 2px solid #676667;
-    }
-
-    .vector1 {
-      left: 40.27%;
-      right: 40.31%;
-      top: 12.49%;
-      bottom: 86.21%;
-    }
-
-    .vector2{
-      left: 76.52%;
-      right: 13.79%;
-      top: 23.48%;
-      bottom: 59.69%;
-    }
-
-    .vector3 {
-      left: 76.52%;
-      right: 13.79%;
-      top: 23.48%;
-      bottom: 59.69%;
-    }
-
-    .vector4 {
-      left: 76.52%;
-      right: 13.79%;
-      top: 23.48%;
-      bottom: 59.69%;
-    }
-
-    .vector5 {
-      left: 13.79%;
-      right: 76.52%;
-      top: 59.69%;
-      bottom: 23.48%;
-    }
-
-    .vector6 {
-      left: 13.79%;
-      right: 76.52%;
-      top: 23.48%;
-      bottom: 59.73%;
-    }
-
-    .vector7 {
-      left: 0%;
-      right: 0%;
-      top: 0%;
-      bottom: 0%;
-    }
-  }
+.outer-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  border: 4px dashed #7C7C7D;
+  margin-left: 10px; /* adjust as needed */
 }
