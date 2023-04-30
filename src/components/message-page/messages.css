@@ -1,50 +1,17 @@
-.msg-bottom {
-  margin: 20px 0 0 0;
-  padding: 8px 10px 16px 2px;
-  align-items: center;
-  background: #f7f9fd;
-  border-radius: 5px;
-}
+/* Error: Can't find stylesheet to import.
+ *   ,
+ * 1 | @import "src/Assets/css/base";
+ *   |         ^^^^^^^^^^^^^^^^^^^^^
+ *   '
+ *   messages.scss 1:9  root stylesheet */
 
-.form-control {
-  background: #eaf2fe;
-  border: none;
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Can't find stylesheet to import.\a   \2577 \a 1 \2502  @import \"src/Assets/css/base\";\d\a   \2502          ^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   messages.scss 1:9  root stylesheet";
 }
-
-.form-control::placeholder {
-  color: #79a2e8;
-}
-
-.fa-link {
-  position: relative;
-  top: 12px;
-  left: 35px;
-  z-index: 9999;
-  color: #79a2e8;
-}
-
-.fa-face-smile {
-  font-size: 25px;
-  position: relative;
-  z-index: 9999;
-  right: 50px;
-  top: 7px;
-  color: #79a2e8;
-}
-
-.fa-paper-plane {
-  position: relative;
-  bottom: 1px;
-  display: flex;
-  background: #5b96f7;
-  height: 40px;
-  width: 40px;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  border-radius: 10px;
-  border: none;
-  box-shadow: #000;
-}
-
-/*# sourceMappingURL=messages.css.map */
