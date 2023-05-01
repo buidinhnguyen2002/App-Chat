@@ -11,7 +11,7 @@ class MessagesPageItem extends React.Component {
     }
     render() {
         return (
-            <div className="container">
+            <div className="container d-flex">
                 <div className="rectangle-16">
                     <i className="fa-solid fa-link"></i>
                     <div className="message">Write a message ...</div>

@@ -1,5 +1,10 @@
 @import "src/Assets/css/base";
 
+.container {
+  display: flex;
+  align-items: center;
+}
+
 .rectangle-6 {
   position: absolute;
   left: 33px;

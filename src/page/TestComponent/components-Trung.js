@@ -9,17 +9,11 @@ import MessagesPage from "../../components/message-page/messages-page";
 
 function Components_Trung() {
     return (
-        <div className="toggle">
+        <div className="d-flex">
             <Toggle_item/>
-            <div className="header-chat">
-                <Header/>
-                <div className="archive">
-                    <Archive_item/>
-                </div>
-                <div className="msg-bottom">
-                    <MessagesPage/>
-                </div>
-            </div>
+            <Header/>
+            <Archive_item/>
+            <MessagesPage/>
         </div>
     );
 }

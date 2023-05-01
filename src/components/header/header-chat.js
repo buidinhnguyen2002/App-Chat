@@ -12,7 +12,7 @@ class HeaderChat extends React.Component {
 
 render() {
         return (
-            <div className="container">
+            <div className="container d-flex">
                 <div className="chats">
                     <span>Chats</span>
                     <div className="outer-circle"></div>

@@ -13,7 +13,7 @@ class ArchiveItem extends React.Component {
 
     render() {
         return (
-            <div className="archive-box">
+            <div className="archive-box d-flex">
                 <div className="archive-img">
                     <img src={archive} alt="Logo" />
                 </div>

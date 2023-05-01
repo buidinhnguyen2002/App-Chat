@@ -12,7 +12,7 @@ class ToggleItem extends React.Component {
 
     render() {
         return (
-            <div className="rectangle-1">
+            <div className="container d-flex">
                 <div className="rectangle-6"></div>
                 <div className="ellipse-2"></div>
             </div>
