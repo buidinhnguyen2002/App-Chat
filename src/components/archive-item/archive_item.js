@@ -1,5 +1,6 @@
 import React from "react";
 import "./archive.scss";
+import archive from './archive.png';
 
 class ArchiveItem extends React.Component {
     constructor(props) {
@@ -12,10 +13,12 @@ class ArchiveItem extends React.Component {
 
     render() {
         return (
-        <div className="archive">
-            <i className="fa-solid fa-box-archive icon-a"></i>
-            <p className="a-name">Archived</p>
-        </div>
+            <div className="archive-box">
+                <div className="archive-img">
+                    <img src={archive} alt="Logo" />
+                </div>
+                <div className="archived">Archived</div>
+            </div>
         )
     }
 }
