@@ -8,12 +8,12 @@
 .chats {
   display: flex;
   align-items: center;
-  font-family: 'Manrope';
+  font-family: $font-Manrope;
   font-style: normal;
   font-weight: 800;
   font-size: 32px;
   line-height: 44px;
-  color: #000000;
+  color: $primary-color-text;
 }
 
 .chat {
@@ -28,6 +28,6 @@
   width: 30px;
   height: 30px;
   border-radius: 100%;
-  border: 4px dashed #7C7C7D;
+  border: 4px dashed $primary-color-subtext;
   margin-left: 204.41px;
 }

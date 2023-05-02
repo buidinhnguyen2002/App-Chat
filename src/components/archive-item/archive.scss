@@ -10,6 +10,7 @@
   top: 192px;
 }
 .archive-img img {
+  position: relative;
   width: 25px;
   height: 25.5px;
 }
@@ -17,11 +18,11 @@
   position: absolute;
   width: 65px;
   height: 20px;
-  font-family: 'Manrope';
+  font-family: $font-Manrope;
   font-style: normal;
   font-weight: 700;
   font-size: 15px;
   line-height: 20px;
-  color: #709CE6;
+  color: $color-blue-03;
   margin-left: 36.44px;
 }

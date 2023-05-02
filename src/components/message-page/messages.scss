@@ -4,7 +4,7 @@
   position: relative;
   width: 869px;
   height: 50px;
-  background: #EAF2FE;
+  background: $color-blue-02;
   border-radius: 10px;
 }
 
@@ -13,7 +13,7 @@
   left: 20px;
   top: 50%;
   transform: translateY(-50%);
-  color: #709CE6;
+  color: $color-blue-03;
 }
 
 .fa-regular.fa-face-smile {
@@ -22,7 +22,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 25px;
-  color: #709CE6;
+  color: $color-blue-03;
 }
 
 .message {
@@ -40,25 +40,25 @@
   left: 605px;
   top: 927px;
   background-color: transparent;
-  font-family: 'Manrope';
+  font-family: $font-Manrope;
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 22px;
-  color: #709CE6;
+  color: $color-blue-03;
   border: none;
   outline: none;
 }
 
 .message input::placeholder {
-  color: #709CE6;
+  color: $color-blue-03;
 }
 .rectangle-17 {
   display: inline-block;
   position: relative;
   width: 48px;
   height: 48px;
-  background: #5B96F7;
+  background: $color-blue-01;
   border-radius: 12px;
   margin-left: 20px;
 }
@@ -72,11 +72,11 @@
 
 .fa-regular.fa-paper-plane {
   border: none;
-  background-color: #5B96F7;
+  background-color: $color-blue-01;
   width: 24px;
   height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #FFFFFF;
+  color: $primary-color-white;
 }
