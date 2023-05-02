@@ -12,6 +12,8 @@ root.render(
     {/*<App />*/}
     {/*  <Components_Nguyen/>*/}
       <Components_Trung/>
+    <App />
+    {/*  <Components_Nguyen/>*/}
   </React.StrictMode>
 );
 
