@@ -32,14 +32,27 @@
   left: calc(20px + 23.01px + 16px);
   top: 50%;
   transform: translateY(-50%);
-  font-family: 'Manrope', sans-serif;
+}
+
+.message input {
+  width: 144px;
+  height: 22px;
+  left: 605px;
+  top: 927px;
+  background-color: transparent;
+  font-family: 'Manrope';
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
   line-height: 22px;
   color: #709CE6;
+  border: none;
+  outline: none;
 }
 
+.message input::placeholder {
+  color: #709CE6;
+}
 .rectangle-17 {
   display: inline-block;
   position: relative;

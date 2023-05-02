@@ -14,7 +14,7 @@ render() {
         return (
             <div className="container d-flex">
                 <div className="chats">
-                    <span>Chats</span>
+                    <span className="chat">Chats</span>
                     <div className="outer-circle"></div>
                 </div>
             </div>

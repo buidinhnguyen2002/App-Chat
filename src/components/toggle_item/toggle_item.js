@@ -13,8 +13,11 @@ class ToggleItem extends React.Component {
     render() {
         return (
             <div className="container d-flex">
-                <div className="rectangle-6"></div>
-                <div className="ellipse-2"></div>
+                <input type="checkbox" id="toggle" className="toggle-input" />
+                <label htmlFor="toggle" className="toggle-label">
+                    <div className="rectangle-6"></div>
+                    <div className="ellipse-2"></div>
+                </label>
             </div>
         )
     }

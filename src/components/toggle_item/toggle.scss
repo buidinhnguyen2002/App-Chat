@@ -1,21 +1,21 @@
 @import "src/Assets/css/base";
 
-.container {
-  display: flex;
-  align-items: center;
+.toggle-input {
+  display: none;
 }
 
-.rectangle-6 {
+.toggle-label .rectangle-6 {
   position: absolute;
   left: 33px;
-  top:  800px;
+  top: 800px;
   width: 53px;
   height: 28px;
   border-radius: 20px;
   background-color: #5B96F7;
+  transition: all 0.3s ease-in-out;
 }
 
-.ellipse-2 {
+.toggle-label .ellipse-2 {
   position: absolute;
   left: 61px;
   top: 804px;
@@ -23,4 +23,20 @@
   height: 20px;
   border-radius: 50%;
   background-color: #FFFFFF;
+  transition: all 0.3s ease-in-out;
+}
+
+.toggle-input:checked + .toggle-label .rectangle-6 {
+  background-color: #C4C4C4;
+}
+
+.toggle-input:checked + .toggle-label .rectangle-6::before {
+  opacity: 0;
+  background-color: #C4C4C4;
+}
+
+.toggle-input:checked + .toggle-label .ellipse-2 {
+  transform: translateX(-24px);
+  background-color: #ffffff;
+  z-index: 2;
 }

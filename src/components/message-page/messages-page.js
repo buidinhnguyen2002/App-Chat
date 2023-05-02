@@ -14,7 +14,9 @@ class MessagesPageItem extends React.Component {
             <div className="container d-flex">
                 <div className="rectangle-16">
                     <i className="fa-solid fa-link"></i>
-                    <div className="message">Write a message ...</div>
+                    <div className="message">
+                        <input type="text" placeholder="Write a message ..." />
+                    </div>
                     <i className="fa-regular fa-face-smile"></i>
                 </div>
                 <div className="rectangle-17">

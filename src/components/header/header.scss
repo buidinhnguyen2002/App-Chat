@@ -8,14 +8,15 @@
 .chats {
   display: flex;
   align-items: center;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Manrope';
   font-style: normal;
+  font-weight: 800;
   font-size: 32px;
   line-height: 44px;
   color: #000000;
 }
 
-span {
+.chat {
   display: flex;
   justify-content: center;
   align-items: center;

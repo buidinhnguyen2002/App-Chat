@@ -1,6 +1,6 @@
 import React from "react";
 import "./archive.scss";
-import archive from './archive.png';
+import archive from '../../Assets/Image/archive.png';
 
 class ArchiveItem extends React.Component {
     constructor(props) {
