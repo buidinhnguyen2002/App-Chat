@@ -17,12 +17,9 @@ function Components_Nguyen() {
             <NavigationItem active={0} icon={'bi bi-telephone'}/>
             <NavigationItem active={1} icon={'bi bi-gear'}/>
             <NavigationItem active={0} icon={'bi bi-gear'}/>
-
-=======
             <Chat_item />
             <Chat_item isChoose={true}/>
             <SearchBar/>
->>>>>>> main
         </div>
     );
 }
