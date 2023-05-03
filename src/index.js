@@ -5,13 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Components_Nguyen from "./page/TestComponent/components_Nguyen";
 import Components_Trung from "./page/TestComponent/components-Trung";
+import ChatPage from "./page/Chat/chat";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     {/*<App />*/}
     {/*  <Components_Nguyen/>*/}
-      <Components_Trung/>
+    {/*  <Components_Trung/>*/}
+      <ChatPage/>
   </React.StrictMode>
 );
 

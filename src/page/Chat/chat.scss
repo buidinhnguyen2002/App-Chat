@@ -1,0 +1,5 @@
+@import "src/Assets/css/base";
+.page-chat{
+  min-height: 100vh;
+  @include dimension(100%,100vh);
+}
