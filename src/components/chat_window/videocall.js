@@ -1,20 +1,25 @@
 import React, {Component} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faVideo} from "@fortawesome/free-solid-svg-icons";
-import "./Chat_window.scss";
 
-class Videocall extends Component{
+import "./video.scss";
+
+class Video extends Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            active: props.active,
+            icon: props.icon,
+        }
+    }
     render() {
         return (
-
-                <div className="board-video_icon">
-                    <button className="board-video__icon-button" onClick={this.handleVideoCall}>
-                        <FontAwesomeIcon icon={faVideo}/>
-                    </button>
-                </div>
+            <div className={this.state.active==1 ? "Video_item Video_item-txtBlack ": ""}>
+                <i className={this.state.icon}></i>
+            </div>
 
         );
     }
 
+
 }
-export default Videocall;
+export default Video;

@@ -1,0 +1,22 @@
+@import "src/Assets/css/base";
+.Video_item{
+  padding: 12px;
+  width: 48px;
+  height: 48px;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  &-txtWhite{
+    color: $primary-color-white;
+  }
+  &-bgBlue {
+    background-color: $primary-color-blue;
+  }
+  &-txtBlack{
+    color: $primary-color-text;
+  }
+  i{
+    font-size: 24px;
+    line-height: 24px;
+  }
+}

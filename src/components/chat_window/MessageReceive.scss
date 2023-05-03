@@ -1,0 +1,37 @@
+@import "src/Assets/css/base";
+
+.message-receive_item {
+  padding: 16px 25px 16px 15px;
+  @include dimension(165px);
+  align-items: center;
+
+  &-round {
+    border-radius: 16px;
+  }
+  &-bgBlue{
+    background-color: $color-blue-01;
+  }
+  &-bgWhite{
+    background-color: $primary-color-white;
+  }
+
+  .message-receive-wrapper {
+    display: flex;
+    justify-content: space-between;
+    @include dimension(222px, 100%);
+    align-items: center;
+    .message-receive-chat_message {
+      h5 {
+        margin: 0;
+      }
+      &-clWhite{
+        @include styleText(600, 14px, 19px, $primary-color-white);
+      }
+      &-clGrey{
+        @include styleText(600, 14px, 19px, $primary-color-subtext);
+      }
+    }
+  }
+
+
+}
