@@ -8,8 +8,8 @@ import Components_Nguyen from "./page/TestComponent/components_Nguyen";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
-    {/*  <Components_Nguyen/>*/}
+    {/*<App />*/}
+      <Components_Nguyen/>
   </React.StrictMode>
 );
 
