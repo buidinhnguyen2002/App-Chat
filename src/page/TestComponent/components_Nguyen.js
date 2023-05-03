@@ -5,6 +5,7 @@ import NavigationItem from "../../components/navigation_item/navigation_item";
 import Chat_item from "../../components/chat_item/chat_item";
 import SearchBar from "../../components/search_bar/search_bar";
 import Chat_detail_header from "../../components/chat_detail_header/chat_detail_header";
+import MessageItem from "../../components/message/message_item";
 
 function Components_Nguyen() {
     return (
@@ -21,6 +22,8 @@ function Components_Nguyen() {
             <Chat_item isChoose={true}/>
             <SearchBar/>
             <Chat_detail_header/>
+            <MessageItem/>
+                <MessageItem myMessage={true}/>
         </div>
     );
 }

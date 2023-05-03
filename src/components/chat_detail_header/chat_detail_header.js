@@ -5,10 +5,6 @@ import "./chat_detail_header.scss";
 class ChatDetailHeader extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isChoose: props.isChoose,
-            icon: props.icon,
-        }
     }
 
     render() {
