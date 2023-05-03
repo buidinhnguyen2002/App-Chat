@@ -1,0 +1,107 @@
+@import "src/Assets/css/base";
+.chat_detail_header {
+  padding: 22px 29px 22px 33px;
+  display: flex;
+  justify-content: space-between;
+  @include dimension();
+  align-items: center;
+
+  &-round {
+    border-radius: 15px;
+  }
+  &-bgBlue{
+    background-color: $color-blue-01;
+  }
+  &-bgLight{
+    background-color: $light-mode-color;
+  }
+  .chat_detail_header-leading {
+    display: flex;
+    .chat_avatar-wrapper {
+      position: relative;
+      margin-right: 17px;
+      position: relative;
+      .chat_avatar {
+        @include dimension(48px, 48px);
+        overflow: hidden;
+        &-circle {
+          border-radius: 50%;
+        }
+        .img-wrapper{
+          width: 100%;
+          height: 100%;
+          img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+
+      .chat_status {
+        position: absolute;
+        @include dimension(9px, 9px);
+        display: inline-block;
+        border-radius: 50%;
+        left: 35px;
+        bottom: 2px;
+        &-active {
+          background-color: $color-green-active;
+        }
+      }
+    }
+  }
+  .chat_detail_header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    @include dimension(222px, 100%);
+    align-items: center;
+    .chat_name {
+      margin-bottom: 4px;
+      h4 {
+        margin: 0;
+      }
+      &-clWhite{
+        @include styleText(800, 16px, 22px, $primary-color-white);
+      }
+      &-clBlack{
+        @include styleText(800, 16px, 22px, $color-black-03);
+      }
+    }
+
+    .chat_message {
+      h5 {
+        margin: 0;
+      }
+      &-clWhite{
+        @include styleText(600, 14px, 19px, $primary-color-white);
+      }
+      &-clGrey{
+        @include styleText(600, 14px, 19px, $primary-color-subtext);
+      }
+    }
+  }
+  .chat_detail_header-trailing{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .chat_detail-icon{
+      margin-right: 40px;
+      i{
+        font-size: 24px;
+        color: $color-grey-02;
+      }
+    }
+    .more {
+      position: relative;
+      .vertical-line {
+        position: absolute;
+        @include dimension(1px, 48px);
+        background-color: $color-grey-03;
+        left: -18px;
+        transform: translateY(-5px);
+      }
+    }
+  }
+
+}

@@ -1,0 +1,23 @@
+@import "src/Assets/css/base";
+.message_item {
+  padding: 12px 20px;
+  height: 100%;
+  &-round{
+    border-radius: 16px;
+  }
+  &-bgBlue{
+    background-color: $color-blue-01;
+  }
+  &-bgWhite {
+    background-color: $primary-color-white;
+  }
+  .message{
+    margin: 0;
+    &-myMessage{
+      @include styleText(600, 14px, 19px, $primary-color-white);
+    }
+    &-peopleMessage{
+      @include styleText(600, 14px, 19px, $color-grey-01);
+    }
+  }
+}
