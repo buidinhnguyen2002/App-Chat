@@ -1,0 +1,26 @@
+@import "src/Assets/css/base";
+.toggle {
+  @include dimension(53px, 28px);
+  border-radius: 20px;
+  position: relative;
+  &-bgBlue {
+    background-color: $color-blue-01;
+  }
+  &-bgWhite{
+    background-color: $color-grey-04;
+  }
+  .btn-toggle{
+    position: absolute;
+    @include dimension(20px, 20px);
+    background-color: $primary-color-white;
+    border-radius: 50%;
+    border: 1px solid $primary-color-white;
+    @include positionAbsolute(4px, 5px, unset, unset);
+    &-active{
+      @include positionAbsolute(4px, unset, 5px, unset);
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+}

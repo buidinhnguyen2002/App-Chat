@@ -1,0 +1,17 @@
+@import "src/Assets/css/base";
+
+.archive-box {
+  display: flex;
+  align-items: center;
+}
+.archive-img img {
+  width: 22px;
+  height: 24px;
+}
+.archived {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 20px;
+  color: $color-blue-03;
+  margin-left: 13px;
+}
