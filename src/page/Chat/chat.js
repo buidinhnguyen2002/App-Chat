@@ -1,6 +1,7 @@
 import React from "react";
 import "./chat.scss";
 import NavigationBar from "../../components/navigation_bar/navigation_bar";
+import ListChats from "../../components/list_chats/list-chats";
 
 class ChatPage extends React.Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class ChatPage extends React.Component {
         return (
             <div className={"page-chat"}>
                 <NavigationBar/>
+                <ListChats/>
             </div>
         )
     }

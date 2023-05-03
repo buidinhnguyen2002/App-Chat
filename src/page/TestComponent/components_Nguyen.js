@@ -6,6 +6,7 @@ import Chat_item from "../../components/chat_item/chat_item";
 import SearchBar from "../../components/search_bar/search_bar";
 import Chat_detail_header from "../../components/chat_detail_header/chat_detail_header";
 import MessageItem from "../../components/message/message_item";
+import ChatItem from "../../components/chat_item/chat_item";
 
 function Components_Nguyen() {
     return (
@@ -18,8 +19,8 @@ function Components_Nguyen() {
             <NavigationItem active={0} icon={'bi bi-telephone'}/>
             <NavigationItem active={1} icon={'bi bi-gear'}/>
             <NavigationItem active={0} icon={'bi bi-gear'}/>
-            <Chat_item />
-            <Chat_item isChoose={true}/>
+            <ChatItem />
+            <ChatItem isChoose={true}/>
             <SearchBar/>
             <Chat_detail_header/>
             <MessageItem/>

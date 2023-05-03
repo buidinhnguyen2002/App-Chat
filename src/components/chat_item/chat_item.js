@@ -1,7 +1,7 @@
 import React from "react";
 import "./chat_item.scss";
 
-class NavigationItem extends React.Component {
+class ChatItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -43,4 +43,4 @@ class NavigationItem extends React.Component {
 
 }
 
-export default NavigationItem;
+export default ChatItem;

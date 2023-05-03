@@ -18,7 +18,6 @@
   .chat_avatar-wrapper {
     position: relative;
     margin-right: 17px;
-    transform: translateY(-5px);
     .chat_avatar {
       @include dimension(48px, 48px);
       overflow: hidden;

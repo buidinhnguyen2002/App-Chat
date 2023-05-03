@@ -6,7 +6,6 @@
 }
 .navigation-bar{
   @include dimension(129px, 100%);
-  background-color: $light-mode-color;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

@@ -2,4 +2,6 @@
 .page-chat{
   min-height: 100vh;
   @include dimension(100%,100vh);
+  display: flex;
+  background-color: $light-mode-color;
 }
