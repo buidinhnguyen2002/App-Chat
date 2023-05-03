@@ -1,0 +1,136 @@
+@import "src/Assets/css/base";
+@import "src/Assets/css/variable";
+
+.board-item {
+  width: 200px;
+  height: 65px;
+  background-color: $light-mode-color;
+
+}
+.board-item__avatar {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  top: 6px;
+
+}
+
+.board-item__title {
+  position: relative;
+  top: 10px;
+}
+.board-item__status{
+  position: absolute;
+  width: 44px;
+  height: 19px;
+  top: 38px;
+  left: 64px;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+  color: $primary-color-subtext;
+
+
+}
+.board-item__username {
+  position: absolute;
+  top: 16px;
+  width: 87px;
+  height: 22px;
+  font-style: normal;
+  color: $primary-color-text;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 22px;
+  left: 64px;
+
+}
+
+.board-chat__status .text-white {
+  color: $primary-color-subtext;
+  line-height: 19px;
+  font-weight: 600;
+  font-style: normal;
+
+}
+
+.board-item__user-status {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color:$color-green-active;
+  left: 35px;
+  top: 40px;
+
+}
+
+
+  .board-chat__user-status-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #1eeb37;
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+  }
+  .board-video_icon {
+    position: absolute;
+    width: 36px;
+    height: 27px;
+
+  }
+  .board-video__icon-button{
+    border: none;
+    background-color:$primary-color-white ;
+  }
+
+ .board-video__icon:focus {
+  outline: none;
+ }
+.board-message{
+  position: absolute;
+  width: 165px;
+  height: 44px;
+  top: 150px;
+background-color: $primary-color-white;
+  border-radius: 16px;
+  align-items: center;
+  justify-content: center;
+}
+.board-message__message-content{
+  //position: absolute;
+  width: 120px;
+  height: 19px;
+  text-align: center;
+  line-height: 1.2;
+  padding: 0;
+}
+.board-message-received{
+  position: absolute;
+  width: 165px;
+  height: 44px;
+  top: 200px;
+  background-color: $color-blue-03;
+  border-radius: 16px;
+  align-items: center;
+  justify-content: center;
+}
+.board-message-received__message-content{
+  //position: absolute;
+  width: 120px;
+  height: 19px;
+  text-align: center;
+  line-height: 1.2;
+  padding: 0;
+  color: $primary-color-white;
+}
+
+
+
+
+
+

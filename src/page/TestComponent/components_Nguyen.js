@@ -5,6 +5,7 @@ import NavigationItem from "../../components/navigation_item/navigation_item";
 import Chat_item from "../../components/chat_item/chat_item";
 import SearchBar from "../../components/search_bar/search_bar";
 
+
 function Components_Nguyen() {
     return (
         <div className="d-flex" style={{backgroundColor: '#F0F4FA', minHeight: '100vh'}}>
