@@ -1,31 +1,16 @@
 @import "src/Assets/css/base";
-
-.container {
+.chat_header {
+  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
-
-.chats {
-  display: flex;
-  align-items: center;
-  font-family: $font-Manrope;
-  font-style: normal;
-  font-weight: 800;
-  font-size: 32px;
-  line-height: 44px;
-  color: $primary-color-text;
+.chat{
+  @include styleText(800, 32px, 44px, $primary-color-text)
 }
-
-.chat {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .outer-circle {
   width: 30px;
   height: 30px;
   border-radius: 100%;
   border: 4px dashed $primary-color-subtext;
-  margin-left: 204.41px;
 }

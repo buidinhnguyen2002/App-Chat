@@ -4,14 +4,15 @@ import 'mdbreact/dist/css/mdb.css';
 import Toggle_item from "../../components/toggle_item/toggle_item";
 import Header from "../../components/header/header-chat"
 import Archive_item from "../../components/archive-item/archive_item";
-import MessagesPage from "../../components/message-page/messages-page";
+import MessagesPage from "../../components/message-page/input_message";
+import HeaderChat from "../../components/header/header-chat";
 
 
 function Components_Trung() {
     return (
-        <div className="d-flex">
+        <div className="d-flex" style={{flexWrap: "wrap"}}>
             <Toggle_item/>
-            <Header/>
+            <HeaderChat/>
             <Archive_item/>
             <MessagesPage/>
         </div>

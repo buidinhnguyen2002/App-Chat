@@ -1,26 +1,17 @@
 @import "src/Assets/css/base";
 
 .archive-box {
-  position: relative;
   display: flex;
   align-items: center;
-  width: 22px;
-  height: 24px;
-  left: 162px;
-  top: 192px;
 }
 .archive-img img {
-  position: relative;
-  width: 25px;
-  height: 25.5px;
+  width: 22px;
+  height: 24px;
 }
 .archived {
-  position: absolute;
-  font-family: $font-Manrope;
-  font-style: normal;
   font-weight: 700;
   font-size: 15px;
   line-height: 20px;
   color: $color-blue-03;
-  margin-left: 36.44px;
+  margin-left: 13px;
 }

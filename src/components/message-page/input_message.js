@@ -1,7 +1,7 @@
 import React from "react";
 import "./messages.scss";
 
-class MessagesPageItem extends React.Component {
+class InputMessage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,4 +32,4 @@ class MessagesPageItem extends React.Component {
 }
 
 
-export default MessagesPageItem;
+export default InputMessage;

@@ -5,10 +5,6 @@ import archive from '../../Assets/Image/archive.png';
 class ArchiveItem extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            active: props.active,
-            icon: props.icon,
-        }
     }
 
     render() {

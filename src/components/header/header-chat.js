@@ -4,20 +4,14 @@ import "./header.scss";
 class HeaderChat extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            active: props.active,
-            icon: props.icon,
-        }
     }
 
 render() {
         return (
-            <div className="container d-flex">
-                <div className="chats">
+                <div className="chat_header">
                     <span className="chat">Chats</span>
                     <div className="outer-circle"></div>
                 </div>
-            </div>
         );
     }
 }

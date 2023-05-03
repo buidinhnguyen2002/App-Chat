@@ -1,42 +1,26 @@
 @import "src/Assets/css/base";
-
-.toggle-input {
-  display: none;
-}
-
-.toggle-label .rectangle-6 {
-  position: absolute;
-  left: 33px;
-  top: 800px;
-  width: 53px;
-  height: 28px;
+.toggle {
+  @include dimension(53px, 28px);
   border-radius: 20px;
-  background-color: $color-blue-01;
-  transition: all 0.3s ease-in-out;
-}
-
-.toggle-label .ellipse-2 {
-  position: absolute;
-  left: 61px;
-  top: 804px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: $primary-color-white;
-  transition: all 0.3s ease-in-out;
-}
-
-.toggle-input:checked + .toggle-label .rectangle-6 {
-  background-color: $color-grey-01;
-}
-
-.toggle-input:checked + .toggle-label .rectangle-6::before {
-  opacity: 0;
-  background-color: $color-grey-01;
-}
-
-.toggle-input:checked + .toggle-label .ellipse-2 {
-  transform: translateX(-24px);
-  background-color: $primary-color-white;
-  z-index: 2;
+  position: relative;
+  &-bgBlue {
+    background-color: $color-blue-01;
+  }
+  &-bgWhite{
+    background-color: $color-grey-04;
+  }
+  .btn-toggle{
+    position: absolute;
+    @include dimension(20px, 20px);
+    background-color: $primary-color-white;
+    border-radius: 50%;
+    border: 1px solid $primary-color-white;
+    @include positionAbsolute(4px, 5px, unset, unset);
+    &-active{
+      @include positionAbsolute(4px, unset, 5px, unset);
+    }
+    &:focus {
+      outline: none;
+    }
+  }
 }
