@@ -9,9 +9,7 @@ import imgPolygon1 from '../../Assets/Image/Polygon 1.png';
 import imgPolygon2 from '../../Assets/Image/Polygon 2.png';
 import imgPolygon3 from '../../Assets/Image/Polygon 3.png';
 import imgSubtract from '../../Assets/Image/Subtract.png';
-import WebSocket from 'websocket';
 import {callAPILogin, callAPIRegister} from '../../service/loginService';
-
 class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -24,6 +22,7 @@ class Login extends React.Component {
             showRetypePassword: false,
         }
     }
+
     handleOnchangeInput = (event) =>{
         const {name, value} = event.target;
         this.setState({[name]: value});
@@ -39,7 +38,7 @@ class Login extends React.Component {
         callAPILogin(this.state.userName, this.state.password);
     }
     handleRegister = () => {
-        callAPIRegister();
+        callAPIRegister(this.state.userName, this.state.password);
     }
     toggleShowPassword = (event) => {
         const name = event.target.parentElement.getAttribute('name');
@@ -78,7 +77,7 @@ class Login extends React.Component {
                         </div>}
                     </div>
                     <button className="btn-login col-12"
-                            onClick={this.handleLogin}>{this.state.status === 'login' ? 'Login' : 'Register'}</button>
+                            onClick={this.state.status === 'login' ? this.handleLogin: this.handleRegister}>{this.state.status === 'login' ? 'Login' : 'Register'}</button>
                     <hr style={{borderColor: "#FFFFFF", borderWidth: "1px"}}/>
                     <div className="register-container" onClick={this.changeStatus}>
                         <a>{this.state.status === 'login' ? 'Register' : 'Login'}</a></div>
