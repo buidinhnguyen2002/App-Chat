@@ -4,7 +4,7 @@
   padding: 16px 25px 16px 15px;
   @include dimension(327px);
   align-items: center;
-
+  cursor: pointer;
   &-round {
     border-radius: 15px;
   }
