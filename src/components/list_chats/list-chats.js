@@ -2,9 +2,7 @@ import React from "react";
 import "./list_chat.scss";
 import HeaderChat from "../header/header-chat";
 import SearchBar from "../search_bar/search_bar";
-import Archive_item from "../archive-item/archive_item";
 import ArchiveItem from "../archive-item/archive_item";
-import Chat_item from "../chat_item/chat_item";
 import ChatItem from "../chat_item/chat_item";
 
 class ListChats extends React.Component {

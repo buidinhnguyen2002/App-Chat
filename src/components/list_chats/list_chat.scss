@@ -1,6 +1,7 @@
 @import "src/Assets/css/base";
 .list_chats {
   padding: 35px 28px 43px;
+  background-color: $color-grey-06;
   .header_chat{
     margin-bottom: 31px;
   }
@@ -20,7 +21,7 @@
   }
   .chats_container {
     height: max-content;
-    max-height: 440px;
+    max-height: 400px;
     overflow-y: scroll;
     .chat-item {
       margin-bottom: 18px;

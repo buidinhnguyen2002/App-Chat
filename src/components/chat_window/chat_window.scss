@@ -1,0 +1,10 @@
+@import "src/Assets/css/base";
+.window-chat{
+  width: 100%;
+  &-header{
+    height: max-content;
+  }
+  &-body{
+    height: calc(100% - 92px - 90px);
+  }
+}

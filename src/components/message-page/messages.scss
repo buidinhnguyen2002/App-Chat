@@ -1,4 +1,8 @@
 @import "src/Assets/css/base";
+.container{
+  padding: 20px 36px 20px 23px;
+  background-color: $color-white-01;
+}
 .rectangle-16 {
   display: inline-block;
   position: relative;

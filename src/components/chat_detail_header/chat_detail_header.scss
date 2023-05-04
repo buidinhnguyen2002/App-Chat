@@ -5,15 +5,11 @@
   justify-content: space-between;
   @include dimension();
   align-items: center;
-
-  &-round {
-    border-radius: 15px;
-  }
   &-bgBlue{
     background-color: $color-blue-01;
   }
   &-bgLight{
-    background-color: $light-mode-color;
+    background-color: $color-grey-06;
   }
   .chat_detail_header-leading {
     display: flex;
