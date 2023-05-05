@@ -26,7 +26,7 @@ function Login (props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const isLogin = localStorage.getItem('isLogin');
+        const isLogin = localStorage.getItem('isLogIn');
         if (isLogin) {
             navigate('/chat', { replace: true });
         }
