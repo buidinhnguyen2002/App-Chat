@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
@@ -9,78 +9,95 @@ import imgPolygon1 from '../../Assets/Image/Polygon 1.png';
 import imgPolygon2 from '../../Assets/Image/Polygon 2.png';
 import imgPolygon3 from '../../Assets/Image/Polygon 3.png';
 import imgSubtract from '../../Assets/Image/Subtract.png';
-import {callAPILogin, callAPIRegister} from '../../service/loginService';
-class Login extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            status: props.status,
-            userName: '',
-            password: '',
-            retypePassword: '',
-            showPassword: false,
-            showRetypePassword: false,
-        }
-    }
+import {callAPILogin, callAPIRegister, responseLogin} from '../../service/loginService';
+import loginService from '../../service/loginService';
+import { loginSuccess } from "../../store/actions/userAction";
+import {connect, useDispatch} from "react-redux";
+import {redirect, Link, Navigate,useNavigate } from "react-router-dom";
 
-    handleOnchangeInput = (event) =>{
+function Login (props) {
+    const [status, setStatus] = useState(props.status);
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [retypePassword, setRetypePassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showRetypePassword, setShowRetypePassword] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const isLogin = localStorage.getItem('isLogin');
+        if (isLogin) {
+            navigate('/chat', { replace: true });
+        }
+    }, [navigate]);
+    const handleOnchangeInput = (event) =>{
         const {name, value} = event.target;
-        this.setState({[name]: value});
-    }
-    changeStatus = () => {
-        if (this.state.status == 'login') {
-            this.setState({status: 'register'});
-        } else {
-            this.setState({status: 'login'});
+        if(name === 'userName'){
+            setUserName(value);
+        }
+        if(name === 'password'){
+            setPassword(value);
+        }
+        if(name === 'retypePassword'){
+            setRetypePassword(value);
         }
     }
-    handleLogin = () => {
-        callAPILogin(this.state.userName, this.state.password);
+    const changeStatus = () => {
+        if (status == 'login') {
+            setStatus('register');
+        } else {
+            setStatus('login');
+        }
     }
-    handleRegister = () => {
-        callAPIRegister(this.state.userName, this.state.password);
+
+    const handleLogin = async () => {
+        const response = await callAPILogin(userName, password);
+        if (response.status === 'success') {
+            const action = loginSuccess(userName,response.RE_LOGIN_CODE);
+            dispatch(action);
+            return navigate('/chat');
+        }
+    };
+    const handleRegister = () => {
+        callAPIRegister(userName, password);
     }
-    toggleShowPassword = (event) => {
+    const toggleShowPassword = (event) => {
         const name = event.target.parentElement.getAttribute('name');
-        const value = name == 'showPassword' ? !this.state.showPassword : !this.state.showRetypePassword;
-        this.setState({
-            [name]: value,
-        })
-
+        const value = name == 'showPassword' ? !showPassword : !showRetypePassword;
+        setShowPassword(value);
     }
-
-    render() {
         return (
             <div className="login-background col-12 d-flex justify-content-center align-items-center">
                 <div className="login-container">
                     <div className="title-login">
-                        <h4 className="title-form">{this.state.status === 'login' ? 'Login' : 'Register'} </h4>
+                        <h4 className="title-form">{status === 'login' ? 'Login' : 'Register'} </h4>
                     </div>
                     <div className="input-container">
-                        <input className="d-block" type="text" name="userName" placeholder="Username" value={this.state.userName}
-                               onChange={(event) => this.handleOnchangeInput(event)}/>
+                        <input className="d-block" type="text" name="userName" placeholder="Username" value={userName}
+                               onChange={(event) => handleOnchangeInput(event)}/>
                         <div className="password-wrapper">
-                            <input className="d-block" name="password" type={this.state.showPassword ? 'text' : 'password'}
-                                   placeholder="Password" value={this.state.password}
-                                   onChange={(event) => this.handleOnchangeInput(event)}/>
-                            <span style={{cursor: 'pointer'}} name="showPassword" onClick={this.toggleShowPassword}>
-                                <i className={this.state.showPassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
+                            <input className="d-block" name="password" type={showPassword ? 'text' : 'password'}
+                                   placeholder="Password" value={password}
+                                   onChange={(event) => handleOnchangeInput(event)}/>
+                            <span style={{cursor: 'pointer'}} name="showPassword" onClick={toggleShowPassword}>
+                                <i className={showPassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
                             </span>
                         </div>
-                        {this.state.status === 'register' && <div className="password-wrapper">
-                            <input className="d-block" type={this.state.showRetypePassword ? 'text' : 'password'} name="retypePassword"
-                                   placeholder="Retype password" value={this.state.retypePassword}
-                                   onChange={(event) => this.handleOnchangeInput(event)}/>
-                            <span style={{cursor: 'pointer'}} name="showRetypePassword" onClick={this.toggleShowPassword}>
-                                <i className={this.state.showRetypePassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
+                        {status === 'register' && <div className="password-wrapper">
+                            <input className="d-block" type={showRetypePassword ? 'text' : 'password'} name="retypePassword"
+                                   placeholder="Retype password" value={retypePassword}
+                                   onChange={(event) => handleOnchangeInput(event)}/>
+                            <span style={{cursor: 'pointer'}} name="showRetypePassword" onClick={toggleShowPassword}>
+                                <i className={showRetypePassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
                             </span>
                         </div>}
                     </div>
                     <button className="btn-login col-12"
-                            onClick={this.state.status === 'login' ? this.handleLogin: this.handleRegister}>{this.state.status === 'login' ? 'Login' : 'Register'}</button>
+                            onClick={status === 'login' ? handleLogin: handleRegister}>{status === 'login' ? 'Login' : 'Register'}</button>
                     <hr style={{borderColor: "#FFFFFF", borderWidth: "1px"}}/>
-                    <div className="register-container" onClick={this.changeStatus}>
-                        <a>{this.state.status === 'login' ? 'Register' : 'Login'}</a></div>
+                    <div className="register-container" onClick={changeStatus}>
+                        <a>{status === 'login' ? 'Register' : 'Login'}</a></div>
                 </div>
                 <div className="img-decoration-container">
                     <img className="img-polygon1" src={imgPolygon1} alt=""/>
@@ -95,7 +112,6 @@ class Login extends React.Component {
 
             </div>
         );
-    }
 }
 
 export default Login;
