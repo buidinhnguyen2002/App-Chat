@@ -8,26 +8,35 @@ import ChatPage from "./page/Chat/chat";
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Navigate, Routes} from "react-router-dom";
 import store from "./store/store";
 import {Provider} from "react-redux";
+import ChatDetail from "./components/chat/chat";
+
 
 
 const router = createBrowserRouter(
-        createRoutesFromElements([
-            <Route path={"/"} element={<Login status={"login"}/>}/>,
-            <Route path={"/chat"}  element={<ChatPage />} />
-
-
-
-            ]
-        ),
+    [
+        {
+        path: "/",
+        element: <Login status={"login"}/>,
+    }, {
+        path: "/",
+        element: <ChatPage />,
+        children: [
+            {
+                path: "chat",
+                element: <ChatDetail/>
+            },
+            {
+              path: "setting",
+              element: <div>Setting</div>,
+            },
+        ],
+        },
+    ]
 );
 
 
 function App() {
     return (
-        // <div className="app">
-        //
-        //     {/*<Login status="login"/>*/}
-        // </div>
         <RouterProvider router={router}/>
     );
 }

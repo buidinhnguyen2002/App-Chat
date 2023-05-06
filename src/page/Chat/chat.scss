@@ -4,4 +4,8 @@
   @include dimension(100%,100vh);
   display: flex;
   background-color: $light-mode-color;
+  .detail {
+    height: 100%;
+    display: flex;
+  }
 }
