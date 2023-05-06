@@ -1,0 +1,37 @@
+@import "src/Assets/css/base";
+.chat_setting {
+  display: flex;
+  width: 100%;
+  .list_setting {
+    background-color: $color-grey-06;
+    padding: 35px 45px 35px 25px;
+    @include dimension(384px, 100%);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+    h4{
+      @include styleText(800, 32px, 44px, $primary-color-text)
+    }
+    &-item {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #B4B4B4;
+      i{
+        font-size: 24px;
+        margin-right: 25px;
+        color: $color-brown-01;
+      }
+      span{
+        @include styleText(700, 16px, 22px, $color-brown-01);
+      }
+    }
+  }
+  &-detail{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $primary-color-white;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+  }
+}

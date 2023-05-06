@@ -9,6 +9,7 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Na
 import store from "./store/store";
 import {Provider} from "react-redux";
 import ChatDetail from "./components/chat/chat";
+import SettingFragment from "./components/setting_fragment/setting_fragment";
 
 
 
@@ -27,7 +28,7 @@ const router = createBrowserRouter(
             },
             {
               path: "setting",
-              element: <div>Setting</div>,
+              element: <SettingFragment/>,
             },
         ],
         },
