@@ -8,3 +8,9 @@ export function loginSuccess(username, keyReLogin) {
         },
     };
 }
+export function saveListChat(chats) {
+    return {
+        type: 'SAVE_LIST_CHATS',
+        payload: chats,
+    }
+}

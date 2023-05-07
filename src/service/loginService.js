@@ -1,6 +1,8 @@
 import {w3cwebsocket as W3CWebSocket} from "websocket";
+import store from "../store/store";
 
-const client = new W3CWebSocket('ws://140.238.54.136:8080/chat/chat');
+const urlServer = 'ws://140.238.54.136:8080/chat/chat';
+var client = new W3CWebSocket(urlServer);
 client.onopen = () => {
     console.log('Websocket ')
 }
@@ -12,6 +14,9 @@ client.onmessage = (message) => {
     console.log(dataFromServer['status'], 'A');
 }
 
+export const reConnectionServer = () => {
+    client = new W3CWebSocket(urlServer);
+}
 
 export const callAPILogin = (userName, password) => {
     return new Promise((resolve, reject) => {
@@ -39,12 +44,28 @@ export const callAPILogin = (userName, password) => {
         }
     });
 }
-export const callAPIGetUserList = () => {
+export const callAPIGetRoomChatMes = async () => {
+    let isConnecting = false;
+    while (true) {
+        await new Promise(resolve => setTimeout(() => {
+            if (client.readyState === W3CWebSocket.OPEN) {
+                isConnecting = true;
+                resolve();
+            }
+        }, 1000));
+        if (isConnecting) break;
+    }
+    console.log(client.readyState, "Ready");
+    callAPIReLogIn();
     client.send(JSON.stringify(
         {
             "action": "onchat",
             "data": {
-                "event": "GET_USER_LIST",
+                "event": "GET_ROOM_CHAT_MES",
+                "data": {
+                    "name": "",
+                    "page": 1,
+                }
             }
         }
     ));
@@ -52,6 +73,57 @@ export const callAPIGetUserList = () => {
         const dataFromServer = JSON.parse(message.data);
         console.log(dataFromServer);
     }
+}
+export const callAPIReLogIn = () => {
+    const currentStore = store.getState();
+    console.log(currentStore.userReducer.keyReLogin, "Code");
+    client.send(JSON.stringify(
+        {
+            "action": "onchat",
+            "data": {
+                "event": "RE_LOGIN",
+                "data": {
+                    "user": currentStore.userReducer.username,
+                    "code": currentStore.userReducer.keyReLogin,
+                }
+            }
+        }
+    ));
+    client.onmessage = (message) => {
+        const dataFromServer = JSON.parse(message.data);
+        console.log(dataFromServer);
+    }
+}
+const waitConnection = async () => {
+    let isConnecting = false;
+    while (true) {
+        await new Promise(resolve => setTimeout(() => {
+            if (client.readyState === W3CWebSocket.OPEN) {
+                isConnecting = true;
+                resolve();
+            }
+        }, 1000));
+        if (isConnecting) break;
+    }
+}
+export const callAPIGetUserList = async () => {
+    await waitConnection();
+    return new Promise((resolve, reject) => {
+        let responseListChat = [];
+        client.send(JSON.stringify(
+            {
+                "action": "onchat",
+                "data": {
+                    "event": "GET_USER_LIST",
+                }
+            }
+        ));
+        client.onmessage = (message) => {
+            const dataFromServer = JSON.parse(message.data);
+            responseListChat = dataFromServer['data'];
+            resolve(responseListChat);
+        }
+    })
 }
 export const callAPILogout = () => {
     client.send(JSON.stringify(
@@ -62,7 +134,6 @@ export const callAPILogout = () => {
             }
         }
     ));
-    client.close();
 }
 
 
