@@ -37,10 +37,6 @@ class NavigationBar extends React.Component {
                     <div className="navigation-bar-item navigation-bar-item-phone" onClick={()=>this.changeIndexNav(2)}>
                         <NavigationItem active={this.state.indexActive === 2} icon={'bi bi-telephone'}/>
                     </div>
-                    {/*<div className="navigation-bar-item navigation-bar-item-setting" onClick={()=>this.changeIndexNav(3)}>*/}
-                    {/*    <NavigationItem active={this.state.indexActive === 3} icon={'bi bi-gear'}/>*/}
-                    {/*    <div className="horizontal-line"></div>*/}
-                    {/*</div>*/}
                     <div className="navigation-bar-item navigation-bar-item-setting" onClick={()=>this.changeIndexNav(3)}>
                         <Link to={"/setting"}>
                             <NavigationItem active={this.state.indexActive === 3} icon={'bi bi-gear'}/>

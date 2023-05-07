@@ -28,8 +28,7 @@ function ChatPage(props) {
             dispatch(saveListChat(response));
         }
         f();
-        // dispatch()
-        // callAPIGetRoomChatMes().then(r => r);
+        callAPIGetRoomChatMes();
         return ()=> {
 
         }

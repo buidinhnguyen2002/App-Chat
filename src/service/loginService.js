@@ -44,26 +44,14 @@ export const callAPILogin = (userName, password) => {
         }
     });
 }
-export const callAPIGetRoomChatMes = async () => {
-    let isConnecting = false;
-    while (true) {
-        await new Promise(resolve => setTimeout(() => {
-            if (client.readyState === W3CWebSocket.OPEN) {
-                isConnecting = true;
-                resolve();
-            }
-        }, 1000));
-        if (isConnecting) break;
-    }
-    console.log(client.readyState, "Ready");
-    callAPIReLogIn();
+export const callAPIGetRoomChatMes = () => {
     client.send(JSON.stringify(
         {
             "action": "onchat",
             "data": {
                 "event": "GET_ROOM_CHAT_MES",
                 "data": {
-                    "name": "",
+                    "name": "test room",
                     "page": 1,
                 }
             }
