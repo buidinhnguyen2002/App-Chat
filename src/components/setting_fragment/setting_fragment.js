@@ -1,12 +1,14 @@
 import ImageBackground from "../../Assets/Image/Call Service.png";
 import "./setting_fragment.scss";
 import {useNavigate} from "react-router-dom";
+import {callAPILogout} from "../../service/loginService";
 
 
 export default function SettingFragment(props) {
     const navigate = useNavigate();
     function logout() {
         localStorage.removeItem("isLogIn");
+        callAPILogout();
         navigate("/");
     }
     return <div className={"chat_setting"}>

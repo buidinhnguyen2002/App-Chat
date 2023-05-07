@@ -10,44 +10,8 @@ client.onmessage = (message) => {
     const dataFromServer = JSON.parse(message.data);
     console.log('reply' + message.data);
     console.log(dataFromServer['status'], 'A');
-    // if(dataFromServer['event'] === 'LOGIN'){
-    //     responseLogin = {
-    //         "status": 'a',
-    //         "data": {
-    //             "RE_LOGIN_CODE": dataFromServer['data']['RE_LOGIN_CODE'],
-    //         }
-    //     }
-    // }
-    // console.log(responseLogin)
 }
-// export const callAPILogin = (userName, password, response) => {
-//     const responseLogin = {
-//         status: "",
-//         RE_LOGIN_CODE: null,
-//     }
-//     client.send(JSON.stringify(
-//         {
-//             "action": "onchat",
-//             "data": {
-//                 "event": "LOGIN",
-//                 "data": {
-//                     "user": userName,
-//                     "pass": password,
-//                 }
-//             }
-//         }
-//     ));
-//     client.onmessage = (message) => {
-//         const dataFromServer = JSON.parse(message.data);
-//         console.log('reply'+ message.data);
-//         if(dataFromServer['event'] === 'LOGIN'){
-//             responseLogin['RE_LOGIN_CODE'] = dataFromServer['data']['RE_LOGIN_CODE'];
-//             responseLogin['status'] = dataFromServer['status'];
-//             return responseLogin;
-//         }
-//
-//     }
-// }
+
 
 export const callAPILogin = (userName, password) => {
     return new Promise((resolve, reject) => {
@@ -74,6 +38,31 @@ export const callAPILogin = (userName, password) => {
             }
         }
     });
+}
+export const callAPIGetUserList = () => {
+    client.send(JSON.stringify(
+        {
+            "action": "onchat",
+            "data": {
+                "event": "GET_USER_LIST",
+            }
+        }
+    ));
+    client.onmessage = (message) => {
+        const dataFromServer = JSON.parse(message.data);
+        console.log(dataFromServer);
+    }
+}
+export const callAPILogout = () => {
+    client.send(JSON.stringify(
+        {
+            "action": "onchat",
+            "data": {
+                "event": "LOGOUT",
+            }
+        }
+    ));
+    client.close();
 }
 
 

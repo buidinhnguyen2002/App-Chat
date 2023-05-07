@@ -3,7 +3,7 @@
   padding: 22px 29px 22px 33px;
   display: flex;
   justify-content: space-between;
-  @include dimension();
+  //@include dimension();
   align-items: center;
   &-bgBlue{
     background-color: $color-blue-01;

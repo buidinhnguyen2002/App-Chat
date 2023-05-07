@@ -11,7 +11,7 @@ class InputMessage extends React.Component {
     }
     render() {
         return (
-            <div className="container d-flex">
+            <div className="container-input">
                 <div className="rectangle-16">
                     <i className="fa-solid fa-link"></i>
                     <div className="message">
