@@ -1,7 +1,6 @@
 @import "src/Assets/css/base";
 .search_bar{
   position: relative;
-  height: 100%;
   .searchBar-input {
     padding: 14px 54px 14px 54px;
     @include dimension(327px, 50px);

@@ -12,7 +12,7 @@ class NavigationItem extends React.Component {
 
     render() {
         return (
-            <div className={this.state.active==1 ? "navigation_item navigation_item-txtWhite navigation_item-bgBlue": "navigation_item navigation_item-txtBlack navigation_item-bgTrans"}>
+            <div className={this.props.active ? "navigation_item navigation_item-txtWhite navigation_item-bgBlue": "navigation_item navigation_item-txtBlack navigation_item-bgTrans"}>
                 <i className={this.state.icon}></i>
             </div>
         )

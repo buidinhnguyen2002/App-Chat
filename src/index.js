@@ -3,16 +3,32 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {
+    createBrowserRouter,
+    createRoutesFromElements,
+    RouterProvider,
+    redirect,
+    Navigate,
+    Route
+} from "react-router-dom";
 import Components_Nguyen from "./page/TestComponent/components_Nguyen";
 import Components_Trung from "./page/TestComponent/components-Trung";
+import ChatPage from "./page/Chat/chat";
+import {Provider} from "react-redux";
+import store from "./store/store";
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    {/*<App />*/}
-    {/*  <Components_Nguyen/>*/}
-      <Components_Trung/>
-  </React.StrictMode>
+    <React.StrictMode>
+        <Provider store={store}>
+            <App />
+        </Provider>
+        {/*  <Components_Nguyen/>*/}
+        {/*  <Components_Trung/>*/}
+        {/*  <ChatPage/>*/}
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
