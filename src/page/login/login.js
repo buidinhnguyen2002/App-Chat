@@ -9,11 +9,11 @@ import imgPolygon1 from '../../Assets/Image/Polygon 1.png';
 import imgPolygon2 from '../../Assets/Image/Polygon 2.png';
 import imgPolygon3 from '../../Assets/Image/Polygon 3.png';
 import imgSubtract from '../../Assets/Image/Subtract.png';
-import {callAPILogin, callAPIRegister, responseLogin} from '../../service/loginService';
+import {callAPILogin, callAPIRegister, client, reConnectionServer, responseLogin} from '../../service/loginService';
 import loginService from '../../service/loginService';
 import { loginSuccess } from "../../store/actions/userAction";
 import {connect, useDispatch} from "react-redux";
-import {redirect, Link, Navigate,useNavigate } from "react-router-dom";
+import {redirect, Link, Navigate, useNavigate, json} from "react-router-dom";
 
 function Login (props) {
     const [status, setStatus] = useState(props.status);
@@ -26,11 +26,12 @@ function Login (props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const isLogin = localStorage.getItem('isLogIn');
+        const isLogin = sessionStorage.getItem('isLogIn');
+        reConnectionServer();
         if (isLogin) {
             navigate('/chat', { replace: true });
         }
-    }, [navigate]);
+    },[navigate]);
     const handleOnchangeInput = (event) =>{
         const {name, value} = event.target;
         if(name === 'userName'){
@@ -51,12 +52,20 @@ function Login (props) {
         }
     }
 
-    const handleLogin = async () => {
-        const response = await callAPILogin(userName, password);
-        if (response.status === 'success') {
-            const action = loginSuccess(userName,response.RE_LOGIN_CODE);
-            dispatch(action);
-            return navigate('/chat');
+    const handleLogin =  () => {
+        callAPILogin(userName, password);
+        client.onmessage = (message) => {
+            const dataFromServer = JSON.parse(message.data);
+            console.log(dataFromServer);
+            if (dataFromServer['event'] === 'LOGIN') {
+                sessionStorage.setItem('isLogIn',true);
+                const dataReLogIn = {
+                    userName: userName,
+                    keyReLogIn: dataFromServer['data']['RE_LOGIN_CODE'],
+                };
+                sessionStorage.setItem('dataReLogIn',JSON.stringify(dataReLogIn));
+                return navigate('/chat');
+            }
         }
     };
     const handleRegister = () => {

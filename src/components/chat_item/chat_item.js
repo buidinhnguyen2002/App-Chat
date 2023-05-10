@@ -1,10 +1,39 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./chat_item.scss";
 import ChatPeople from "../../Assets/Image/chat_people.jpg";
+import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/loginService";
+import {useDispatch, useSelector} from "react-redux";
+import {saveToListChatsDetail} from "../../store/actions/userAction";
 function ChatItem(props) {
     const [isChoose, setIsChoose] = useState(props.isChoose);
     const [type, setType] = useState(props.type);
     const [name, setName] = useState(props.name);
+    const dispatch = useDispatch();
+    let chatData = useSelector(state => state.userReducer.chatsDetail.find(chat=> chat && chat.name === name));
+    let newMess = null;
+    let timeShort = "";
+    if(chatData) {
+        if(chatData.chatData[0]){
+            newMess = chatData.chatData[0];
+            let arrTime = newMess.createAt.split(" ");
+            let fullTime = arrTime[1];
+            timeShort = fullTime.substring(0, fullTime.length-3);
+            console.log(timeShort, "ALLL");
+        }
+    }
+    console.log(useSelector(state => state.userReducer.chatsDetail), "alo");
+    useEffect(()=>{
+        async function f(){
+            await waitConnection();
+            callAPIGetRoomChatMes(name);
+            client.onmessage = (message) => {
+                const dataFromServer = JSON.parse(message.data);
+                dispatch(saveToListChatsDetail(dataFromServer['data']));
+            }
+
+        }
+        f();
+    },[])
         return (
             <div className={`chat_item chat_item-round d-flex ${props.isChoose ? 'chat_item-bgBlue':'chat_item-bgWhite'}`}>
                 <div className="chat_avatar-wrapper">
@@ -18,15 +47,15 @@ function ChatItem(props) {
                 <div className="chat-wrapper">
                     <div className="chat_content-wrapper">
                         <div className="chat_name ">
-                            {/*<h4 className={`${this.state.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>Pink Panda</h4>*/}
                             <h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{name}</h4>
                         </div>
                         <div className="chat_message">
-                            <h5 className={`${props.isChoose ? 'chat_message-clWhite':'chat_message-clGrey'}`}>You: thnx!</h5>
+                            <h5 className={`${props.isChoose ? 'chat_message-clWhite':'chat_message-clGrey'}`}>{newMess != null ? newMess.mes : ""}</h5>
                         </div>
                     </div>
                     <div className="chat_time">
-                        <span className={`${props.isChoose ? 'chat_time-clWhite':'chat_time-clGrey'}`}>9:36</span>
+                        {/*<span className={`${props.isChoose ? 'chat_time-clWhite':'chat_time-clGrey'}`}>9:36</span>*/}
+                        <span className={`${props.isChoose ? 'chat_time-clWhite':'chat_time-clGrey'}`}>{timeShort}</span>
                         <div style={{visibility: props.isChoose ? "hidden": "visible"}} className="num-unread-message">
                             <span>2</span>
                         </div>

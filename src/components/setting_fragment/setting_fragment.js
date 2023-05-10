@@ -7,7 +7,6 @@ import {callAPILogout} from "../../service/loginService";
 export default function SettingFragment(props) {
     const navigate = useNavigate();
     function logout() {
-        localStorage.removeItem("isLogIn");
         callAPILogout();
         navigate("/");
     }

@@ -14,3 +14,9 @@ export function saveListChat(chats) {
         payload: chats,
     }
 }
+export function saveToListChatsDetail(chat) {
+    return {
+        type: 'SAVE_LIST_CHATS_DETAIL',
+        payload: chat,
+    }
+}

@@ -3,6 +3,7 @@ const initialState = {
     keyReLogin: '',
     isAuthenticated: false,
     chats: [],
+    chatsDetail: [],
 };
 
 export default function userReducer(state = initialState, action) {
@@ -18,6 +19,11 @@ export default function userReducer(state = initialState, action) {
             return {
                 ...state,
                 chats: action.payload,
+            }
+        case 'SAVE_LIST_CHATS_DETAIL':
+            return {
+                ...state,
+                chatsDetail: [...state.chatsDetail, action.payload],
             }
         case 'LOGOUT_SUCCESS':
             return initialState;
