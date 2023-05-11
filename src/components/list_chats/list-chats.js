@@ -4,10 +4,12 @@ import HeaderChat from "../header/header-chat";
 import SearchBar from "../search_bar/search_bar";
 import ArchiveItem from "../archive-item/archive_item";
 import ChatItem from "../chat_item/chat_item";
+import createAndjoinRoom from "../rooms/createAndjoinRoom";
 import {useDispatch, useSelector} from "react-redux";
 import chat from "../../page/Chat/chat";
 import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/loginService";
 import {saveToListChatsDetail} from "../../store/actions/userAction";
+import CreateAndjoinRoom from "../rooms/createAndjoinRoom";
 
 function ListChats(props) {
     const listChats = useSelector(state =>  state.userReducer.chats);
@@ -24,6 +26,9 @@ function ListChats(props) {
             <SearchBar/>
             <div className="archive_item">
                 <ArchiveItem/>
+            </div>
+            <div className="rooms">
+                <CreateAndjoinRoom/>
             </div>
             <div className="horizontal-line"></div>
             <div className="chats">

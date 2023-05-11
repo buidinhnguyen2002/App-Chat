@@ -6,7 +6,7 @@ import Header from "../../components/header/header-chat"
 import Archive_item from "../../components/archive-item/archive_item";
 import MessagesPage from "../../components/message-page/input_message";
 import HeaderChat from "../../components/header/header-chat";
-
+import CreateAndjoinRoom from "../../components/rooms/createAndjoinRoom";
 
 function Components_Trung() {
     return (
@@ -15,6 +15,7 @@ function Components_Trung() {
             <HeaderChat/>
             <Archive_item/>
             <MessagesPage/>
+            <CreateAndjoinRoom/>
         </div>
     );
 }
