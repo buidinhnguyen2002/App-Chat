@@ -9,7 +9,7 @@ class ChatDetailHeader extends React.Component {
 
     render() {
         return (
-            <div className="chat_detail_header chat_detail_header-round chat_detail_header-bgLight">
+            <div className="chat_detail_header chat_detail_header-bgLight">
                 <div className="chat_detail_header-leading">
                     <div className="chat_avatar-wrapper">
                         <div className="chat_avatar chat_avatar-circle">

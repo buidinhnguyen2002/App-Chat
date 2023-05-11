@@ -1,0 +1,16 @@
+@import "src/Assets/css/base";
+.chat_header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat{
+  @include styleText(800, 32px, 44px, $primary-color-text)
+}
+.outer-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  border: 4px dashed $primary-color-subtext;
+}

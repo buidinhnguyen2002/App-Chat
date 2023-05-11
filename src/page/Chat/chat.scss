@@ -1,0 +1,12 @@
+@import "src/Assets/css/base";
+.page-chat{
+  min-height: 100vh;
+  @include dimension(100%,100vh);
+  display: flex;
+  background-color: $light-mode-color;
+  .detail {
+    height: 100%;
+    width: calc(100% - 100px);
+    display: flex;
+  }
+}
