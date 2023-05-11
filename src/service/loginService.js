@@ -19,30 +19,30 @@ export const reConnectionServer = () => {
 }
 
 export const callAPILogin = (userName, password) => {
-        client.send(JSON.stringify({
+    client.send(JSON.stringify({
+        "action": "onchat",
+        "data": {
+            "event": "LOGIN",
+            "data": {
+                "user": userName,
+                "pass": password,
+            }
+        }
+    }));
+}
+export const callAPIGetRoomChatMes = (roomName) => {
+    client.send(JSON.stringify(
+        {
             "action": "onchat",
             "data": {
-                "event": "LOGIN",
+                "event": "GET_ROOM_CHAT_MES",
                 "data": {
-                    "user": userName,
-                    "pass": password,
+                    "name": roomName,
+                    "page": 1,
                 }
             }
-        }));
-}
-export const callAPIGetRoomChatMes =  (roomName) => {
-        client.send(JSON.stringify(
-            {
-                "action": "onchat",
-                "data": {
-                    "event": "GET_ROOM_CHAT_MES",
-                    "data": {
-                        "name": roomName,
-                        "page": 1,
-                    }
-                }
-            }
-        ));
+        }
+    ));
 }
 export const callAPIReLogIn = () => {
     const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
@@ -53,7 +53,7 @@ export const callAPIReLogIn = () => {
                 "event": "RE_LOGIN",
                 "data": {
                     "user": dataReLogIn.userName,
-                    "code": dataReLogIn.keyReLogIn ,
+                    "code": dataReLogIn.keyReLogIn,
                 }
             }
         }
@@ -72,14 +72,14 @@ export const waitConnection = async () => {
     }
 }
 export const callAPIGetUserList = () => {
-        client.send(JSON.stringify(
-            {
-                "action": "onchat",
-                "data": {
-                    "event": "GET_USER_LIST",
-                }
+    client.send(JSON.stringify(
+        {
+            "action": "onchat",
+            "data": {
+                "event": "GET_USER_LIST",
             }
-        ));
+        }
+    ));
 }
 export const callAPILogout = () => {
     client.send(JSON.stringify(
@@ -98,7 +98,6 @@ export const callAPILogout = () => {
     }
 }
 
-
 export const callAPIRegister = (userName, password) => {
     client.send(JSON.stringify(
         {
@@ -112,4 +111,27 @@ export const callAPIRegister = (userName, password) => {
             }
         }
     ));
+}
+export const callAPICreateRoomChat = (roomName) => {
+    client.send(JSON.stringify({
+        "action": "onchat",
+        "data": {
+            "event": "CREATE_ROOM",
+            "data": {
+                "name": `${roomName}`
+            }
+        }
+    }));
+}
+
+export const callAPIJoinRoomChat = (roomName) => {
+    client.send(JSON.stringify({
+        "action": "onchat",
+        "data": {
+            "event": "JOIN_ROOM",
+            "data": {
+                "name": `${roomName}`
+            }
+        }
+    }));
 }
