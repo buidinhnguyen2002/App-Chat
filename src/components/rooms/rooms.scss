@@ -30,7 +30,7 @@
 
 .create-room-btn, .join-room-btn {
   background-color: $color-blue-01;
-  color: white;
+  color: $primary-color-white;
   border: none;
   padding: 10px 20px;
   font-size: 20px;
@@ -53,7 +53,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
-  background-color: white;
+  background-color: $primary-color-white;
   border-radius: 20px;
   outline: none;
 }
