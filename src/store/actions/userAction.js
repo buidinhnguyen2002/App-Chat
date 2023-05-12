@@ -20,3 +20,12 @@ export function saveToListChatsDetail(chat) {
         payload: chat,
     }
 }
+export function loginSuc(name, msg) {
+    return {
+        type: 'LOGIN_SUCCESS',
+        payload: {
+            name,
+            msg,
+        },
+    };
+}

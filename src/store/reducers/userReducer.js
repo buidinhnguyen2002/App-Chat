@@ -25,6 +25,12 @@ export default function userReducer(state = initialState, action) {
                 ...state,
                 chatsDetail: [...state.chatsDetail, action.payload],
             }
+        case 'SAVE_CHAT':
+            let currentChatData = state.chatsDetail
+            return {
+                ...state,
+
+            }
         case 'LOGOUT_SUCCESS':
             return initialState;
         default:
