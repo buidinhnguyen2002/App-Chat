@@ -48,55 +48,6 @@ function ChatPage(props) {
 
         f();
     }, [navigate]);
-    async function createRoom(roomName) {
-        await waitConnection();
-        callAPIGetUserList();
-        callAPICreateRoomChat(roomName);
-        client.onmessage = (message) => {
-            const dataFromServer = JSON.parse(message.data);
-            if (dataFromServer['event'] === 'CREATE_ROOM') {
-                const dataCreateRoom = JSON.parse(sessionStorage.getItem('dataCreateRoom'));
-                dataCreateRoom.keyCreateRoom = dataFromServer['data']['CREATE_ROOM_CODE'];
-                sessionStorage.setItem('dataCreateRoom', JSON.stringify(dataCreateRoom));
-            }
-            if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
-                const dataGetRoom = JSON.parse(sessionStorage.getItem('dataGetRoom'));
-                dataGetRoom.keyGetRoom = dataFromServer['data']['GET_ROOM_CHAT_MES_CODE'];
-                sessionStorage.setItem('dataGetRoom', JSON.stringify(dataGetRoom));
-            }
-        }
-    }
-    createRoom('roomName');
-
-    async function joinRoom(roomName) {
-        await waitConnection();
-        callAPIGetRoomChatMes(roomName)
-        callAPIJoinRoomChat(roomName);
-        client.onmessage = (message) => {
-            const dataFromServer = JSON.parse(message.data);
-            if (dataFromServer['event'] === 'JOIN_ROOM') {
-                const dataJoinRoom = JSON.parse(sessionStorage.getItem('dataJoinRoom'));
-                if (dataJoinRoom !== null) {
-                    dataJoinRoom.keyJoinRoom = dataFromServer['data']['JOIN_ROOM_CODE'];
-                    sessionStorage.setItem('dataJoinRoom', JSON.stringify(dataJoinRoom));
-                }
-            }
-            if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
-                const dataGetRoom = JSON.parse(sessionStorage.getItem('dataGetRoom'));
-                if (dataGetRoom !== null) {
-                    dataGetRoom.keyGetRoom = dataFromServer['data']['GET_ROOM_CHAT_MES_CODE'];
-                    sessionStorage.setItem('dataGetRoom', JSON.stringify(dataGetRoom));
-                }
-            }
-        }
-    }
-    joinRoom('roomName');
-
-
-    function listenMessageRelogin() {
-
-    }
-
     return (
         <div className={"page-chat"}>
             <NavigationBar/>
