@@ -118,7 +118,7 @@ export const callAPICreateRoomChat = (roomName) => {
         "data": {
             "event": "CREATE_ROOM",
             "data": {
-                "name": `${roomName}`
+                "name": roomName,
             }
         }
     }));
@@ -130,7 +130,7 @@ export const callAPIJoinRoomChat = (roomName) => {
         "data": {
             "event": "JOIN_ROOM",
             "data": {
-                "name": `${roomName}`
+                "name": roomName,
             }
         }
     }));

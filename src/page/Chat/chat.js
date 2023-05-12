@@ -70,7 +70,7 @@ function ChatPage(props) {
 
     async function joinRoom(roomName) {
         await waitConnection();
-        callAPIGetUserList();
+        callAPIGetRoomChatMes(roomName)
         callAPIJoinRoomChat(roomName);
         client.onmessage = (message) => {
             const dataFromServer = JSON.parse(message.data);
