@@ -1,17 +1,30 @@
 @import "src/Assets/css/base";
 
-.create-room input  {
-  padding: 14px 54px 14px 64px;
+.create-room {
+  width: 343.8px;
+}
+
+.create-join {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: $color-blue-03;
+}
+
+.create-room input {
+  padding: 14px 54px 14px 78px;
   @include dimension(327px, 30px);
   border-radius: 20px;
   background-color: $color-blue-02;
-  @include styleText(400,16px, 22px, $primary-color-text);
+  @include styleText(400, 13px, 22px, $primary-color-text);
   border: none;
 }
-.create-room input:focus{
+
+.create-room input:focus {
   outline: none;
 }
-.create-room input::placeholder{
+
+.create-room input::placeholder {
   color: $color-blue-03;
 }
 
@@ -24,7 +37,7 @@
   cursor: pointer;
   margin: 0 5px;
   transform: scale(0.5);
-  border-radius: 12px;
+  border-radius: 20px;
 }
 
 .create-room-btn:hover, .join-room-btn:hover {

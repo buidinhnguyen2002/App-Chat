@@ -62,7 +62,7 @@ function ChatPage(props) {
             if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
                 const dataGetRoom = JSON.parse(sessionStorage.getItem('dataGetRoom'));
                 dataGetRoom.keyGetRoom = dataFromServer['data']['GET_ROOM_CHAT_MES_CODE'];
-                sessionStorage.setItem('dataCreateRoom', JSON.stringify(dataGetRoom));
+                sessionStorage.setItem('dataGetRoom', JSON.stringify(dataGetRoom));
             }
         }
     }
@@ -76,17 +76,22 @@ function ChatPage(props) {
             const dataFromServer = JSON.parse(message.data);
             if (dataFromServer['event'] === 'JOIN_ROOM') {
                 const dataJoinRoom = JSON.parse(sessionStorage.getItem('dataJoinRoom'));
-                dataJoinRoom.keyJoinRoom = dataFromServer['data']['JOIN_ROOM_CODE'];
-                sessionStorage.setItem('dataJoinRoom', JSON.stringify(dataJoinRoom));
+                if (dataJoinRoom !== null) {
+                    dataJoinRoom.keyJoinRoom = dataFromServer['data']['JOIN_ROOM_CODE'];
+                    sessionStorage.setItem('dataJoinRoom', JSON.stringify(dataJoinRoom));
+                }
             }
             if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
                 const dataGetRoom = JSON.parse(sessionStorage.getItem('dataGetRoom'));
-                dataGetRoom.keyGetRoom = dataFromServer['data']['GET_ROOM_CHAT_MES_CODE'];
-                sessionStorage.setItem('dataCreateRoom', JSON.stringify(dataGetRoom));
+                if (dataGetRoom !== null) {
+                    dataGetRoom.keyGetRoom = dataFromServer['data']['GET_ROOM_CHAT_MES_CODE'];
+                    sessionStorage.setItem('dataGetRoom', JSON.stringify(dataGetRoom));
+                }
             }
         }
     }
-   joinRoom('roomName');
+    joinRoom('roomName');
+
 
     function listenMessageRelogin() {
 
