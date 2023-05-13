@@ -5,8 +5,9 @@ import ListChats from "../../components/list_chats/list-chats";
 import WindowChat from "../../components/chat_window/chat_window";
 import {redirect, useNavigate, Outlet} from "react-router-dom";
 import {
+    callAPICreateRoomChat,
     callAPIGetRoomChatMes,
-    callAPIGetUserList,
+    callAPIGetUserList, callAPIJoinRoomChat,
     callAPIReLogIn, client,
     reConnectionServer, waitConnection
 } from "../../service/loginService";
@@ -34,7 +35,7 @@ function ChatPage(props) {
                     const dataFromServer = JSON.parse(message.data);
                     const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
                     console.log(dataFromServer, "RELO");
-                    dataReLogIn.keyReLogIn = dataFromServer['data']['RE_LOGIN_CODE'];
+                    dataReLogIn.keyReLogIn = dataFromServer['data']?.['RE_LOGIN_CODE'];
                     sessionStorage.setItem('dataReLogIn', JSON.stringify(dataReLogIn));
                 }
                 if(dataFromServer['event'] === 'GET_USER_LIST'){
@@ -47,11 +48,6 @@ function ChatPage(props) {
 
         f();
     }, [navigate]);
-
-    function listenMessageRelogin() {
-
-    }
-
     return (
         <div className={"page-chat"}>
             <NavigationBar/>

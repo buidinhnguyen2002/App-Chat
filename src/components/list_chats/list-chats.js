@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import chat from "../../page/Chat/chat";
 import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/loginService";
 import {saveToListChatsDetail} from "../../store/actions/userAction";
+import CreateAndjoinRoom from "../rooms/createAndjoinRoom";
 
 function ListChats(props) {
     const listChats = useSelector(state =>  state.userReducer.chats);
@@ -16,7 +17,6 @@ function ListChats(props) {
         setChatIndex(index);
     }
     return (
-
         <div className={"list_chats"}>
             <div className="header_chat">
                 <HeaderChat/>
@@ -24,6 +24,9 @@ function ListChats(props) {
             <SearchBar/>
             <div className="archive_item">
                 <ArchiveItem/>
+            </div>
+            <div className="rooms">
+                <CreateAndjoinRoom/>
             </div>
             <div className="horizontal-line"></div>
             <div className="chats">
