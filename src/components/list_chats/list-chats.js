@@ -6,13 +6,14 @@ import ArchiveItem from "../archive-item/archive_item";
 import ChatItem from "../chat_item/chat_item";
 import {useDispatch, useSelector} from "react-redux";
 import chat from "../../page/Chat/chat";
-import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/loginService";
+import {callAPIGetPeopleChatMes, callAPIGetRoomChatMes, client, waitConnection} from "../../service/loginService";
 import {saveToListChatsDetail} from "../../store/actions/userAction";
 import CreateAndjoinRoom from "../rooms/createAndjoinRoom";
 
 function ListChats(props) {
     const listChats = useSelector(state =>  state.userReducer.chats);
     const [chatIndex, setChatIndex] = useState(0);
+    const dispatch = useDispatch();
     function changeChatIndex(index) {
         setChatIndex(index);
     }

@@ -44,6 +44,21 @@ export const callAPIGetRoomChatMes = (roomName) => {
         }
     ));
 }
+export const callAPIGetPeopleChatMes = (name) => {
+    client.send(JSON.stringify(
+        {
+            "action": "onchat",
+            "data": {
+                "event": "GET_PEOPLE_CHAT_MES",
+                "data": {
+                    "name": name,
+                    "page": 1,
+                }
+            }
+        }
+    ));
+}
+
 export const callAPIReLogIn = () => {
     const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
     client.send(JSON.stringify(
