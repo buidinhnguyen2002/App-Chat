@@ -4,7 +4,6 @@ import HeaderChat from "../header/header-chat";
 import SearchBar from "../search_bar/search_bar";
 import ArchiveItem from "../archive-item/archive_item";
 import ChatItem from "../chat_item/chat_item";
-import createAndjoinRoom from "../rooms/createAndjoinRoom";
 import {useDispatch, useSelector} from "react-redux";
 import chat from "../../page/Chat/chat";
 import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/loginService";
@@ -18,7 +17,6 @@ function ListChats(props) {
         setChatIndex(index);
     }
     return (
-
         <div className={"list_chats"}>
             <div className="header_chat">
                 <HeaderChat/>

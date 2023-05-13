@@ -13,7 +13,7 @@ import {
 } from "../../service/loginService";
 import {testCallAPIReLogIn, testReConnectionServer} from "../../service/APIService";
 import {useDispatch} from "react-redux";
-import {saveListChat, saveListRoom} from "../../store/actions/userAction";
+import {saveListChat} from "../../store/actions/userAction";
 
 function ChatPage(props) {
     const dispatch = useDispatch();

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useEffect, useState} from "react";
 import "./rooms.scss";
 import {
     callAPICreateRoomChat,
@@ -7,56 +7,63 @@ import {
     client,
     callAPIGetUserList
 } from "../../service/loginService";
-import Modal from 'react-modal';
 import {saveListChat, saveToListChatsDetail} from "../../store/actions/userAction";
 import {useDispatch} from "react-redux";
-
-// Đặt phần tử gốc của ứng dụng là #root
-Modal.setAppElement('#root');
 
 function CreateAndJoinRoom(props) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [error, setError] = useState(false);
-    const dispatch = useDispatch;
+    const dispatch = useDispatch();
     const createRoom = () => {
         const roomName = document.getElementById('roomName').value;
-        console.log('roomName:', roomName);
         callAPICreateRoomChat(roomName);
         client.onmessage = (message) => {
             const dataFromServer = JSON.parse(message.data);
-
+            if(dataFromServer['event'] === 'CREATE_ROOM'){
+                const status = dataFromServer['status'];
+                const msg = dataFromServer['mes'];
+                console.log(status)
+                if(status === 'error'){
+                    setError(msg);
+                    return;
+                }
+            }
             callAPIGetUserList();
             if (dataFromServer['event'] === 'GET_USER_LIST') {
                 const responseListChat = dataFromServer['data'];
                 console.log(responseListChat, "Test");
-
+                dispatch(saveListChat(responseListChat));
             }
+            setError('');
+            document.getElementById('roomName').value = '';
+            toggleDialog();
         }
-        dispatch(saveListChat(''));
     }
 
 
     const joinRoom = () => {
         const roomName = document.getElementById('roomName').value;
-        console.log('roomName:', roomName);
-        callAPIGetRoomChatMes(roomName);
+        callAPIJoinRoomChat(roomName);
         client.onmessage = (message) => {
             const dataFromServer = JSON.parse(message.data);
-            console.log(dataFromServer, "Test");
-            if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
+            if (dataFromServer['event'] === 'JOIN_ROOM') {
                 const status = dataFromServer.status;
+                const msg = dataFromServer['mes'];
                 if (status === 'success') {
                     callAPIJoinRoomChat(roomName);
                     callAPIGetUserList();
                 } else {
-                    setError('Room not exist!');
+                    setError(msg);
+                    return;
                 }
             }
             if (dataFromServer['event'] === 'GET_USER_LIST') {
                 const responseListChat = dataFromServer['data'];
-                console.log(dataFromServer, "CHAT");
                 dispatch(saveListChat(responseListChat));
             }
+            setError('');
+            document.getElementById('roomName').value = '';
+            toggleDialog();
         }
     }
 
@@ -64,14 +71,9 @@ function CreateAndJoinRoom(props) {
         setIsDialogOpen(!isDialogOpen);
     };
     return (
-        <>
-            <a className="create-join" href="#" onClick={toggleDialog}>Create and Join room</a>
-            <Modal
-                isOpen={isDialogOpen}
-                onRequestClose={toggleDialog}
-                className="create-join-room-dialog"
-                overlayClassName="create-join-room-dialog-overlay"
-            >
+        <div>
+            <p className="create-join" onClick={toggleDialog}>Create and Join room</p>
+            <div className={"room_container"} style={{display: isDialogOpen ? "block" : "none"}}>
                 <div className="create-join-room-dialog-content">
                     <h2 className="create-join-room-dialog-title">Create and Join Room</h2>
                     <button className="close-dialog-btn" onClick={toggleDialog}>X</button>
@@ -84,10 +86,11 @@ function CreateAndJoinRoom(props) {
                         )}
                     </div>
                 </div>
-            </Modal>
-        </>
+            </div>
+        </div>
     );
-
 }
+
+
 
 export default CreateAndJoinRoom;

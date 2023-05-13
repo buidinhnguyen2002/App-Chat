@@ -1,5 +1,12 @@
 @import "src/Assets/css/base";
 
+.room_container{
+  @include positionAbsolute(50%, 50%, unset, unset);
+  transform: translate(-50%, -50%);
+  background-color: $primary-color-white;
+  border-radius: 15px;
+}
+
 .create-room {
   width: 343.8px;
 }
@@ -9,6 +16,8 @@
   font-size: 14px;
   line-height: 20px;
   color: $color-blue-03;
+  margin: 0;
+  cursor: pointer;
 }
 
 .create-room input {
@@ -38,11 +47,12 @@
   margin: 0 5px;
   transform: scale(0.5);
   border-radius: 20px;
+  &:hover {
+    background-color: $color-blue-02;
+    @include styleText(400, 20px, 30px, $primary-color-blue);
+  }
 }
 
-.create-room-btn:hover, .join-room-btn:hover {
-  opacity: 0.2;
-}
 .create-join-room-dialog-overlay {
   background-color: rgba(0, 0, 0, 0.4);
 }
@@ -79,7 +89,14 @@
   border: none;
   font-size: 15px;
   cursor: pointer;
+  &:hover{
+    opacity: 0.5;
+  }
+  &:focus{
+    outline: none;
+  }
 }
-.close-dialog-btn:hover {
-  opacity: 0.5;
+.error {
+  text-align: center;
+  color: $color-red-01;
 }
