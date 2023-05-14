@@ -46,9 +46,22 @@ export default function userReducer(state = initialState, action) {
 
             }
         case 'CHANGE_CURRENT_CHAT':
+            const nameChat = action.payload.nameChat;
+            const type = action.payload.type;
+            let listChat = [];
+            if(type == 1){
+                const room= state.chatsRoom.find(room => room.name === nameChat);
+                listChat = room.chatData;
+            }
+            if(type == 0){
+                const people= state.chatsPeople.find(people => people.name === nameChat);
+                if(people){
+                    listChat = people.chatData;
+                }
+            }
             return {
                 ...state,
-                chatsRoom: [...state.chatsRoom, action.payload],
+                currentChat: [...listChat],
             }
         case 'LOGOUT_SUCCESS':
             return initialState;
