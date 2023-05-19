@@ -79,9 +79,23 @@ export default function userReducer(state = initialState, action) {
 
                 }
             }
+        case 'UPDATE_CHATS':
+            return {
+                ...state,
+                chatsRoom: state.chatsRoom.map((room,index) => {
+                    if(room.name === action.payload.name){
+                        return action.payload;
+                    }else {
+                        return {
+                            ...room,
+                        }
+                    }
+                }),
+                currentChat: action.payload,
+            }
         case 'SEND_CHAT':
-            nameChat = action.payload.nameChat;
-            type = action.payload.type;
+            const roomChat = action.payload.nameChat;
+            const typeChat = action.payload.type;
             let mes = action.payload.mes;
             let username = JSON.parse(sessionStorage.getItem('dataReLogIn')).username;
             let msgObj = {
@@ -89,20 +103,33 @@ export default function userReducer(state = initialState, action) {
                 type: 1,
                 to: '',
                 mes: mes,
+                createAt: "2020 11:28:23",
             }
+
             // if(type == 1){
             //     const room= state.chatsRoom.find(room => room.name === nameChat);
             //     currentChatChoose = room;
             // }
-            if(type == 0){
-                const people= state.chatsPeople.find(people => people.name === nameChat);
-                if(people){
-                    currentChatChoose = people;
-                }
-            }
+            // if(type == 0){
+            //     const people= state.chatsPeople.find(people => people.name === nameChat);
+            //     if(people){
+            //         currentChatChoose = people;
+            //     }
+            // }
             return {
                 ...state,
-                currentChat: state.currentChat.chatData
+                chatsRoom: state.chatsRoom.map(room => {
+                    if(room.name === roomChat){
+                        return {
+                            ...room,
+                            chatData: [msgObj,...room.chatData ],
+                        };
+                    }
+                }),
+                currentChat: {
+                    ...state.currentChat,
+                    chatData: [msgObj, ...state.currentChat.chatData],
+                }
             }
         case 'LOGOUT_SUCCESS':
             return initialState;

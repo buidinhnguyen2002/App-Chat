@@ -35,6 +35,7 @@ export function changeCurrentChat(nameChat, type) {
     }
 }
 export function sendChat(nameChat, type, mes) {
+    console.log(nameChat, 1, mes)
     return {
         type: "SEND_CHAT",
         payload: {
@@ -42,6 +43,12 @@ export function sendChat(nameChat, type, mes) {
             type: type,
             mes: mes,
         }
+    }
+}
+export function updateChat(newChats) {
+    return {
+        type: "UPDATE_CHATS",
+        payload: newChats,
     }
 }
 export function reciveChat(chat) {
