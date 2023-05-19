@@ -150,3 +150,17 @@ export const callAPIJoinRoomChat = (roomName) => {
         }
     }));
 }
+
+export const callAPISendChatRoom = (to, mes)=>{
+    client.send(JSON.stringify({
+        "action": "onchat",
+        "data": {
+            "event": "SEND_CHAT",
+            "data": {
+                "type": "room",
+                "to": to,
+                "mes": mes,
+            }
+        }
+    }));
+}

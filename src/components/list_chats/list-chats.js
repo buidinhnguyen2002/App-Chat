@@ -18,7 +18,6 @@ function ListChats(props) {
         setChatIndex(index);
         const nameChat = e.target.getAttribute('name');
         const type = e.target.getAttribute('type');
-        // console.log(nameChat, type);
         dispatch(changeCurrentChat(nameChat, type));
     }
     return (

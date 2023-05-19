@@ -34,3 +34,20 @@ export function changeCurrentChat(nameChat, type) {
         }
     }
 }
+export function sendChat(nameChat, type, mes) {
+    return {
+        type: "SEND_CHAT",
+        payload: {
+            nameChat: nameChat,
+            type: type,
+            mes: mes,
+        }
+    }
+}
+export function reciveChat(chat) {
+    return {
+        type: "SEND_CHAT",
+        payload: chat,
+    }
+}
+

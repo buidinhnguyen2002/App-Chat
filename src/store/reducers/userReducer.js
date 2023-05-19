@@ -5,7 +5,7 @@ const initialState = {
     chats: [],
     chatsRoom: [],
     chatsPeople: [],
-    currentChat: [],
+    currentChat: null,
 };
 let isInit = true;
 
@@ -28,40 +28,81 @@ export default function userReducer(state = initialState, action) {
                 chatsRoom: [...action.payload],
             }
         case 'SAVE_LIST_CHATS_PEOPLE':
-            let currentChat = [];
+            let currentChat = null;
             if(isInit){
                 const chatChoose = state.chats[0];
                 if(chatChoose.type === 1){
-                    currentChat = state.chatsRoom[0].chatData;
+                    currentChat = state.chatsRoom[0];
                 }
                 if(chatChoose.type === 0){
-                    currentChat = state.chatsPeople[0].chatData;
+                    currentChat = state.chatsPeople[0];
                 }
                 isInit = false;
             }
             return {
                 ...state,
                 chatsPeople: [...action.payload],
-                currentChat: currentChat.length !== 0 ? currentChat : [...state.currentChat],
+                currentChat: currentChat.length !== 0 ? currentChat : state.currentChat,
 
             }
         case 'CHANGE_CURRENT_CHAT':
-            const nameChat = action.payload.nameChat;
-            const type = action.payload.type;
-            let listChat = [];
+            let nameChat = action.payload.nameChat;
+            let type = action.payload.type;
+            let currentChatChoose = null;
             if(type == 1){
                 const room= state.chatsRoom.find(room => room.name === nameChat);
-                listChat = room.chatData;
+                console.log(room)
+                currentChatChoose = room;
             }
             if(type == 0){
                 const people= state.chatsPeople.find(people => people.name === nameChat);
                 if(people){
-                    listChat = people.chatData;
+                    currentChatChoose = people;
                 }
             }
             return {
                 ...state,
-                currentChat: [...listChat],
+                currentChat: currentChatChoose,
+            }
+        case '':
+            let chatRecive = action.payload;
+            let newListChat = [];
+            let chat = null;
+            if(chatRecive.type == 1){
+                chat = state.chatsRoom.find(room => room.name === chatRecive.to);
+                newListChat = [chatRecive, ...chat.chatData];
+            }
+            return {
+                ...state,
+                chatsRoom: {
+                    ...state.chatsRoom,
+
+                }
+            }
+        case 'SEND_CHAT':
+            nameChat = action.payload.nameChat;
+            type = action.payload.type;
+            let mes = action.payload.mes;
+            let username = JSON.parse(sessionStorage.getItem('dataReLogIn')).username;
+            let msgObj = {
+                name: username,
+                type: 1,
+                to: '',
+                mes: mes,
+            }
+            // if(type == 1){
+            //     const room= state.chatsRoom.find(room => room.name === nameChat);
+            //     currentChatChoose = room;
+            // }
+            if(type == 0){
+                const people= state.chatsPeople.find(people => people.name === nameChat);
+                if(people){
+                    currentChatChoose = people;
+                }
+            }
+            return {
+                ...state,
+                currentChat: state.currentChat.chatData
             }
         case 'LOGOUT_SUCCESS':
             return initialState;

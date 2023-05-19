@@ -9,7 +9,8 @@ import {useNavigate} from "react-router-dom";
 import MessageItem from "../message/message_item";
 
 function WindowChat(props) {
-    const currentChats = [...useSelector(state => state.userReducer.currentChat)].reverse();
+    const currentChats = useSelector(state => state.userReducer.currentChat);
+    const chatData = currentChats !== null ? [...currentChats.chatData].reverse(): [];
     const dispatch = useDispatch();
     useEffect(() => {
 
@@ -21,7 +22,7 @@ function WindowChat(props) {
             </div>
             <div className="window-chat-body d-flex" style={{flexDirection: "column"}}>
                 {
-                    currentChats.map((msg,index)=> (
+                    chatData.map((msg,index)=> (
                         <div className={'msgItem'} key={msg.id}>
                             <MessageItem key={msg.id} name={msg.name} mes={msg.mes}/>
                         </div>

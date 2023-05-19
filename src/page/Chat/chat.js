@@ -88,6 +88,14 @@ function ChatPage(props) {
             });
             dispatch(saveToListChatsDetail(chatsRoom));
             dispatch(saveToListChatsPeople(chatPeople));
+            client.onmessage = (message) => {
+                const dataFromServer = JSON.parse(message.data);
+                console.log('recieve');
+                console.log(dataFromServer);
+                if(dataFromServer['event'] === 'SEND_CHAT'){
+
+                }
+            }
         }
         f();
     }, []);
