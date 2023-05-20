@@ -29,7 +29,7 @@ function Login(props) {
         const isLogin = sessionStorage.getItem('isLogIn');
         reConnectionServer();
         if (isLogin) {
-            navigate('/chat', {replace: true});
+            navigate('/chat',);
         }
     }, [navigate]);
     const handleOnchangeInput = (event) => {
@@ -64,6 +64,7 @@ function Login(props) {
                     keyReLogIn: dataFromServer['data']['RE_LOGIN_CODE'],
                 };
                 sessionStorage.setItem('dataReLogIn', JSON.stringify(dataReLogIn));
+                dispatch(loginSuccess(userName));
                 return navigate('/chat');
             }
         }

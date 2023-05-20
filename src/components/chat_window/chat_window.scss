@@ -7,5 +7,6 @@
   }
   &-body{
     height: calc(100% - 92px - 90px);
+    overflow-y: scroll;
   }
 }

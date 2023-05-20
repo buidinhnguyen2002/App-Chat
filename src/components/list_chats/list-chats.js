@@ -6,15 +6,19 @@ import ArchiveItem from "../archive-item/archive_item";
 import ChatItem from "../chat_item/chat_item";
 import {useDispatch, useSelector} from "react-redux";
 import chat from "../../page/Chat/chat";
-import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/loginService";
-import {saveToListChatsDetail} from "../../store/actions/userAction";
+import {callAPIGetPeopleChatMes, callAPIGetRoomChatMes, client, waitConnection} from "../../service/loginService";
+import {changeCurrentChat, saveToListChatsDetail} from "../../store/actions/userAction";
 import CreateAndjoinRoom from "../rooms/createAndjoinRoom";
 
 function ListChats(props) {
     const listChats = useSelector(state =>  state.userReducer.chats);
     const [chatIndex, setChatIndex] = useState(0);
-    function changeChatIndex(index) {
+    const dispatch = useDispatch();
+    function changeChatIndex(index,e) {
         setChatIndex(index);
+        const nameChat = e.target.getAttribute('name');
+        const type = e.target.getAttribute('type');
+        dispatch(changeCurrentChat(nameChat, type));
     }
     return (
         <div className={"list_chats"}>
@@ -33,7 +37,7 @@ function ListChats(props) {
                 <h4 className={"chats-title"}>All Chats</h4>
                 <div className="chats_container">
                     {typeof listChats !== 'undefined' && Array.isArray(listChats) ? listChats.map((chatItem,index) => (
-                        <div className="chat-item" onClick={()=>changeChatIndex(index)}>
+                        <div key={chatItem.actionTime} name={chatItem.name} type={chatItem.type} className="chat-item" onClick={(e)=>changeChatIndex(index,e)}>
                             <ChatItem type={chatItem.type} name={chatItem.name} isChoose={chatIndex == index ? true : false} />
                         </div>
                     )): <div></div>}

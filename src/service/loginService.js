@@ -44,6 +44,21 @@ export const callAPIGetRoomChatMes = (roomName) => {
         }
     ));
 }
+export const callAPIGetPeopleChatMes = (name) => {
+    client.send(JSON.stringify(
+        {
+            "action": "onchat",
+            "data": {
+                "event": "GET_PEOPLE_CHAT_MES",
+                "data": {
+                    "name": name,
+                    "page": 1,
+                }
+            }
+        }
+    ));
+}
+
 export const callAPIReLogIn = () => {
     const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
     client.send(JSON.stringify(
@@ -131,6 +146,31 @@ export const callAPIJoinRoomChat = (roomName) => {
             "event": "JOIN_ROOM",
             "data": {
                 "name": roomName,
+            }
+        }
+    }));
+}
+
+export const callAPISendChatRoom = (to, mes)=>{
+    client.send(JSON.stringify({
+        "action": "onchat",
+        "data": {
+            "event": "SEND_CHAT",
+            "data": {
+                "type": "room",
+                "to": to,
+                "mes": mes,
+            }
+        }
+    }));
+}
+export const callAPICheckUser = ()=>{
+    client.send(JSON.stringify({
+        "action": "onchat",
+        "data": {
+            "event": "CHECK_USER",
+            "data": {
+                "user": "nguyen................................"
             }
         }
     }));

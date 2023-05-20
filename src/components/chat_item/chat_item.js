@@ -9,30 +9,28 @@ function ChatItem(props) {
     const [type, setType] = useState(props.type);
     const [name, setName] = useState(props.name);
     const dispatch = useDispatch();
-    let chatData = useSelector(state => state.userReducer.chatsDetail.find(chat=> chat && chat.name === name));
+    let chatData = useSelector(state => type == 1 ? state.userReducer.chatsRoom.find(chat=> chat && chat.name === name) : state.userReducer.chatsPeople.find(chat=> chat && chat.name === name));
     let newMess = null;
     let timeShort = "";
     if(chatData) {
         if(chatData.chatData[0]){
             newMess = chatData.chatData[0];
+
             let arrTime = newMess.createAt.split(" ");
             let fullTime = arrTime[1];
             timeShort = fullTime.substring(0, fullTime.length-3);
-            console.log(timeShort, "ALLL");
         }
     }
-    console.log(useSelector(state => state.userReducer.chatsDetail), "alo");
     useEffect(()=>{
-        async function f(){
-            await waitConnection();
-            callAPIGetRoomChatMes(name);
-            client.onmessage = (message) => {
-                const dataFromServer = JSON.parse(message.data);
-                dispatch(saveToListChatsDetail(dataFromServer['data']));
-            }
-
-        }
-        f();
+        // async function f(){
+        //     await waitConnection();
+        //     callAPIGetRoomChatMes(name);
+        //     client.onmessage = (message) => {
+        //         const dataFromServer = JSON.parse(message.data);
+        //         dispatch(saveToListChatsDetail(dataFromServer['data']));
+        //     }
+        // }
+        // f();
     },[])
         return (
             <div className={`chat_item chat_item-round d-flex ${props.isChoose ? 'chat_item-bgBlue':'chat_item-bgWhite'}`}>
@@ -54,7 +52,7 @@ function ChatItem(props) {
                         </div>
                     </div>
                     <div className="chat_time">
-                        <span className={`${props.isChoose ? 'chat_time-clWhite':'chat_time-clGrey'}`}>{props.timeShort}</span>
+                        <span className={`${props.isChoose ? 'chat_time-clWhite':'chat_time-clGrey'}`}>{timeShort}</span>
                         <div style={{visibility: props.isChoose ? "hidden": "visible"}} className="num-unread-message">
                             <span>2</span>
                         </div>

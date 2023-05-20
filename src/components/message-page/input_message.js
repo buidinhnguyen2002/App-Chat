@@ -1,34 +1,45 @@
-import React from "react";
+import React, {useState} from "react";
 import "./messages.scss";
+import {callAPIGetRoomChatMes, callAPIGetUserList, callAPISendChatRoom, client} from "../../service/loginService";
+import {useDispatch, useSelector} from "react-redux";
+import {saveListChat, sendChat, updateChat} from "../../store/actions/userAction";
+import {isAllOf} from "@reduxjs/toolkit";
 
-class InputMessage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            active: props.active,
-            icon: props.icon,
+function InputMessage(props) {
+    const currentChats = useSelector(state => state.userReducer.currentChat);
+    const [msg, setMsg] = useState('');
+    const dispatch = useDispatch();
+    const handleOnchangeInput = (event) => {
+        const  value = event.target.value;
+        setMsg(value);
+    }
+    const sendMsg=()=>{
+        callAPISendChatRoom(currentChats.name, msg);
+        callAPIGetRoomChatMes(currentChats.name);
+        client.onmessage = (message) => {
+            const dataFromServer = JSON.parse(message.data);
+            console.log('recieve');
+            console.log(dataFromServer);
+            if(dataFromServer['event'] === 'GET_ROOM_CHAT_MES'){
+                dispatch(updateChat(dataFromServer['data']));
+            }
         }
+        setMsg('');
     }
-    render() {
-        return (
-            <div className="container-input">
-                <div className="rectangle-16">
-                    <i className="fa-solid fa-link"></i>
-                    <div className="message">
-                        <input type="text" placeholder="Write a message ..." />
-                    </div>
-                    <i className="fa-regular fa-face-smile"></i>
+    return (
+        <div className="container-input">
+            <div className="rectangle-16">
+                <i className="fa-solid fa-link"></i>
+                <div className="message">
+                    <input type="text" placeholder="Write a message ..." onChange={handleOnchangeInput} value={msg}/>
                 </div>
-                <div className="rectangle-17">
-                    <div className="input-group-append">
-                        <button className="fa-regular fa-paper-plane">
-                            <i className="bi bi-send"></i>
-                        </button>
-                    </div>
-                </div>
+                <i className="fa-regular fa-face-smile"></i>
             </div>
-        );
-    }
+            <button className="rectangle-17" onClick={sendMsg}>
+                <i className="fa-regular fa-paper-plane"></i>
+            </button>
+        </div>
+    );
 }
 
 

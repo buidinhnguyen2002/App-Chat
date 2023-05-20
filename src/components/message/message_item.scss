@@ -1,6 +1,19 @@
 @import "src/Assets/css/base";
+.message_container {
+  width: 100%;
+  display: flex;
+  padding: 8px 25px;
+}
+.message_container-flexRight{
+  justify-content: right;
+}
+.message_container-flexleft{
+  justify-content: left;
+}
 .message_item {
   padding: 12px 20px;
+  width: max-content;
+  max-width: 50%;
   height: 100%;
   &-round{
     border-radius: 16px;
@@ -10,6 +23,9 @@
   }
   &-bgWhite {
     background-color: $primary-color-white;
+  }
+  .msg {
+    word-break: break-word;
   }
   .message{
     margin: 0;
