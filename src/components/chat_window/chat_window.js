@@ -16,7 +16,6 @@ function WindowChat(props) {
     const scrollTargetRef = useRef(null);
     useEffect(() => {
         if (scrollTargetRef.current) {
-            console.log(scrollTargetRef.current, "day ne")
             scrollTargetRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, );

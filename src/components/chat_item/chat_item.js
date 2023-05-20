@@ -15,6 +15,7 @@ function ChatItem(props) {
     if(chatData) {
         if(chatData.chatData[0]){
             newMess = chatData.chatData[0];
+
             let arrTime = newMess.createAt.split(" ");
             let fullTime = arrTime[1];
             timeShort = fullTime.substring(0, fullTime.length-3);

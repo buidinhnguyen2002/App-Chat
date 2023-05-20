@@ -5,6 +5,7 @@ import ListChats from "../../components/list_chats/list-chats";
 import WindowChat from "../../components/chat_window/chat_window";
 import {redirect, useNavigate, Outlet} from "react-router-dom";
 import {
+    callAPICheckUser,
     callAPICreateRoomChat, callAPIGetPeopleChatMes,
     callAPIGetRoomChatMes,
     callAPIGetUserList, callAPIJoinRoomChat,
@@ -13,7 +14,7 @@ import {
 } from "../../service/loginService";
 import {testCallAPIReLogIn, testReConnectionServer} from "../../service/APIService";
 import {useDispatch, useSelector} from "react-redux";
-import {saveListChat, saveToListChatsDetail, saveToListChatsPeople} from "../../store/actions/userAction";
+import {receiveChat, saveListChat, saveToListChatsDetail, saveToListChatsPeople} from "../../store/actions/userAction";
 import listChats from "../../components/list_chats/list-chats";
 
 function ChatPage(props) {
@@ -88,12 +89,17 @@ function ChatPage(props) {
             });
             dispatch(saveToListChatsDetail(chatsRoom));
             dispatch(saveToListChatsPeople(chatPeople));
+            callAPICheckUser();
             client.onmessage = (message) => {
                 const dataFromServer = JSON.parse(message.data);
-                console.log('recieve');
-                console.log(dataFromServer);
+                console.log(dataFromServer, 'check user')
+                const dataMessage = dataFromServer['data'];
+                const date = new Date();
+                const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
+                    + ':' + date.getMinutes()+':' + date.getSeconds();
+                dataMessage.createAt = newTime;
                 if(dataFromServer['event'] === 'SEND_CHAT'){
-
+                    dispatch(receiveChat(dataMessage));
                 }
             }
         }

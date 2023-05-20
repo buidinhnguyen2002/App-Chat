@@ -80,18 +80,36 @@ export default function userReducer(state = initialState, action) {
                 }
             }
         case 'UPDATE_CHATS':
+
+            const updateChats = state.chatsRoom.map((room,index) => {
+                if(room.name === action.payload.name){
+                    return action.payload;
+                }
+                return room;
+            });
+            console.log(updateChats, 'update chat');
             return {
                 ...state,
-                chatsRoom: state.chatsRoom.map((room,index) => {
-                    if(room.name === action.payload.name){
-                        return action.payload;
-                    }else {
+                chatsRoom: updateChats,
+                currentChat: action.payload,
+            }
+        case 'RECEIVE_CHAT':
+            const updateChat = state.chatsRoom.map((room,index) => {
+                    if(room.name === action.payload.to){
                         return {
                             ...room,
-                        }
+                            chatData: [action.payload, ...room.chatData],
+                        };
                     }
-                }),
-                currentChat: action.payload,
+                    return room;
+                });
+            return {
+                ...state,
+                chatsRoom: updateChat,
+                currentChat: {
+                    ...state.currentChat,
+                    chatData: [action.payload,...state.currentChat.chatData],
+                },
             }
         case 'SEND_CHAT':
             const roomChat = action.payload.nameChat;

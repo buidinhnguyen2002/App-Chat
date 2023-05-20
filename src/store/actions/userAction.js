@@ -51,9 +51,9 @@ export function updateChat(newChats) {
         payload: newChats,
     }
 }
-export function reciveChat(chat) {
+export function receiveChat(chat) {
     return {
-        type: "SEND_CHAT",
+        type: "RECEIVE_CHAT",
         payload: chat,
     }
 }
