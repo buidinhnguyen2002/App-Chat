@@ -14,7 +14,23 @@ import loginService from '../../service/loginService';
 import {loginSuccess, saveListChat} from "../../store/actions/userAction";
 import {connect, useDispatch} from "react-redux";
 import {redirect, Link, Navigate, useNavigate, json} from "react-router-dom";
-import {validatePassword, validateUser} from "../../helpers/func";
+function validatePassword(password1 = '', password2 = password1) {
+    if(password1.trim().length<=0){
+        return 'Password is not empty'
+    }
+
+    if (password1 !== password2) {
+        return 'Password is not match'
+    }
+    return null
+}
+function validateUser(username) {
+    if(username.trim().length<=0){
+        return 'Username is not empty'
+    }
+    return null
+}
+
 
 function Login(props) {
     const [status, setStatus] = useState(props.status);
@@ -56,6 +72,7 @@ function Login(props) {
     }
 
     const handleLogin = () => {
+
         const checkUser = validateUser(userName)
         setValidation({username:checkUser})
         if(checkUser){
@@ -79,7 +96,7 @@ function Login(props) {
                 sessionStorage.setItem('isLogIn', true);
                 const dataReLogIn = {
                     userName: userName,
-                    keyReLogInL: dataFromServer['data']['RE_LOGIN_CODE'],
+                    keyReLogIn: dataFromServer['data']['RE_LOGIN_CODE'],
                 };
                 sessionStorage.setItem('dataReLogIn', JSON.stringify(dataReLogIn));
                 return navigate('/chat');
@@ -131,7 +148,7 @@ function Login(props) {
                     <h4 className="title-form">{status === 'login' ? 'Login' : 'Register'} </h4>
                 </div>
                 <div className="input-container">
-                    <input className="d-block" type="text" name="userName" placeholder="Username" value={userName}
+                    <input className="d-block stealthy mb-3" type="text" name="userName" placeholder="Username" value={userName}
                            onChange={(event) => handleOnchangeInput(event)}/>
                    <span className="text-danger"> {validation.username}</span>
                     <div className="password-wrapper">
