@@ -1,8 +1,15 @@
 import React, {useState} from "react";
 import "./messages.scss";
-import {callAPIGetRoomChatMes, callAPIGetUserList, callAPISendChatRoom, client} from "../../service/loginService";
+import {
+    callAPIGetPeopleChatMes,
+    callAPIGetRoomChatMes,
+    callAPIGetUserList,
+    callAPISendChatPeople,
+    callAPISendChatRoom,
+    client
+} from "../../service/loginService";
 import {useDispatch, useSelector} from "react-redux";
-import {saveListChat, sendChat, updateChat} from "../../store/actions/userAction";
+import {changeCurrentChat, saveListChat, sendChat, updateChat} from "../../store/actions/userAction";
 import {isAllOf} from "@reduxjs/toolkit";
 
 function InputMessage(props) {
@@ -14,17 +21,32 @@ function InputMessage(props) {
         setMsg(value);
     }
     const sendMsg=()=>{
-        callAPISendChatRoom(currentChats.name, msg);
-        callAPIGetRoomChatMes(currentChats.name);
+        console.log(currentChats);
+        if(currentChats?.type === 0){
+            callAPISendChatPeople(currentChats.name,msg)
+            callAPIGetPeopleChatMes(currentChats.name, msg);
+        }
+        else{
+            callAPISendChatRoom(currentChats.name, msg);
+            callAPIGetRoomChatMes(currentChats.name);
+        }
+
         client.onmessage = (message) => {
             const dataFromServer = JSON.parse(message.data);
             console.log('recieve');
-            console.log(dataFromServer);
+            console.log(dataFromServer,currentChats);
             if(dataFromServer['event'] === 'GET_ROOM_CHAT_MES'){
                 dispatch(updateChat(dataFromServer['data']));
             }
+            else if(dataFromServer['event'] === 'GET_PEOPLE_CHAT_MES'){
+                dispatch(changeCurrentChat({
+                    chatsPeople:dataFromServer['data'],
+                    type:0,
+                    nameChat:currentChats.name
+                }));
+            }
+            setMsg('')
         }
-        setMsg('');
     }
     return (
         <div className="container-input">

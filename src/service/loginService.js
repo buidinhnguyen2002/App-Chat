@@ -164,6 +164,21 @@ export const callAPISendChatRoom = (to, mes)=>{
         }
     }));
 }
+
+export const callAPISendChatPeople = (to, mes)=>{
+    client.send(JSON.stringify({
+        "action": "onchat",
+        "data": {
+            "event": "SEND_CHAT",
+            "data": {
+                "type": "people",
+                "to": to,
+                "mes": mes,
+            }
+        }
+    }));
+}
+
 export const callAPICheckUser = ()=>{
     client.send(JSON.stringify({
         "action": "onchat",
