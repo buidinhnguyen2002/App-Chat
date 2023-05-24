@@ -70,7 +70,7 @@ function ChatPage(props) {
                         let chatData = dataFromServer['data'];
                         if(chatData.length !== 0){
                             let chatObj = {
-                                name: chatData[0].to,
+                                nameChat: chatData[0].to,
                                 type: chatData[0].type,
                                 chatData: chatData,
                             };

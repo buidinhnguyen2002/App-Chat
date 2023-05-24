@@ -58,3 +58,9 @@ export function receiveChat(chat) {
     }
 }
 
+export function updateChatPeole(newChats) {
+    return {
+        type: "UPDATE_CHATS_PEOPLE",
+        payload: newChats,
+    }
+}
