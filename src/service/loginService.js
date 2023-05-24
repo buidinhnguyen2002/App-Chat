@@ -166,6 +166,7 @@ export const callAPISendChatRoom = (to, mes)=>{
 }
 
 export const callAPISendChatPeople = (to, mes)=>{
+    console.log("Send message to",to,mes)
     client.send(JSON.stringify({
         "action": "onchat",
         "data": {

@@ -38,15 +38,14 @@ function InputMessage(props) {
     const sendMsg=()=>{
         console.log(currentChats);
         if(currentChats?.type === 0){
-            callAPISendChatPeople(currentChats.name,msg)
-            callAPIGetPeopleChatMes(currentChats.name, msg);
+            console.log(currentChats);
+            callAPISendChatPeople(currentChats.nameChat,msg)
+            callAPIGetPeopleChatMes(currentChats.nameChat);
         }
         else{
-            callAPISendChatRoom(currentChats.name, msg);
-            callAPIGetRoomChatMes(currentChats.name);
+            callAPISendChatRoom(currentChats.nameChat, msg);
+            callAPIGetRoomChatMes(currentChats.nameChat);
         }
-
-       
         setMsg('')
 
     }
