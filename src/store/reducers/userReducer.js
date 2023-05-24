@@ -49,20 +49,21 @@ export default function userReducer(state = initialState, action) {
             let nameChat = action.payload.nameChat;
             let type = action.payload.type;
             let currentChatChoose = {};
+            console.log(action.payload);
             if(type == 1){
                 const room= state.chatsRoom.find(room => room.name === nameChat);
                 console.log(room)
                 currentChatChoose = room;
             }
             if(type == 0){
-                const people= state.chatsPeople.find(people => people.name === nameChat);    
+                const people = state.chatsPeople.find(people => people.name === nameChat);    
                 currentChatChoose.currentChat = action.payload.chatsPeople && []
                 if(people){
                     currentChatChoose = people;
                 }else{
-                    currentChatChoose.type = action.payload.type
                     currentChatChoose.nameChat = action.payload.nameChat
                 }
+                currentChatChoose.type = action.payload.type
             }
             return {
                 ...state,
@@ -96,6 +97,14 @@ export default function userReducer(state = initialState, action) {
                 ...state,
                 chatsRoom: updateChats,
                 currentChat: action.payload,
+            }
+        case 'UPDATE_CHATS_PEOPLE':
+            return {
+                ...state,
+                currentChat:{
+                    ...state.currentChat,
+                    chatData:action.payload
+                },
             }
         case 'RECEIVE_CHAT':
             const updateChat = state.chatsRoom.map((room,index) => {

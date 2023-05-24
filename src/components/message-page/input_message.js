@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./messages.scss";
 import {
     callAPIGetPeopleChatMes,
@@ -9,7 +9,7 @@ import {
     client
 } from "../../service/loginService";
 import {useDispatch, useSelector} from "react-redux";
-import {changeCurrentChat, saveListChat, sendChat, updateChat} from "../../store/actions/userAction";
+import {changeCurrentChat, saveListChat, sendChat, updateChat, updateChatPeole} from "../../store/actions/userAction";
 import {isAllOf} from "@reduxjs/toolkit";
 
 function InputMessage(props) {
@@ -20,6 +20,21 @@ function InputMessage(props) {
         const  value = event.target.value;
         setMsg(value);
     }
+
+    useEffect(()=>{
+        client.onmessage = (message) => {
+            const dataFromServer = JSON.parse(message.data);
+            console.log('recieve');
+            console.log(dataFromServer,currentChats);
+            if(dataFromServer['event'] === 'GET_ROOM_CHAT_MES'){
+                dispatch(updateChat(dataFromServer['data']));
+            }
+            else if(dataFromServer['event'] === 'GET_PEOPLE_CHAT_MES'){
+                dispatch(updateChatPeole(dataFromServer['data']))
+            }
+        }
+    })
+
     const sendMsg=()=>{
         console.log(currentChats);
         if(currentChats?.type === 0){
@@ -31,22 +46,9 @@ function InputMessage(props) {
             callAPIGetRoomChatMes(currentChats.name);
         }
 
-        client.onmessage = (message) => {
-            const dataFromServer = JSON.parse(message.data);
-            console.log('recieve');
-            console.log(dataFromServer,currentChats);
-            if(dataFromServer['event'] === 'GET_ROOM_CHAT_MES'){
-                dispatch(updateChat(dataFromServer['data']));
-            }
-            else if(dataFromServer['event'] === 'GET_PEOPLE_CHAT_MES'){
-                dispatch(changeCurrentChat({
-                    chatsPeople:dataFromServer['data'],
-                    type:0,
-                    nameChat:currentChats.name
-                }));
-            }
-            setMsg('')
-        }
+       
+        setMsg('')
+
     }
     return (
         <div className="container-input">

@@ -4,7 +4,7 @@ import ChatDetailHeader from "../chat_detail_header/chat_detail_header";
 import InputMessage from "../message-page/input_message";
 import {useDispatch, useSelector} from "react-redux";
 import {callAPIGetPeopleChatMes, callAPIGetRoomChatMes, client} from "../../service/loginService";
-import {saveToListChatsDetail} from "../../store/actions/userAction";
+import {changeCurrentChat, saveToListChatsDetail} from "../../store/actions/userAction";
 import {useNavigate} from "react-router-dom";
 import MessageItem from "../message/message_item";
 import chat from "../../page/Chat/chat";
@@ -22,15 +22,8 @@ function WindowChat(props) {
             scrollTargetRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, );
-
-
     function handleClickMessage(message){
-        console.log(message);
-        callAPIGetPeopleChatMes(message.name)
-        client.onmessage = (message) => {
-            const dataFromServer = JSON.parse(message.data);
-            console.log(dataFromServer);
-        }
+        dispatch(changeCurrentChat(message.name,0))
     }
 
     return (
