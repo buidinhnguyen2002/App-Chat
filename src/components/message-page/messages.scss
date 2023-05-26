@@ -1,5 +1,5 @@
 @import "src/Assets/css/base";
-.container-input{
+.container-input {
   padding: 20px 14px 20px 23px;
   background-color: $color-white-01;
   display: flex;
@@ -31,7 +31,6 @@
 }
 
 .message {
-
 }
 
 .message input {
@@ -61,7 +60,7 @@
   margin-left: 20px;
   outline: none;
   border: none;
-  &:focus{
+  &:focus {
     outline: none;
     border: none;
   }
@@ -76,3 +75,10 @@
   align-items: center;
   color: $primary-color-white;
 }
+
+.emoji-picker-container {
+  position: absolute;
+  top: -450px;
+  right: 0;
+}
+
