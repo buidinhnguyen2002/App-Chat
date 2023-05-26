@@ -1,4 +1,3 @@
-// Trong component WindowChat
 import React, { useEffect, useRef } from "react";
 import "./chat_window.scss";
 import ChatDetailHeader from "../chat_detail_header/chat_detail_header";
