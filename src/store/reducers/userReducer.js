@@ -6,6 +6,7 @@ const initialState = {
     chatsRoom: [],
     chatsPeople: [],
     currentChat: null,
+    images: [],
 };
 let isInit = true;
 
@@ -148,6 +149,11 @@ export default function userReducer(state = initialState, action) {
                     ...state.currentChat,
                     chatData: [msgObj, ...state.currentChat.chatData],
                 }
+            }
+        case 'SAVE_MY_IMAGES':
+            return {
+                ...state,
+                images: action.payload,
             }
         case 'LOGOUT_SUCCESS':
             return initialState;

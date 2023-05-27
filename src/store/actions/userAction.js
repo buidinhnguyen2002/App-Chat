@@ -57,4 +57,10 @@ export function receiveChat(chat) {
         payload: chat,
     }
 }
+export function saveAllImage(images) {
+    return {
+        type: "SAVE_MY_IMAGES",
+        payload: images,
+    }
+}
 

@@ -1,8 +1,7 @@
 import React, {useEffect} from "react";
 import "./chat.scss";
 import NavigationBar from "../../components/navigation_bar/navigation_bar";
-import ListChats from "../../components/list_chats/list-chats";
-import WindowChat from "../../components/chat_window/chat_window";
+import {listAll, ref, getDownloadURL} from "firebase/storage";
 import {redirect, useNavigate, Outlet} from "react-router-dom";
 import {
     callAPICheckUser,
@@ -12,16 +11,24 @@ import {
     callAPIReLogIn, client,
     reConnectionServer, waitConnection
 } from "../../service/loginService";
-import {testCallAPIReLogIn, testReConnectionServer} from "../../service/APIService";
 import {useDispatch, useSelector} from "react-redux";
-import {receiveChat, saveListChat, saveToListChatsDetail, saveToListChatsPeople} from "../../store/actions/userAction";
+import {
+    loginSuccess,
+    receiveChat, saveAllImage,
+    saveListChat,
+    saveToListChatsDetail,
+    saveToListChatsPeople
+} from "../../store/actions/userAction";
 import listChats from "../../components/list_chats/list-chats";
+import {storage} from "../../firebase";
 
 function ChatPage(props) {
+    const currentAuth = useSelector(state => state.userReducer.username);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogIn');
+
         if (!isLogin) {
             navigate('/');
             return;
@@ -43,6 +50,8 @@ function ChatPage(props) {
                         console.log(dataFromServer, "RELO");
                         dataReLogIn.keyReLogIn = dataFromServer['data']?.['RE_LOGIN_CODE'];
                         sessionStorage.setItem('dataReLogIn', JSON.stringify(dataReLogIn));
+                        dispatch(loginSuccess(dataReLogIn.userName));
+                        fetchAndSetMyImage(dataReLogIn.userName);
                     }
                     if(dataFromServer['event'] === 'GET_USER_LIST'){
                         const responseListChat = dataFromServer['data'];
@@ -94,6 +103,7 @@ function ChatPage(props) {
                 const dataFromServer = JSON.parse(message.data);
                 console.log(dataFromServer, 'check user')
                 const dataMessage = dataFromServer['data'];
+                // const dataMessage = JSON.parse(dataFromServer['data']);
                 const date = new Date();
                 const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
                     + ':' + date.getMinutes()+':' + date.getSeconds();
@@ -105,6 +115,18 @@ function ChatPage(props) {
         }
         f();
     }, []);
+    const fetchAndSetMyImage = (myName) => {
+        const imageListRef = ref(storage, `images/${myName}/`);
+        listAll(imageListRef).then((response)=> {
+            const urlImgs = [];
+            response.items.forEach(item => {
+                getDownloadURL(item).then(url => {
+                    urlImgs.push(url);
+                });
+            })
+            dispatch(saveAllImage(urlImgs));
+        });
+    }
     return (
         <div className={"page-chat"}>
             <NavigationBar/>

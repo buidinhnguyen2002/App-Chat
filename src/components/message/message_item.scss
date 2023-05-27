@@ -1,39 +1,127 @@
 @import "src/Assets/css/base";
+
 .message_container {
   width: 100%;
   display: flex;
   padding: 8px 25px;
 }
-.message_container-flexRight{
+
+.message_container-flexRight {
   justify-content: right;
 }
-.message_container-flexleft{
+
+.message_container-flexleft {
   justify-content: left;
 }
+
+.image_container {
+  .flex-container{
+    max-width: 50%;
+    flex-wrap: wrap;
+    padding: 8px;
+  }
+  .image_item {
+    @include dimension(94px, 94px);
+    margin: 5px 3px;
+    cursor: pointer;
+    border-radius: 5px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    &:hover {
+      background-color: $primary-color-white;
+    }
+  }
+}
+
 .message_item {
   padding: 12px 20px;
-  width: max-content;
   max-width: 50%;
   height: 100%;
-  &-round{
+
+  &-round {
     border-radius: 16px;
   }
-  &-bgBlue{
+
+  &-bgBlue {
     background-color: $color-blue-01;
   }
+
   &-bgWhite {
     background-color: $primary-color-white;
   }
+
   .msg {
     word-break: break-word;
   }
-  .message{
+
+  .message {
     margin: 0;
-    &-myMessage{
+
+    &-myMessage {
       @include styleText(600, 14px, 19px, $primary-color-white);
     }
-    &-peopleMessage{
+
+    &-peopleMessage {
       @include styleText(600, 14px, 19px, $color-grey-01);
+    }
+  }
+}
+
+.image_detail-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $primary-color-text;
+  opacity: 0.9;
+  z-index: 99;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img{
+    object-fit: cover;
+    max-width: 85%;
+    max-height: 85%;
+  }
+  .ic_close, .ic_download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 5px;
+    transform: translate(-50%, 25%);
+    border-radius: 50%;
+    @include dimension(40px, 40px);
+    i{
+      font-size: 40px;
+      color: white;
+      @include dimension(40px, 40px);
+      display: block;
+      &:before{
+        transform: translateY(-10px);
+      }
+    }
+    &:hover {
+      background-color: #999999;
+    }
+  }
+  .ic_download{
+    right: 70px;
+    top: 15px;
+    top: 10px;
+    @include dimension(35px, 35px);
+    i{
+      font-size: 20px;
+      &:before{
+        transform: translate(7px, 5px);
+      }
     }
   }
 }
