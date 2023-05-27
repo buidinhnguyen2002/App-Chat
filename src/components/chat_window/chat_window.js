@@ -11,14 +11,28 @@ import chat from "../../page/Chat/chat";
 
 function WindowChat(props) {
     const currentChats = useSelector(state => state.userReducer.currentChat);
-    const chatData = currentChats !== null ? [...currentChats.chatData].reverse(): [];
+    const chatData = currentChats !== null ? [...currentChats.chatData].reverse() : [];
     const dispatch = useDispatch();
     const scrollTargetRef = useRef(null);
     useEffect(() => {
         if (scrollTargetRef.current) {
-            scrollTargetRef.current.scrollIntoView({ behavior: 'smooth' });
+            scrollTargetRef.current.scrollIntoView({behavior: 'smooth'});
         }
-    }, );
+    },);
+
+    function isJSON(str) {
+        try {
+            const searchStrings = ["{", "}", "[", "]", "text", "imgs"];
+            for (const searchStringsKey of searchStrings) {
+                if (!str.includes(searchStringsKey)) return false;
+            }
+            JSON.parse(str);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+
     return (
         <div className={"window-chat"}>
             <div className="window-chat-header">
@@ -26,10 +40,17 @@ function WindowChat(props) {
             </div>
             <div className="window-chat-body d-flex" style={{flexDirection: "column"}}>
                 {
-                    chatData.map((msg,index)=> (
-                        <div ref={(chatData.length-1) === index ? scrollTargetRef: null} className={'msgItem'+ `${(chatData.length-1) === index ? " alo": ' loa'}`} key={msg.id}>
-                            <MessageItem key={msg.id} name={msg.name} mes={msg.mes}/>
-                        </div>
+                    chatData.map((msg, index) => (
+                        isJSON(msg.mes) ? <div ref={(chatData.length - 1) === index ? scrollTargetRef : null}
+                                               className={'msgItem'}
+                                               key={msg.id}>
+                                <MessageItem key={msg.id} name={msg.name} mes={msg.mes} isJson={true}/>
+                            </div> :
+                            <div ref={(chatData.length - 1) === index ? scrollTargetRef : null}
+                                 className={'msgItem' + `${(chatData.length - 1) === index ? " alo" : ' loa'}`}
+                                 key={msg.id}>
+                                <MessageItem key={msg.id} name={msg.name} mes={msg.mes}/>
+                            </div>
                     ))
                 }
             </div>
