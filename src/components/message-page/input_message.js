@@ -7,11 +7,14 @@ import {isAllOf} from "@reduxjs/toolkit";
 import {storage} from "../../firebase";
 import {ref, uploadBytes, getDownloadURL, uploadBytesResumable} from "firebase/storage";
 import {v4} from "uuid";
+import {HEADER_MSG_VIDEO} from "../../util/constants";
 
 function InputMessage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
     const currentChats = useSelector(state => state.userReducer.currentChat);
     const [msg, setMsg] = useState({'text': '', 'imgs': []});
+    const [videos, setVideos] = useState([]);
+    const [videosBuffer, setVideosBuffer] = useState([]);
     const dispatch = useDispatch();
     const [msgImgs, setMsgImgs] = useState([]);
     const [msgFileImgs, setMsgFileImgs] = useState([]);
@@ -24,6 +27,35 @@ function InputMessage(props) {
     }
     const sendMsg = async () => {
         await handleUploadToFirebase();
+
+    }
+    const handleUploadVideosToFirebase = async () => {
+        let newVideos = [];
+        const uploadTasks = videos.map((video) => {
+            if (video == null) return null;
+            const videoRef = ref(storage, `videos/${currentAuth}/${video.name + v4()}`);
+            const uploadTask = uploadBytesResumable(videoRef, video);
+            return new Promise((resolve, reject) => {
+                uploadTask.on(
+                    "state_changed",
+                    null,
+                    null,
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref)
+                            .then((downloadURL) => {
+                                newVideos = [...newVideos, downloadURL];
+                                callAPISendChatRoom(currentChats.name, HEADER_MSG_VIDEO+downloadURL);
+                                callAPIGetRoomChatMes(currentChats.name);
+                                resolve();
+                            })
+                            .catch((error) => {
+                                console.error("Lỗi khi lấy URL tải xuống:", error);
+                                reject(error);
+                            });
+                    }
+                );
+            });
+        });
     }
     const handleUploadToFirebase = async () => {
         const newMsg = {
@@ -69,27 +101,54 @@ function InputMessage(props) {
                 setMsg({'text': '', 'imgs': []});
                 setMsgImgs([]);
                 setMsgFileImgs([]);
+                setMsgFileImgs([]);
+                setVideosBuffer([]);
             })
             .catch((error) => {
                 console.error("Lỗi khi tải lên hình ảnh:", error);
             });
+        handleUploadVideosToFirebase();
     };
+
     const uploadImg = (e) => {
         const files = e.target.files;
         const newBuffersImg = [];
         const newFileImgs = [];
+        const newFileVideos = [];
+        const newBufferVideos = [];
+        let countNotImg = 0;
+        let countNotVideo = 0;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            newFileImgs.push(file);
-            const fileReader = new FileReader();
-            fileReader.onload = function () {
-                newBuffersImg.push(fileReader.result);
-                if (newBuffersImg.length === files.length) {
-                    setMsgImgs(newBuffersImg);
-                    setMsgFileImgs(newFileImgs);
+            if (file.type.startsWith('image/')) {
+                newFileImgs.push(file);
+                const fileReader = new FileReader();
+                fileReader.onload = function () {
+                    newBuffersImg.push(fileReader.result);
+                    if (newBuffersImg.length === files.length - countNotImg) {
+                        setMsgImgs(newBuffersImg);
+                        setMsgFileImgs(newFileImgs);
+                    }
                 }
+                fileReader.readAsDataURL(file);
+            } else {
+                countNotImg++;
             }
-            fileReader.readAsDataURL(file);
+            if (file.type.startsWith('video/')) {
+                const videoObjectURL = URL.createObjectURL(file);
+                newBufferVideos.push(videoObjectURL);
+                newFileVideos.push(file);
+                const fileReader = new FileReader();
+                fileReader.onload = function () {
+                    if (newBufferVideos.length === files.length - countNotVideo) {
+                        setVideos(newFileVideos);
+                        setVideosBuffer(newBufferVideos);
+                    }
+                }
+                fileReader.readAsDataURL(file);
+            } else {
+                countNotVideo++;
+            }
         }
     }
 
@@ -108,7 +167,15 @@ function InputMessage(props) {
                             </div>
                             <img src={file} alt="" className={"imgLoad"}/>
                         </div>))}
-
+                    </div>
+                    <div className="message_videos">
+                        {videosBuffer.map((video, index) => (
+                                <div className={'message_video-item d-flex'}>
+                                    <video controls>
+                                        <source src={video} type={"video/mp4"}/>
+                                    </video>
+                                </div>
+                            ))}
                     </div>
                     <input type="text" placeholder="Write a message ..." onChange={handleOnchangeInput}
                            value={msg.text}/>
