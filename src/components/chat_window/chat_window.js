@@ -47,7 +47,7 @@ function WindowChat(props) {
                                 <MessageItem key={msg.id} name={msg.name} mes={msg.mes} isJson={true}/>
                             </div> :
                             <div ref={(chatData.length - 1) === index ? scrollTargetRef : null}
-                                 className={'msgItem' + `${(chatData.length - 1) === index ? " alo" : ' loa'}`}
+                                 className={'msgItem'}
                                  key={msg.id}>
                                 <MessageItem key={msg.id} name={msg.name} mes={msg.mes}/>
                             </div>

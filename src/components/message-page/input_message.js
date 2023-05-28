@@ -44,7 +44,7 @@ function InputMessage(props) {
                         getDownloadURL(uploadTask.snapshot.ref)
                             .then((downloadURL) => {
                                 newVideos = [...newVideos, downloadURL];
-                                callAPISendChatRoom(currentChats.name, HEADER_MSG_VIDEO+downloadURL);
+                                callAPISendChatRoom(currentChats.name, HEADER_MSG_VIDEO + downloadURL);
                                 callAPIGetRoomChatMes(currentChats.name);
                                 resolve();
                             })
@@ -88,26 +88,34 @@ function InputMessage(props) {
         });
         Promise.all(uploadTasks)
             .then(() => {
-                callAPISendChatRoom(currentChats.name, JSON.stringify(newMsg));
-                callAPIGetRoomChatMes(currentChats.name);
-                client.onmessage = (message) => {
-                    const dataFromServer = JSON.parse(message.data);
-                    console.log('recieve');
-                    console.log(dataFromServer);
-                    if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
-                        dispatch(updateChat(dataFromServer['data']));
+                if (newMsg.text !== '' || newMsg.imgs.length !== 0) {
+                    callAPISendChatRoom(currentChats.name, JSON.stringify(newMsg));
+                    callAPIGetRoomChatMes(currentChats.name);
+                    client.onmessage = (message) => {
+                        const dataFromServer = JSON.parse(message.data);
+                        console.log('recieve');
+                        console.log(dataFromServer);
+                        if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
+                            dispatch(updateChat(dataFromServer['data']));
+                        }
                     }
                 }
                 setMsg({'text': '', 'imgs': []});
                 setMsgImgs([]);
                 setMsgFileImgs([]);
-                setMsgFileImgs([]);
+                setVideos([]);
                 setVideosBuffer([]);
             })
             .catch((error) => {
                 console.error("Lỗi khi tải lên hình ảnh:", error);
             });
         handleUploadVideosToFirebase();
+    };
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            sendMsg();
+        }
     };
 
     const uploadImg = (e) => {
@@ -170,15 +178,15 @@ function InputMessage(props) {
                     </div>
                     <div className="message_videos">
                         {videosBuffer.map((video, index) => (
-                                <div className={'message_video-item d-flex'}>
-                                    <video controls>
-                                        <source src={video} type={"video/mp4"}/>
-                                    </video>
-                                </div>
-                            ))}
+                            <div className={'message_video-item d-flex'}>
+                                <video controls>
+                                    <source src={video} type={"video/mp4"}/>
+                                </video>
+                            </div>
+                        ))}
                     </div>
                     <input type="text" placeholder="Write a message ..." onChange={handleOnchangeInput}
-                           value={msg.text}/>
+                           value={msg.text} onKeyPress={handleKeyPress}/>
                 </div>
                 <i className="fa-regular fa-face-smile"></i>
             </div>

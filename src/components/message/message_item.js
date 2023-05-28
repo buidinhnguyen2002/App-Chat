@@ -45,7 +45,7 @@ function MessageItem(props) {
                         <source src={video} type={"video/mp4"}/>
                     </video>
                 </div>
-            </div>: <div className={`message_container ${props.name === myName ? 'message_container-flexRight':'message_container-flexleft'}`}>
+            </div> : <div className={`message_container ${props.name === myName ? 'message_container-flexRight':'message_container-flexleft'}`}>
                 <div
                     className={`message_item message_item-round ${props.name === myName ? "message_item-bgBlue" : "message_item-bgWhite"}`}>
                     <span className={`msg ${props.name === myName ? "message-myMessage" : "message-peopleMessage"}`}>{mesText}</span>
@@ -58,7 +58,7 @@ function MessageItem(props) {
             </div> : <></>}
             {showVideoDetail ? <div className={"image_detail-container"}>
                 <video controls>
-                    <source src={video} type={"video/mp4"} onClick={setURLVideoDetail}/>
+                    <source src={video} type={"video/mp4"} onDoubleClick={setURLVideoDetail}/>
                 </video>
                 <div className={'ic_close'} onClick={closeImageDetail}><i className="bi bi-x-circle"></i></div>
                 <div className={'ic_download'} onClick={dowloadImage}><i className="bi bi-download"></i></div>
