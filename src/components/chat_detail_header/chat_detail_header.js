@@ -19,7 +19,6 @@ function ChatDetailHeader (props) {
                     <div className="chat_detail_header-wrapper">
                         <div className="chat_content-wrapper">
                             <div className="chat_name ">
-                                {/*<h4 className='chat_name-clBlack'>Pink Panda</h4>*/}
                                 <h4 className='chat_name-clBlack'>{currentChat ? currentChat.name:''}</h4>
                             </div>
                             <div className="chat_message">

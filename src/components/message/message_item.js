@@ -3,6 +3,7 @@ import "./message_item.scss";
 import {useSelector} from "react-redux";
 import {saveAs} from 'file-saver';
 import {HEADER_MSG_VIDEO} from "../../util/constants";
+import {getURLVideo} from "../../util/function";
 
 function MessageItem(props) {
     const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
@@ -13,7 +14,7 @@ function MessageItem(props) {
     const [videoDetail, setVideoDetail] = useState('');
     const [showImageDetail, setShowImageDetail] = useState(false);
     const [showVideoDetail, setShowVideoDetail] = useState(false);
-    const video = props.mes.includes(HEADER_MSG_VIDEO) ? mesText.substring(mesText.indexOf('=') + 1, mesText.length) : '';
+    const video = getURLVideo(mesText);
     const setURLImageDetail = (e) => {
         setImgDetail(e.target.src);
         setShowImageDetail(true);
