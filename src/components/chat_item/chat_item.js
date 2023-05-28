@@ -22,13 +22,15 @@ function ChatItem(props) {
             timeShort = fullTime.substring(0, fullTime.length-3);
         }
     }
-    function getMessage(msg, ownChat){
+    function getMessage(msg, ownChat, type, to){
+        // console.log(ownChat + 'ownchat ' + myName + 'myName' + "type: "+type + "to: " + to)
         if(isVideo(msg)) return 'Bạn đã gửi 1 video.';
         const isMyChat = ownChat === myName;
-        if(!isJSON(msg)) return (isMyChat ? 'Bạn: ' : '') + msg;
+        console.log(isJSON(msg)+ to)
+        if(!isJSON(msg)) return (isMyChat ? 'Bạn: ' : type === 1 ? ownChat+ ": " : '') + msg;
         const msgObject = JSON.parse(msg);
         if(msgObject.text === '' && msgObject.imgs.length > 0) return `Bạn đã gửi ${msgObject.imgs.length} hình ảnh.`;
-        return (isMyChat ? 'Bạn: ' : '') + msgObject.text;
+        return (isMyChat ? 'Bạn: ' : type === 1 ? ownChat+ ": " : '') + msgObject.text;
     }
     useEffect(()=>{
     },[])
@@ -48,7 +50,7 @@ function ChatItem(props) {
                             <h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{props.name}</h4>
                         </div>
                         <div className="chat_message">
-                            <h5 className={`${props.isChoose ? 'chat_message-clWhite':'chat_message-clGrey'}`}>{newMess != null ?  getMessage(newMess.mes, newMess.name): ""}</h5>
+                            <h5 className={`${props.isChoose ? 'chat_message-clWhite':'chat_message-clGrey'}`}>{newMess != null ?  getMessage(newMess.mes, newMess.name, newMess.type, newMess.to): ""}</h5>
                         </div>
                     </div>
                     <div className="chat_time">
