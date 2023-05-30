@@ -36,6 +36,11 @@
         font-size: 24px;
         line-height: 36px;
       }
+
+      .mb-3{
+        margin-bottom: 3px;
+      }
+
       input::placeholder {
         font-weight: 400;
       }
@@ -117,6 +122,14 @@
       bottom: -55px;
       right: -65px;
     }
+  }
+  .text-danger{
+    color:red;
+  }
+
+  .text-message{
+    color: #76D45E;
+    text-align: center;
   }
 
 }

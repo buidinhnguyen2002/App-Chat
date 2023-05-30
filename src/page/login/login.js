@@ -14,6 +14,23 @@ import loginService from '../../service/loginService';
 import {loginSuccess, saveListChat} from "../../store/actions/userAction";
 import {connect, useDispatch} from "react-redux";
 import {redirect, Link, Navigate, useNavigate, json} from "react-router-dom";
+function validatePassword(password1 = '', password2 = password1) {
+    if(password1.trim().length<=0){
+        return 'Password is not empty'
+    }
+
+    if (password1 !== password2) {
+        return 'Password is not match'
+    }
+    return null
+}
+function validateUser(username) {
+    if(username.trim().length<=0){
+        return 'Username is not empty'
+    }
+    return null
+}
+
 
 function Login(props) {
     const [status, setStatus] = useState(props.status);
@@ -22,6 +39,7 @@ function Login(props) {
     const [retypePassword, setRetypePassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showRetypePassword, setShowRetypePassword] = useState(false);
+    const [validation,setValidation] = useState({username:'',password:'',message:''})
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -45,6 +63,7 @@ function Login(props) {
         }
     }
     const changeStatus = () => {
+        setValidation({})
         if (status == 'login') {
             setStatus('register');
         } else {
@@ -53,11 +72,27 @@ function Login(props) {
     }
 
     const handleLogin = () => {
-        callAPILogin(userName, password);
+
+        const checkUser = validateUser(userName)
+        setValidation({username:checkUser})
+        if(checkUser){
+            return
+        }
+        const checkPassword = validatePassword(password)
+        if(checkPassword){
+            return
+        }
+        try {
+            callAPILogin(userName, password);
+        }catch (e) {
+            console.log(e)
+            return
+        }
         client.onmessage = (message) => {
             const dataFromServer = JSON.parse(message.data);
             console.log(dataFromServer);
-            if (dataFromServer['event'] === 'LOGIN') {
+
+            if (dataFromServer['status'] === 'success' && dataFromServer['event'] === 'LOGIN') {
                 sessionStorage.setItem('isLogIn', true);
                 const dataReLogIn = {
                     userName: userName,
@@ -66,11 +101,41 @@ function Login(props) {
                 sessionStorage.setItem('dataReLogIn', JSON.stringify(dataReLogIn));
                 dispatch(loginSuccess(userName));
                 return navigate('/chat');
+            }else{
+                setValidation({username:dataFromServer["mes"]})
             }
         }
     };
     const handleRegister = () => {
+        const checkUser = validateUser(userName)
+        setValidation({username:checkUser})
+        if(checkUser){
+            return
+        }
+        const checkPassword = validatePassword(password, retypePassword)
+        setValidation({password:checkPassword})
+        if(checkPassword){
+            return
+        }
         callAPIRegister(userName, password);
+        client.onmessage = (message) => {
+            const dataFromServer = JSON.parse(message.data);
+            console.log(dataFromServer);
+        }
+
+        client.onmessage = (message) => {
+            const dataFromServer = JSON.parse(message.data);
+            console.log(dataFromServer);
+
+            if (dataFromServer['status'] === 'success' && dataFromServer['event'] === 'REGISTER') {
+                setUserName('')
+                setPassword('')
+                setRetypePassword('')
+                setValidation({message: dataFromServer['data']})
+            }else{
+                setValidation({username:dataFromServer["mes"]})
+            }
+        }
     }
     const toggleShowPassword = (event) => {
         const name = event.target.parentElement.getAttribute('name');
@@ -84,12 +149,14 @@ function Login(props) {
                     <h4 className="title-form">{status === 'login' ? 'Login' : 'Register'} </h4>
                 </div>
                 <div className="input-container">
-                    <input className="d-block" type="text" name="userName" placeholder="Username" value={userName}
+                    <input className="d-block stealthy mb-3" type="text" name="userName" placeholder="Username" value={userName}
                            onChange={(event) => handleOnchangeInput(event)}/>
+                   <span className="text-danger"> {validation.username}</span>
                     <div className="password-wrapper">
                         <input className="d-block" name="password" type={showPassword ? 'text' : 'password'}
                                placeholder="Password" value={password}
                                onChange={(event) => handleOnchangeInput(event)}/>
+                        <span className="text-danger"> {validation.password}</span>
                         <span style={{cursor: 'pointer'}} name="showPassword" onClick={toggleShowPassword}>
                                 <i className={showPassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
                             </span>
@@ -105,6 +172,7 @@ function Login(props) {
                 </div>
                 <button className="btn-login col-12"
                         onClick={status === 'login' ? handleLogin : handleRegister}>{status === 'login' ? 'Login' : 'Register'}</button>
+                <div className='text-message'>{validation.message}</div>
                 <hr style={{borderColor: "#FFFFFF", borderWidth: "1px"}}/>
                 <div className="register-container" onClick={changeStatus}>
                     <a>{status === 'login' ? 'Register' : 'Login'}</a></div>
