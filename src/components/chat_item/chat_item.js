@@ -23,13 +23,11 @@ function ChatItem(props) {
         }
     }
     function getMessage(msg, ownChat, type, to){
-        // console.log(ownChat + 'ownchat ' + myName + 'myName' + "type: "+type + "to: " + to)
-        if(isVideo(msg)) return 'Bạn đã gửi 1 video.';
         const isMyChat = ownChat === myName;
-        console.log(isJSON(msg)+ to)
+        if(isVideo(msg)) return (isMyChat ? 'Bạn ' : type === 1 ?ownChat+ ': ': '') + 'đã gửi 1 video.';
         if(!isJSON(msg)) return (isMyChat ? 'Bạn: ' : type === 1 ? ownChat+ ": " : '') + msg;
         const msgObject = JSON.parse(msg);
-        if(msgObject.text === '' && msgObject.imgs.length > 0) return `Bạn đã gửi ${msgObject.imgs.length} hình ảnh.`;
+        if(msgObject.text === '' && msgObject.imgs.length > 0) return (isMyChat ? 'Bạn đã gửi ' : type === 1 ? ownChat+ ' đã gửi ' : '') + ` ${msgObject.imgs.length} hình ảnh.`;
         return (isMyChat ? 'Bạn: ' : type === 1 ? ownChat+ ": " : '') + msgObject.text;
     }
     useEffect(()=>{
