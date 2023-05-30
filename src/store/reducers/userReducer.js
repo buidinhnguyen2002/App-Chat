@@ -95,6 +95,7 @@ export default function userReducer(state = initialState, action) {
                 currentChat: action.payload,
             }
         case 'RECEIVE_CHAT':
+
             const updateChat = state.chatsRoom.map((room,index) => {
                     if(room.name === action.payload.to){
                         return {

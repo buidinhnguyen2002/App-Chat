@@ -27,7 +27,6 @@ function InputMessage(props) {
     }
     const sendMsg = async () => {
         await handleUploadToFirebase();
-
     }
     const handleUploadVideosToFirebase = async () => {
         let newVideos = [];
@@ -91,14 +90,6 @@ function InputMessage(props) {
                 if (newMsg.text !== '' || newMsg.imgs.length !== 0) {
                     callAPISendChatRoom(currentChats.name, JSON.stringify(newMsg));
                     callAPIGetRoomChatMes(currentChats.name);
-                    client.onmessage = (message) => {
-                        const dataFromServer = JSON.parse(message.data);
-                        console.log('recieve');
-                        console.log(dataFromServer);
-                        if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
-                            dispatch(updateChat(dataFromServer['data']));
-                        }
-                    }
                 }
                 setMsg({'text': '', 'imgs': []});
                 setMsgImgs([]);
