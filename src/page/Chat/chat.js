@@ -17,7 +17,7 @@ import {
     receiveChat, saveAllImage,
     saveListChat,
     saveToListChatsDetail,
-    saveToListChatsPeople
+    saveToListChatsPeople, updateChat
 } from "../../store/actions/userAction";
 import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
@@ -28,7 +28,6 @@ function ChatPage(props) {
     const navigate = useNavigate();
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogIn');
-
         if (!isLogin) {
             navigate('/');
             return;
@@ -108,8 +107,13 @@ function ChatPage(props) {
                 const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
                     + ':' + date.getMinutes()+':' + date.getSeconds();
                 dataMessage.createAt = newTime;
+                console.log(dataMessage, 'DATA MESSGE');
                 if(dataFromServer['event'] === 'SEND_CHAT'){
+                    console.log('Vao duoc r');
                     dispatch(receiveChat(dataMessage));
+                }
+                if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
+                    dispatch(updateChat(dataFromServer['data']));
                 }
             }
         }
