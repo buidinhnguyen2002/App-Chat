@@ -95,7 +95,6 @@ export default function userReducer(state = initialState, action) {
                 currentChat: action.payload,
             }
         case 'RECEIVE_CHAT':
-
             const updateChat = state.chatsRoom.map((room,index) => {
                     if(room.name === action.payload.to){
                         return {
@@ -110,7 +109,7 @@ export default function userReducer(state = initialState, action) {
                 chatsRoom: updateChat,
                 currentChat: {
                     ...state.currentChat,
-                    chatData: [action.payload,...state.currentChat.chatData],
+                    chatData: state.currentChat.name === action.payload.to ? [  action.payload,...state.currentChat.chatData] : [...state.currentChat.chatData],
                 },
             }
         case 'SEND_CHAT':
