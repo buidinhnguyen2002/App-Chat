@@ -1,13 +1,10 @@
 import React from "react";
 import "./chat_detail_header.scss";
+import {useSelector} from "react-redux";
 
 
-class ChatDetailHeader extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
+function ChatDetailHeader (props) {
+    const currentChat = useSelector(state => state.userReducer.currentChat);
         return (
             <div className="chat_detail_header chat_detail_header-bgLight">
                 <div className="chat_detail_header-leading">
@@ -22,7 +19,7 @@ class ChatDetailHeader extends React.Component {
                     <div className="chat_detail_header-wrapper">
                         <div className="chat_content-wrapper">
                             <div className="chat_name ">
-                                <h4 className='chat_name-clBlack'>Pink Panda</h4>
+                                <h4 className='chat_name-clBlack'>{currentChat ? currentChat.name:''}</h4>
                             </div>
                             <div className="chat_message">
                                 <h5 className='chat_message-clGrey'>Online</h5>
@@ -47,7 +44,6 @@ class ChatDetailHeader extends React.Component {
                 </div>
             </div>
         )
-    }
 
 }
 

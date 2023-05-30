@@ -53,7 +53,7 @@
 }
 
 .message {
-  .message_img{
+  &_img{
     display: flex;
     &-item{
       position: relative;
@@ -89,6 +89,25 @@
           transform: translateY(-3px);
         }
       }
+    }
+  }
+  &_videos {
+    display: flex;
+    //&_videos-item {
+    //  width: 200px;
+    //  height: 200px;
+    //}
+  }
+  .message_video-item {
+    margin-right: 5px;
+    video {
+      width: 100%;
+      max-width: 120px;
+      max-height: 120px;
+      height: auto;
+      object-fit: cover;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
   }
 }
