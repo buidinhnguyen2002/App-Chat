@@ -2,17 +2,29 @@ import React, {useState} from "react";
 import "./chat_detail_header.scss";
 import {useSelector} from "react-redux";
 import VideoCallScreen from "../video_call_screen/video_call_screen";
+import {authToken, createMeeting} from "../../service/VideoCallService";
+import {callAPISendChatRoom} from "../../service/loginService";
+import {HEADER_VIDEO_CALL} from "../../util/constants";
 
 
 function ChatDetailHeader (props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
     const [connecting, setConnecting] = useState(false);
     const [videoCall, setVideoCall] = useState(false);
-    const handelCallVideo = () => {
+    const [meetingId, setMeetingId] = useState(null);
+    const getMeetingAndToken = async (id) => {
+        const meetingId = id == null ? await createMeeting({token: authToken}): id;
+        setMeetingId(meetingId);
+        return meetingId.toString();
+    }
+    const handelCallVideo = async () => {
         setVideoCall(true);
+        const meetId = await getMeetingAndToken(null);
+        if(meetId){
+            callAPISendChatRoom(currentChat.name,HEADER_VIDEO_CALL+meetId);
+        }
     }
     const handleLeaveVideoCall = () => {
-        console.log('Vao day r')
         setVideoCall(false);
     }
 
@@ -53,7 +65,7 @@ function ChatDetailHeader (props) {
                         <i className="bi bi-chevron-down"></i>
                     </div>
                 </div>
-                {videoCall ? <VideoCallScreen handleLeaveVideoCall={handleLeaveVideoCall}/> : <></>}
+                {videoCall && <VideoCallScreen meetingId={meetingId} handleLeaveVideoCall={handleLeaveVideoCall}/>}
             </div>
         )
 

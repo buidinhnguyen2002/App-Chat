@@ -22,12 +22,17 @@ import {
 import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
 import VideoCallScreen from "../../components/video_call_screen/video_call_screen";
+import {isVideoCall} from "../../util/function";
 
 function ChatPage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const [videoCall, setVideoCall] = useState(false);
+    const handleLeaveVideoCall = () => {
+        setVideoCall(false);
+    }
+    const [meetingId, setMeetingId] = useState(null);
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogIn');
         if (!isLogin) {
@@ -99,7 +104,7 @@ function ChatPage(props) {
             });
             dispatch(saveToListChatsDetail(chatsRoom));
             dispatch(saveToListChatsPeople(chatPeople));
-            callAPICheckUser();
+            // callAPICheckUser();
             client.onmessage = (message) => {
                 const dataFromServer = JSON.parse(message.data);
                 console.log(dataFromServer, 'check user')
@@ -108,9 +113,12 @@ function ChatPage(props) {
                 const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
                     + ':' + date.getMinutes()+':' + date.getSeconds();
                 dataMessage.createAt = newTime;
-                console.log(dataMessage, 'DATA MESSGE');
+                // console.log(dataMessage, 'DATA MESSGE');
                 if(dataFromServer['event'] === 'SEND_CHAT'){
-                    console.log('Vao duoc r');
+                    if(isVideoCall(dataMessage.mes)){
+                        setVideoCall(true);
+                        return;
+                    }
                     dispatch(receiveChat(dataMessage));
                 }
                 if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
@@ -138,8 +146,9 @@ function ChatPage(props) {
             <div className="detail">
                 <Outlet/>
             </div>
-            {/*{videoCall ? <VideoCallScreen/> : <></>}*/}
+            {videoCall && <VideoCallScreen meetingId={meetingId} handleLeaveVideoCall={handleLeaveVideoCall}/>}
         </div>
+
     )
 }
 
