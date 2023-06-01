@@ -1,7 +1,11 @@
-import {HEADER_MSG_VIDEO} from "./constants";
+import {HEADER_MSG_VIDEO, HEADER_VIDEO_CALL} from "./constants";
 
 export const isVideo = (text) => {
     if(text.includes(HEADER_MSG_VIDEO)) return true;
+    return false;
+}
+export const isVideoCall = (text) => {
+    if(text.startsWith(HEADER_VIDEO_CALL)) return true;
     return false;
 }
 export const getURLVideo = (text) => {

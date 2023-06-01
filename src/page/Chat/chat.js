@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import "./chat.scss";
 import NavigationBar from "../../components/navigation_bar/navigation_bar";
 import {listAll, ref, getDownloadURL} from "firebase/storage";
@@ -21,11 +21,13 @@ import {
 } from "../../store/actions/userAction";
 import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
+import VideoCallScreen from "../../components/video_call_screen/video_call_screen";
 
 function ChatPage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     useEffect(() => {
         const isLogin = sessionStorage.getItem('isLogIn');
         if (!isLogin) {
@@ -102,7 +104,6 @@ function ChatPage(props) {
                 const dataFromServer = JSON.parse(message.data);
                 console.log(dataFromServer, 'check user')
                 const dataMessage = dataFromServer['data'];
-                // const dataMessage = JSON.parse(dataFromServer['data']);
                 const date = new Date();
                 const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
                     + ':' + date.getMinutes()+':' + date.getSeconds();
@@ -137,6 +138,7 @@ function ChatPage(props) {
             <div className="detail">
                 <Outlet/>
             </div>
+            {/*{videoCall ? <VideoCallScreen/> : <></>}*/}
         </div>
     )
 }

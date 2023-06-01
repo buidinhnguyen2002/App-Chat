@@ -1,10 +1,21 @@
-import React from "react";
+import React, {useState} from "react";
 import "./chat_detail_header.scss";
 import {useSelector} from "react-redux";
+import VideoCallScreen from "../video_call_screen/video_call_screen";
 
 
 function ChatDetailHeader (props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
+    const [connecting, setConnecting] = useState(false);
+    const [videoCall, setVideoCall] = useState(false);
+    const handelCallVideo = () => {
+        setVideoCall(true);
+    }
+    const handleLeaveVideoCall = () => {
+        console.log('Vao day r')
+        setVideoCall(false);
+    }
+
         return (
             <div className="chat_detail_header chat_detail_header-bgLight">
                 <div className="chat_detail_header-leading">
@@ -28,7 +39,7 @@ function ChatDetailHeader (props) {
                     </div>
                 </div>
                 <div className="chat_detail_header-trailing">
-                    <div className="video_call chat_detail-icon">
+                    <div className="video_call chat_detail-icon" onClick={handelCallVideo}>
                         <i className="bi bi-camera-video"></i>
                     </div>
                     <div className="audio_call chat_detail-icon">
@@ -42,6 +53,7 @@ function ChatDetailHeader (props) {
                         <i className="bi bi-chevron-down"></i>
                     </div>
                 </div>
+                {videoCall ? <VideoCallScreen handleLeaveVideoCall={handleLeaveVideoCall}/> : <></>}
             </div>
         )
 
