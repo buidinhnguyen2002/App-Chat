@@ -1,33 +1,43 @@
-import React, {useState} from "react";
+import {
+    MeetingProvider,
+    MeetingConsumer,
+    useMeeting,
+    useParticipant,
+} from "@videosdk.live/react-sdk";
+import React, {useEffect, useState} from "react";
+
 import "./chat_detail_header.scss";
-import {useSelector} from "react-redux";
-import VideoCallScreen from "../video_call_screen/video_call_screen";
+import {useDispatch, useSelector} from "react-redux";
 import {authToken, createMeeting} from "../../service/VideoCallService";
+import {setMeetingRoom} from "../../store/actions/meetingAction";
 import {callAPISendChatRoom} from "../../service/loginService";
 import {HEADER_VIDEO_CALL} from "../../util/constants";
 
 
 function ChatDetailHeader (props) {
+
     const currentChat = useSelector(state => state.userReducer.currentChat);
-    const [connecting, setConnecting] = useState(false);
-    const [videoCall, setVideoCall] = useState(false);
+    const isCalling = useSelector(state => state.userReducer.isCalling);
+    const myName = useSelector(state => state.userReducer.username);
     const [meetingId, setMeetingId] = useState(null);
+    const dispatch = useDispatch();
     const getMeetingAndToken = async (id) => {
         const meetingId = id == null ? await createMeeting({token: authToken}): id;
         setMeetingId(meetingId);
         return meetingId.toString();
     }
     const handelCallVideo = async () => {
-        setVideoCall(true);
         const meetId = await getMeetingAndToken(null);
         if(meetId){
-            callAPISendChatRoom(currentChat.name,HEADER_VIDEO_CALL+meetId);
+            const meetingRoom = {
+                meetId,
+                meetingName: currentChat.name,
+                owner: myName,
+                participants: [myName],
+            };
+            dispatch(setMeetingRoom(meetingRoom));
         }
     }
-    const handleLeaveVideoCall = () => {
-        setVideoCall(false);
-    }
-
         return (
             <div className="chat_detail_header chat_detail_header-bgLight">
                 <div className="chat_detail_header-leading">
@@ -65,7 +75,15 @@ function ChatDetailHeader (props) {
                         <i className="bi bi-chevron-down"></i>
                     </div>
                 </div>
-                {videoCall && <VideoCallScreen meetingId={meetingId} handleLeaveVideoCall={handleLeaveVideoCall}/>}
+                {/*{(videoCall && isCalling == true && meetingId != null) && <MeetingProvider*/}
+                {/*    config={{*/}
+                {/*        meetingId,*/}
+                {/*        micEnabled: true,*/}
+                {/*        webcamEnabled: true,*/}
+                {/*        name: "C.V. Raman",*/}
+                {/*    }}*/}
+                {/*    token={authToken}*/}
+                {/*> <VideoCallScreen meetingId={meetingId} handleLeaveVideoCall={handleLeaveVideoCall} joined={joined}/></MeetingProvider>}*/}
             </div>
         )
 

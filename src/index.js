@@ -25,9 +25,6 @@ root.render(
         <Provider store={store}>
             <App />
         </Provider>
-        {/*  <Components_Nguyen/>*/}
-        {/*  <Components_Trung/>*/}
-        {/*  <ChatPage/>*/}
     </React.StrictMode>
 );
 

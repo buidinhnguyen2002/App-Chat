@@ -1,4 +1,4 @@
-import {HEADER_MSG_VIDEO, HEADER_VIDEO_CALL} from "./constants";
+import {HEADER_JOIN_ROOM_MEETING, HEADER_MSG_VIDEO, HEADER_REJECT_VIDEO_CALL, HEADER_VIDEO_CALL} from "./constants";
 
 export const isVideo = (text) => {
     if(text.includes(HEADER_MSG_VIDEO)) return true;
@@ -6,6 +6,21 @@ export const isVideo = (text) => {
 }
 export const isVideoCall = (text) => {
     if(text.startsWith(HEADER_VIDEO_CALL)) return true;
+    return false;
+}
+export const getMeetingRoom = (text) => {
+    return JSON.parse(text.substring(HEADER_VIDEO_CALL.length , text.length));
+}
+export const isRejectVideoCall = (text) => {
+    if(text.startsWith(HEADER_REJECT_VIDEO_CALL)) return true;
+    return false;
+}
+export const isJoinRoomMeeting = (text) => {
+    if(text.startsWith(HEADER_JOIN_ROOM_MEETING)) return true;
+    return false;
+}
+export const isRejectRoomMeeting = (text) => {
+    if(text.startsWith(HEADER_REJECT_VIDEO_CALL)) return true;
     return false;
 }
 export const getURLVideo = (text) => {

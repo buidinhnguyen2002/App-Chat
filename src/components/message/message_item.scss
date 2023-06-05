@@ -4,6 +4,11 @@
   width: 100%;
   display: flex;
   padding: 8px 25px;
+
+}
+.mes_call {
+  text-align: center;
+  font-size: 14px;
 }
 
 .message_container-flexRight {
@@ -34,6 +39,7 @@
       background-color: $primary-color-white;
     }
   }
+
 }
 
 .message_item {

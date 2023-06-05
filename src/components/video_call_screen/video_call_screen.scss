@@ -3,6 +3,7 @@
   @include positionAbsolute(50%, 50%, unset,unset);
   min-width: 85%;
   min-height: 95%;
+  height: 700px;
   background-color: lightgrey;
   transform: translate(-50%, -50%);
   z-index: 100;
@@ -11,6 +12,16 @@
   display: flex;
   ustify-content: center;
   align-items: center;
+  padding: 10px;
+  .grid_view-container{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    border-radius: 30px;
+    overflow: hidden;
+  }
   .connecting-container {
     display: flex;
     justify-content: center;
@@ -21,6 +32,32 @@
     p{
       margin-top: 100px;
       @include styleText(800,30px, 22px, $primary-color-text);
+    }
+    .receive_call {
+      display: flex;
+      margin-top: 40px;
+      &_bar{
+        margin: 0 30px;
+        @include dimension(60px,60px);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .reject {
+        background-color: $color-red-01;
+        font-size: 22px;
+        img{
+            transform: translateY(2px);
+        }
+      }
+      .phone {
+        background-color: #3BB873;
+        font-size: 25px;
+        i{
+          transform: translateY(1px);
+        }
+      }
     }
     .connecting-avatar-container{
       display: flex;

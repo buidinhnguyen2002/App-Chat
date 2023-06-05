@@ -8,7 +8,7 @@ import {
     callAPICreateRoomChat, callAPIGetPeopleChatMes,
     callAPIGetRoomChatMes,
     callAPIGetUserList, callAPIJoinRoomChat,
-    callAPIReLogIn, client,
+    callAPIReLogIn, callAPISendChatRoom, client,
     reConnectionServer, waitConnection
 } from "../../service/loginService";
 import {useDispatch, useSelector} from "react-redux";
@@ -22,15 +22,25 @@ import {
 import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
 import VideoCallScreen from "../../components/video_call_screen/video_call_screen";
-import {isVideoCall} from "../../util/function";
+import {getMeetingRoom, isRejectVideoCall, isVideoCall} from "../../util/function";
+import {HEADER_ACCEPT_VIDEO_CALL, HEADER_REJECT_VIDEO_CALL, HEADER_VIDEO_CALL} from "../../util/constants";
+import ChatDetailHeader from "../../components/chat_detail_header/chat_detail_header";
+import {MeetingProvider} from "@videosdk.live/react-sdk";
+import {authToken} from "../../service/VideoCallService";
+import {setCalling, setMeetingRoom} from "../../store/actions/meetingAction";
 
 function ChatPage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
+    const currentChat = useSelector(state => state.userReducer.currentChat);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [videoCall, setVideoCall] = useState(false);
+    const meetingRoom = useSelector(state => state.meetingReducer.meetingRoom);
     const handleLeaveVideoCall = () => {
         setVideoCall(false);
+    }
+    const handelAcceptVideoCall = () => {
+        callAPISendChatRoom(currentChat.name,HEADER_ACCEPT_VIDEO_CALL);
     }
     const [meetingId, setMeetingId] = useState(null);
     useEffect(() => {
@@ -116,7 +126,13 @@ function ChatPage(props) {
                 // console.log(dataMessage, 'DATA MESSGE');
                 if(dataFromServer['event'] === 'SEND_CHAT'){
                     if(isVideoCall(dataMessage.mes)){
-                        setVideoCall(true);
+                        const meetingRoom = getMeetingRoom(dataMessage.mes);
+                        dispatch(setMeetingRoom(meetingRoom));
+                        dispatch(setCalling(true));
+                        return;
+                    }
+                    if(isRejectVideoCall(dataMessage.mes)){
+                        dispatch(setCalling(false));
                         return;
                     }
                     dispatch(receiveChat(dataMessage));
@@ -146,9 +162,16 @@ function ChatPage(props) {
             <div className="detail">
                 <Outlet/>
             </div>
-            {videoCall && <VideoCallScreen meetingId={meetingId} handleLeaveVideoCall={handleLeaveVideoCall}/>}
+            {(meetingRoom != null) && <MeetingProvider
+                config={{
+                    meetingId: meetingRoom.meetId,
+                    micEnabled: true,
+                    webcamEnabled: true,
+                    name: currentAuth,
+                }}
+                token={authToken}
+            ><VideoCallScreen /></MeetingProvider>}
         </div>
-
     )
 }
 

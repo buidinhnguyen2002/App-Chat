@@ -15,3 +15,8 @@
   right: $right;
   bottom: $bottom;
 }
+@mixin flexMiddle(){
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

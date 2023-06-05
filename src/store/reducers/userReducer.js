@@ -7,6 +7,8 @@ const initialState = {
     chatsPeople: [],
     currentChat: null,
     images: [],
+    isCalling: false,
+    meetingRoom: null,
 };
 let isInit = true;
 
@@ -155,6 +157,18 @@ export default function userReducer(state = initialState, action) {
                 ...state,
                 images: action.payload,
             }
+        case 'SET_CALLING': {
+            return {
+                ...state,
+                isCalling: action.payload,
+            }
+        }
+        // case 'SET_MEETING_ROOM': {
+        //     return {
+        //         ...state,
+        //         meetingRoom: action.payload,
+        //     }
+        // }
         case 'LOGOUT_SUCCESS':
             return initialState;
         default:
