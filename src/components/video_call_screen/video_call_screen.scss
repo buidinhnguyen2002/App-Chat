@@ -17,9 +17,15 @@
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+    //grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    //grid-template-rows: 1fr;
+    //grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-flow: row;
+    align-content: center;
+    justify-content: center;
     border-radius: 30px;
+    gap: 10px;
     overflow: hidden;
   }
   .connecting-container {

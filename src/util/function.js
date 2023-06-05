@@ -23,6 +23,10 @@ export const isRejectRoomMeeting = (text) => {
     if(text.startsWith(HEADER_REJECT_VIDEO_CALL)) return true;
     return false;
 }
+export const getLayoutParticipant = (num) => {
+
+    return false;
+}
 export const getURLVideo = (text) => {
     if(text.includes(HEADER_MSG_VIDEO)) {
         return text.substring(text.indexOf('=') + 1, text.length);

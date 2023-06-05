@@ -35,7 +35,7 @@ function MessageItem(props) {
     }
     const getMessage = () => {
         if(isJoinRoomMeeting(mesText)) return (props.name === myName ? 'Bạn ':myName) + ' đã tham gia đoạn chat video.';
-        if(isRejectRoomMeeting(mesText)) return (props.name === myName ? 'Bạn ' : myName) + ' đã rời khỏi đoạn chat video.';
+        if(isRejectRoomMeeting(mesText)) return (props.name === myName ? 'Bạn ' : props.name) + ' đã rời khỏi đoạn chat video.';
         return  null;
     }
     return (

@@ -22,11 +22,14 @@ function VideoCallScreen(props) {
     const meetingId = props.meetingId;
     const [joined, setJoined] = useState(null);
     const [rendered, setRendered] = useState(false);
+    const [myParticipantId, setMyParticipantId] = useState(null);
+    const { leave, toggleMic, toggleWebcam } = useMeeting();
+    const [openMic, setOpenMic] = useState(true);
+    const [openCamera, setOpenCamera] = useState(true);
     const {join, participants} = useMeeting({
         onMeetingJoined: () => {
             setJoined("JOINED");
-            console.log('JOIN');
-            // callAPISendChatRoom(meetingRoom.meetingName, HEADER_JOIN_ROOM_MEETING);
+            callAPISendChatRoom(meetingRoom.meetingName, HEADER_JOIN_ROOM_MEETING);
         },
         onMeetingLeft: () => {
             console.log('LEAVE');
@@ -37,17 +40,18 @@ function VideoCallScreen(props) {
         join();
         callAPISendChatRoom(meetingRoom.meetingName,HEADER_VIDEO_CALL+ JSON.stringify(meetingRoom));
     };
-    const handleLeaveVideoCall = () => {
-        dispatch(leaveMeetingRoom());
-    }
-    const handleEndVideoCall = () => {
-        if (meetingRoom.owner === myName) {
-            dispatch(leaveMeetingRoom());
-        }
-    }
     const handelRejectVideoCall = () => {
         callAPISendChatRoom(meetingRoom.meetingName,HEADER_REJECT_VIDEO_CALL);
+        leave();
         dispatch(rejectVideoCall());
+    }
+    const toggleChangeMic = () => {
+        setOpenMic(!openMic);
+        toggleMic();
+    }
+    const toggleCamera = () => {
+        setOpenCamera(!openCamera);
+        toggleWebcam();
     }
     return (
         <div>
@@ -56,10 +60,22 @@ function VideoCallScreen(props) {
                     <div className="grid_view-container">
                         {[...participants.keys()].map((participantId) => (
                             <ParticipantView
+                                handleRejectVideoCall={handelRejectVideoCall}
                                 participantId={participantId}
                                 key={participantId}
                             />
                         ))}
+                    </div>
+                    <div className="tool_bar">
+                        <div className={`tool_bar-item mic ${openMic ? '': 'bg_white'}`} onClick={toggleChangeMic}>
+                            {openMic ? <i className="bi bi-mic-fill" style={{color: "white"}}></i> : <i className="bi bi-mic-mute-fill"></i>}
+                        </div>
+                        <div className={`tool_bar-item camera ${openCamera ? '': 'bg_white'}`} onClick={toggleCamera}>
+                            {openCamera ? <i className="bi bi-camera-video-fill" style={{color: "white"}}></i> : <i className="bi bi-camera-video-off-fill"></i>}
+                        </div>
+                        <div className="tool_bar-leave" onClick={handelRejectVideoCall}>
+                            <img src={PhoneDisconnect} alt=""/>
+                        </div>
                     </div>
                 </div>
             ) : (joined && joined == "JOINING") ? (
@@ -92,7 +108,7 @@ function VideoCallScreen(props) {
                             </div>
                         </div>}
                         {receiveCall != true && <div className="receive_call">
-                            <div className={`receive_call_bar reject close-call`} onClick={handleLeaveVideoCall}>
+                            <div className={`receive_call_bar reject close-call`} onClick={handelRejectVideoCall}>
                                 <img src={PhoneDisconnect} alt=""/>
                             </div>
                         </div>}
@@ -122,7 +138,7 @@ function VideoCallScreen(props) {
                         <div className={`receive_call_bar reject `} onClick={handelRejectVideoCall}>
                             {<i className="bi bi-x-lg" style={{color: "white"}}></i>}
                         </div>
-                        <div className={`receive_call_bar phone `}>
+                        <div className={`receive_call_bar phone `} onClick={joinMeeting}>
                             {<i className="bi bi-telephone-inbound" style={{color: "white"}}></i>}
                         </div>
                     </div>}
