@@ -3,6 +3,7 @@ import "./chat_window.scss";
 import ChatDetailHeader from "../chat_detail_header/chat_detail_header";
 import InputMessage from "../message-page/input_message";
 import { useDispatch, useSelector } from "react-redux";
+import he from 'he';
 import { callAPIGetPeopleChatMes, callAPIGetRoomChatMes, client } from "../../service/loginService";
 import { saveToListChatsDetail } from "../../store/actions/userAction";
 import { useNavigate } from "react-router-dom";
@@ -21,17 +22,16 @@ function WindowChat(props) {
         }
     }, [chatData]);
 
+    // Hàm chuyển đổi mã HTML entities thành các ký tự emoji
+    const convertEntitiesToEmoji = (text) => {
+        return he.decode(text);
+    };
+
     // Hàm chuyển đổi mã HTML entities thành emoji
     const decodeHTML = (html) => {
         const txt = document.createElement("textarea");
         txt.innerHTML = html;
         return txt.value;
-    };
-
-    // Hàm chuyển đổi mã HTML entities thành các ký tự emoji
-    const convertEntitiesToEmoji = (text) => {
-        const regex = /&#(\d+);/g;
-        return text.replace(regex, (match, dec) => String.fromCharCode(dec));
     };
 
     return (

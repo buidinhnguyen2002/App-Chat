@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import "./messages.scss";
-import {callAPIGetRoomChatMes, callAPIGetUserList, callAPISendChatRoom, client} from "../../service/loginService";
+import { callAPIGetRoomChatMes, callAPIGetUserList, callAPISendChatRoom, client } from "../../service/loginService";
 import { useDispatch, useSelector } from "react-redux";
-import { saveListChat, sendChat,updateChat } from "../../store/actions/userAction";
-import {isAllOf} from "@reduxjs/toolkit";
+import { saveListChat, sendChat, updateChat } from "../../store/actions/userAction";
+import { isAllOf } from "@reduxjs/toolkit";
+import he from 'he';
+import { Emoji, Picker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
-import { Picker } from 'emoji-mart';
-import EmojiConvertor from "emoji-js";
 
 function InputMessage(props) {
     const currentChats = useSelector(state => state.userReducer.currentChat);
     const [msg, setMsg] = useState('');
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const dispatch = useDispatch();
-    const emojiConvertor = new EmojiConvertor();
+
     const handleOnChangeInput = (event) => {
         const value = event.target.value;
         setMsg(value);
@@ -29,7 +29,7 @@ function InputMessage(props) {
     };
 
     const sendMsg = () => {
-        const encodedMsg = convertEmojiToEntities(emojiConvertor.replace_colons(msg));
+        const encodedMsg = convertEmojiToEntities(msg);
         callAPISendChatRoom(currentChats.name, encodedMsg);
         callAPIGetRoomChatMes(currentChats.name);
         client.onmessage = (message) => {
@@ -43,15 +43,9 @@ function InputMessage(props) {
         setMsg("");
     };
 
-    // Hàm chuyển đổi các ký tự emoji thành mã HTML entities
     const convertEmojiToEntities = (text) => {
-        const regex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-        return text.replace(regex, (match) => {
-            const charCode = match.codePointAt(0);
-            return `&#${charCode};`;
-        });
+        return he.encode(text, { decimal: true });
     };
-
 
     return (
         <div className="container-input">
@@ -63,7 +57,7 @@ function InputMessage(props) {
                 <i className="fa-regular fa-face-smile" onClick={toggleEmojiPicker}></i>
                 {showEmojiPicker && (
                     <div className="emoji-picker-container">
-                        <Picker onSelect={handleAddEmoji} />
+                        <Picker set="facebook" exclude={['flags']} onSelect={handleAddEmoji} />
                     </div>
                 )}
             </div>
