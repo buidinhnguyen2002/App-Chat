@@ -68,17 +68,6 @@ function ParticipantView(props) {
                         }}
                     />
                 )}
-                {/*<div className="tool_bar">*/}
-                {/*    <div className={`tool_bar-item mic ${openMic ? '': 'bg_white'}`} onClick={toggleChangeMic}>*/}
-                {/*        {openMic ? <i className="bi bi-mic-fill" style={{color: "white"}}></i> : <i className="bi bi-mic-mute-fill"></i>}*/}
-                {/*    </div>*/}
-                {/*    <div className={`tool_bar-item camera ${openCamera ? '': 'bg_white'}`} onClick={toggleCamera}>*/}
-                {/*        {openCamera ? <i className="bi bi-camera-video-fill" style={{color: "white"}}></i> : <i className="bi bi-camera-video-off-fill"></i>}*/}
-                {/*    </div>*/}
-                {/*    <div className="tool_bar-leave" onClick={props.handleRejectVideoCall}>*/}
-                {/*        <img src={PhoneDisconnect} alt=""/>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
             </div>
     );
 }

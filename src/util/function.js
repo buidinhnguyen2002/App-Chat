@@ -1,4 +1,10 @@
-import {HEADER_JOIN_ROOM_MEETING, HEADER_MSG_VIDEO, HEADER_REJECT_VIDEO_CALL, HEADER_VIDEO_CALL} from "./constants";
+import {
+    HEADER_JOIN_ROOM_MEETING,
+    HEADER_LEAVE_VIDEO_CALL,
+    HEADER_MSG_VIDEO,
+    HEADER_REJECT_VIDEO_CALL,
+    HEADER_VIDEO_CALL
+} from "./constants";
 
 export const isVideo = (text) => {
     if(text.includes(HEADER_MSG_VIDEO)) return true;
@@ -21,6 +27,10 @@ export const isJoinRoomMeeting = (text) => {
 }
 export const isRejectRoomMeeting = (text) => {
     if(text.startsWith(HEADER_REJECT_VIDEO_CALL)) return true;
+    return false;
+}
+export const isLeaveRoomMeeting = (text) => {
+    if(text.startsWith(HEADER_LEAVE_VIDEO_CALL)) return true;
     return false;
 }
 export const getLayoutParticipant = (num) => {
