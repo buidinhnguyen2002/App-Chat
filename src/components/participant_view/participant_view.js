@@ -50,7 +50,8 @@ function ParticipantView(props) {
     }
 
     return (
-            <div className={` participant_view `} style={{width: props.width}}>
+        console.log(props.height + "HEIGHT"),
+            <div className={` participant_view `} style={{width: props.width, height: props.height}}>
                 <audio ref={micRef} autoPlay playsInline muted={isLocal} />
                 {webcamOn && (
                     <ReactPlayer

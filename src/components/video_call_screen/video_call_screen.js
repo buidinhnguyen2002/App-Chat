@@ -90,12 +90,17 @@ function VideoCallScreen(props) {
             case 3:
                 return '49%';
         }
-
+    }
+    const getHeightParticipantView = (num) => {
+        if(num == 3){
+            return '48%';
+        }
+        return '100%';
     }
     return (
         <div>
             {joined && joined == "JOINED" ? (
-                <div className={` video_call_window ${isFullScreen == false ? "window-scale" : ""}`}  >
+                <div className={` video_call_window ${isFullScreen == false ? "window-scale" : "window-full-screen"}`}  >
                     <div className="grid_view-container">
                         <div className="ic-scale-window" onClick={toggleFullScreen}>
                             {isFullScreen ? <i className="bi bi-box-arrow-down-left"></i> :
@@ -104,6 +109,7 @@ function VideoCallScreen(props) {
                         {[...participants.keys()].map((participantId) => (
                             <ParticipantView
                                 width={getWidthParticipantView([...participants].length)}
+                                height={getHeightParticipantView([...participants].length)}
                                 handleRejectVideoCall={handelRejectVideoCall}
                                 participantId={participantId}
                                 key={participantId}
@@ -121,6 +127,7 @@ function VideoCallScreen(props) {
                             <img src={PhoneDisconnect} alt=""/>
                         </div>
                     </div>
+                    {isFullScreen == false && <div className="ic_full-screen" onClick={toggleFullScreen}><i className="bi bi-arrows-fullscreen"></i></div>}
                 </div>
             ) : (joined && joined == "JOINING") ? (
                 <div className={'video_call_window'}>
