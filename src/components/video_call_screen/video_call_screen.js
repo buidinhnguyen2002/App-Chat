@@ -26,6 +26,7 @@ function VideoCallScreen(props) {
     const { leave, toggleMic, toggleWebcam } = useMeeting();
     const [openMic, setOpenMic] = useState(true);
     const [openCamera, setOpenCamera] = useState(true);
+    const [isFullScreen, setIsFullScreen] = useState(true);
     const {join, participants} = useMeeting({
         onMeetingJoined: () => {
             setJoined("JOINED");
@@ -53,6 +54,9 @@ function VideoCallScreen(props) {
         setOpenCamera(!openCamera);
         toggleWebcam();
     }
+    const toggleFullScreen = () => {
+        setIsFullScreen(!isFullScreen);
+    }
     const getWidthParticipantView = (num) => {
         switch (num) {
         case 1:
@@ -68,8 +72,12 @@ function VideoCallScreen(props) {
     return (
         <div>
             {joined && joined == "JOINED" ? (
-                <div className={'video_call_window'}>
+                <div className={` video_call_window ${isFullScreen == false ? "window-scale" : ""}`}  >
                     <div className="grid_view-container">
+                        <div className="ic-scale-window" onClick={toggleFullScreen}>
+                            {isFullScreen ? <i className="bi bi-box-arrow-down-left"></i> :
+                                <i className="bi bi-box-arrow-in-up-right"></i>}
+                        </div>
                         {[...participants.keys()].map((participantId) => (
                             <ParticipantView
                                 width={getWidthParticipantView([...participants].length)}
