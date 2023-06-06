@@ -22,12 +22,18 @@ import {
 import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
 import VideoCallScreen from "../../components/video_call_screen/video_call_screen";
-import {getMeetingRoom, isRejectVideoCall, isVideoCall} from "../../util/function";
+import {
+    getMeetingRoom,
+    getNameParticipant,
+    isLeaveRoomMeeting,
+    isRejectVideoCall,
+    isVideoCall
+} from "../../util/function";
 import {HEADER_ACCEPT_VIDEO_CALL, HEADER_REJECT_VIDEO_CALL, HEADER_VIDEO_CALL} from "../../util/constants";
 import ChatDetailHeader from "../../components/chat_detail_header/chat_detail_header";
 import {MeetingProvider} from "@videosdk.live/react-sdk";
 import {authToken} from "../../service/VideoCallService";
-import {setCalling, setMeetingRoom} from "../../store/actions/meetingAction";
+import {removeParticipant, setCalling, setMeetingRoom} from "../../store/actions/meetingAction";
 
 function ChatPage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
@@ -134,6 +140,10 @@ function ChatPage(props) {
                     if(isRejectVideoCall(dataMessage.mes)){
                         dispatch(setCalling(false));
                         return;
+                    }
+                    if(isLeaveRoomMeeting(dataMessage.mes)){
+                        const getParticipant = getNameParticipant(dataMessage.mes);
+                        dispatch(removeParticipant(getParticipant));
                     }
                     dispatch(receiveChat(dataMessage));
                 }

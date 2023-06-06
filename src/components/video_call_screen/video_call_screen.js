@@ -10,9 +10,9 @@ import {addParticipant, leaveMeetingRoom, rejectVideoCall} from "../../store/act
 import {callAPIGetRoomChatMes, callAPISendChatRoom} from "../../service/loginService";
 import {
     HEADER_JOIN_ROOM_MEETING,
-    HEADER_LEAVE_VIDEO_CALL,
+    HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
     HEADER_REJECT_VIDEO_CALL,
-    HEADER_VIDEO_CALL
+    HEADER_VIDEO_CALL, HEADER_VIDEO_CHAT_END
 } from "../../util/constants";
 import ParticipantView from "../participant_view/participant_view";
 import JoinRoomChatVideo from "../join_room_chat_video/join_room_chat_video";
@@ -36,6 +36,7 @@ function VideoCallScreen(props) {
         onMeetingJoined: () => {
             setJoined("JOINED");
             callAPISendChatRoom(meetingRoom.meetingName, HEADER_JOIN_ROOM_MEETING);
+            callAPIGetRoomChatMes(meetingRoom.meetingName);
         },
         onMeetingLeft: () => {
             console.log('LEAVE');
@@ -44,14 +45,21 @@ function VideoCallScreen(props) {
     const joinMeeting = () => {
         setJoined("JOINING");
         join();
-        callAPISendChatRoom(meetingRoom.meetingName,HEADER_VIDEO_CALL+ JSON.stringify(meetingRoom));
+        const participants = [...meetingRoom.participants];
+        if(!participants.includes(myName)) {
+            participants.push(myName);
+            dispatch(addParticipant(myName));
+        }
+        meetingRoom.participants = participants;
+        if(myName === meetingRoom.owner) callAPISendChatRoom(meetingRoom.meetingName,HEADER_VIDEO_CALL+ JSON.stringify(meetingRoom));
         callAPIGetRoomChatMes(meetingRoom.meetingName);
     };
     const handelRejectVideoCall = (isLeave) => {
-        if(isLeave == true){
-            callAPISendChatRoom(meetingRoom.meetingName,HEADER_LEAVE_VIDEO_CALL);
+        if(meetingRoom.participants.length === 1){
+            callAPISendChatRoom(meetingRoom.meetingName,HEADER_MEETING_END);
+        }else if(isLeave == true){
+            callAPISendChatRoom(meetingRoom.meetingName,HEADER_LEAVE_VIDEO_CALL+myName);
         }else{
-            console.log('REJECT')
             callAPISendChatRoom(meetingRoom.meetingName,HEADER_REJECT_VIDEO_CALL);
         }
         callAPIGetRoomChatMes(meetingRoom.meetingName);

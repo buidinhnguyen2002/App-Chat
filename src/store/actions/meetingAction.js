@@ -16,6 +16,12 @@ export function addParticipant(participant) {
         payload: participant,
     }
 }
+export function removeParticipant(participant) {
+    return {
+        type: "REMOVE_PARTICIPANT",
+        payload: participant,
+    }
+}
 export function setCalling(isCalling) {
     return {
         type: "SET_CALLING",

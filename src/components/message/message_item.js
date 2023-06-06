@@ -7,7 +7,7 @@ import {
     getMeetingRoom,
     getURLVideo,
     isJoinRoomMeeting,
-    isLeaveRoomMeeting,
+    isLeaveRoomMeeting, isMeetingEnd,
     isRejectRoomMeeting,
     isVideoCall
 } from "../../util/function";
@@ -43,9 +43,11 @@ function MessageItem(props) {
         });
     }
     const getMessage = () => {
-        if(isJoinRoomMeeting(mesText)) return (props.name === myName ? 'Bạn ':myName) + ' đã tham gia đoạn chat video.';
-        if(isRejectRoomMeeting(mesText)) return (props.name === myName ? 'Bạn ' : props.name) + ' đã từ chối tham gia đoạn chat video.';
-        if(isLeaveRoomMeeting(mesText)) return  (props.name === myName ? 'Bạn ':myName) + ' đã rời khỏi đoạn chat video.';
+        const owner = (props.name === myName ? 'Bạn ':props.name)
+        if(isMeetingEnd(mesText)) return ' Cuộc gọi video đã kết thúc.';
+        if(isJoinRoomMeeting(mesText)) return owner + ' đã tham gia đoạn chat video.';
+        if(isRejectRoomMeeting(mesText)) return  owner + ' đã từ chối tham gia đoạn chat video.';
+        if(isLeaveRoomMeeting(mesText)) return owner + ' đã rời khỏi đoạn chat video.';
         return  null;
     }
     return (
