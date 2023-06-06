@@ -53,6 +53,18 @@ function VideoCallScreen(props) {
         setOpenCamera(!openCamera);
         toggleWebcam();
     }
+    const getWidthParticipantView = (num) => {
+        switch (num) {
+        case 1:
+            return '100%';
+            break;
+        case 2:
+                return '49%';
+            case 3:
+                return '49%';
+        }
+
+    }
     return (
         <div>
             {joined && joined == "JOINED" ? (
@@ -60,6 +72,7 @@ function VideoCallScreen(props) {
                     <div className="grid_view-container">
                         {[...participants.keys()].map((participantId) => (
                             <ParticipantView
+                                width={getWidthParticipantView([...participants].length)}
                                 handleRejectVideoCall={handelRejectVideoCall}
                                 participantId={participantId}
                                 key={participantId}
