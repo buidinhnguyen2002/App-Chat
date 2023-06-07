@@ -153,6 +153,11 @@
     .bg_white{
       background-color: $color-blue-02 !important;
     }
+    .screen_cast{
+      img{
+        @include dimension(24px, 24px);
+      }
+    }
   }
   .ic_full-screen{
     @include positionAbsolute(0,0,unset,unset);

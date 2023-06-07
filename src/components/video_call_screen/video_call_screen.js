@@ -8,6 +8,8 @@ import {MeetingProvider, useMeeting, useParticipant} from "@videosdk.live/react-
 import {useDispatch, useSelector} from "react-redux";
 import {addParticipant, leaveMeetingRoom, rejectVideoCall} from "../../store/actions/meetingAction";
 import {callAPIGetRoomChatMes, callAPISendChatRoom} from "../../service/loginService";
+import screenCastActive from "../../Assets/Image/Screencast-active.png";
+import screenCastNoneActive from "../../Assets/Image/Screencast-none-active.png";
 import {
     HEADER_JOIN_ROOM_MEETING,
     HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
@@ -32,7 +34,8 @@ function VideoCallScreen(props) {
     const [openMic, setOpenMic] = useState(true);
     const [openCamera, setOpenCamera] = useState(true);
     const [isFullScreen, setIsFullScreen] = useState(true);
-    const {join, participants} = useMeeting({
+    const [screenCast, setScreenCast] = useState(true);
+    const {join, participants, enableScreenShare, disableScreenShare, toggleScreenShare} = useMeeting({
         onMeetingJoined: () => {
             setJoined("JOINED");
             callAPISendChatRoom(meetingRoom.meetingName, HEADER_JOIN_ROOM_MEETING);
@@ -104,6 +107,18 @@ function VideoCallScreen(props) {
                 return '50%';
         }
     }
+    const handleEnableScreenShare = () => {
+        // enableScreenShare();
+        setScreenCast(!screenCast);
+    };
+    const handleDisableScreenShare = () => {
+        disableScreenShare();
+    };
+
+    const handleToggleScreenShare = () => {
+        setScreenCast(!screenCast);
+        toggleScreenShare();
+    };
     return (
         <div>
             {joined && joined == "JOINED" ? (
@@ -124,6 +139,9 @@ function VideoCallScreen(props) {
                         ))}
                     </div>
                     <div className="tool_bar">
+                        <div className={`tool_bar-item screen_cast ${screenCast ? '': 'bg_white'}`} onClick={handleToggleScreenShare}>
+                            {screenCast ? <img src={screenCastActive} alt=""/>: <img src={screenCastNoneActive} alt=""/>}
+                        </div>
                         <div className={`tool_bar-item mic ${openMic ? '': 'bg_white'}`} onClick={toggleChangeMic}>
                             {openMic ? <i className="bi bi-mic-fill" style={{color: "white"}}></i> : <i className="bi bi-mic-mute-fill"></i>}
                         </div>
