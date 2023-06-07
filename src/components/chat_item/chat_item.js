@@ -75,7 +75,6 @@ function ChatItem(props) {
         </div>
     );
 }
-
 export default ChatItem;
 
 

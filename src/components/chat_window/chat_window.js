@@ -50,4 +50,5 @@ function WindowChat(props) {
         </div>
     );
 }
+
 export default WindowChat;
