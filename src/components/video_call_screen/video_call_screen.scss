@@ -139,18 +139,19 @@
     &-item{
       @include dimension(40px,40px);
       border-radius: 50%;
-      background-color: $color-grey-07;
+      background-color: $color-blue-04;
       display: flex;
       justify-content: center;
       align-items: center;
       margin: 0 10px;
       cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     .camera i{
       transform: translateY(1px);
     }
     .bg_white{
-      background-color: $primary-color-white !important;
+      background-color: $color-blue-02 !important;
     }
   }
   .ic_full-screen{

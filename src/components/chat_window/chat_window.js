@@ -20,20 +20,6 @@ function WindowChat(props) {
             scrollTargetRef.current.scrollIntoView({behavior: 'smooth'});
         }
     },);
-
-    // function isJSON(str) {
-    //     try {
-    //         const searchStrings = ["{", "}", "[", "]", "text", "imgs"];
-    //         for (const searchStringsKey of searchStrings) {
-    //             if (!str.includes(searchStringsKey)) return false;
-    //         }
-    //         JSON.parse(str);
-    //         return true;
-    //     } catch (error) {
-    //         return false;
-    //     }
-    // }
-
     return (
         <div className={"window-chat"}>
             <div className="window-chat-header">

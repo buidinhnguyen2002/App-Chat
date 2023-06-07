@@ -24,13 +24,19 @@
     height: 100%;
     background-color: $primary-color-blue;
     @include flexMiddle();
-    p{
+    .title-container{
       @include dimension(250px, 250px);
       border-radius: 50%;
       background-color: $primary-color-white;
       @include styleText(600, 30px, 30px, $primary-color-blue);
-      margin-bottom: 0px;
       @include flexMiddle();
+      p{
+        margin-bottom: 0px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 80%;
+      }
     }
+
   }
 }

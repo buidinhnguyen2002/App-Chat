@@ -69,7 +69,9 @@ function ParticipantView(props) {
                         }}
                     />
                 ) : <div className={"holder_participant"}>
-                    <p>{displayName}</p>
+                    <div className="title-container">
+                        <p>{displayName}</p>
+                    </div>
                 </div>}
             </div>
     );
