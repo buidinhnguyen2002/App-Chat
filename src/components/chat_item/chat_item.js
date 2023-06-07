@@ -1,51 +1,54 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./chat_item.scss";
 import ChatPeople from "../../Assets/Image/chat_people.jpg";
-import { callAPIGetRoomChatMes, client, waitConnection } from "../../service/loginService";
-import { useDispatch, useSelector } from "react-redux";
-import { saveToListChatsDetail } from "../../store/actions/userAction";
-
+import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/loginService";
+import {useDispatch, useSelector} from "react-redux";
+import {saveToListChatsDetail} from "../../store/actions/userAction";
+import {isJSON, isVideo} from "../../util/function";
 function ChatItem(props) {
     const [isChoose, setIsChoose] = useState(props.isChoose);
     const [type, setType] = useState(props.type);
     const [name, setName] = useState(props.name);
     const dispatch = useDispatch();
-    let chatData = useSelector(state =>
-        type === 1
-            ? state.userReducer.chatsRoom.find(chat => chat && chat.name === name)
-            : state.userReducer.chatsPeople.find(chat => chat && chat.name === name)
-    );
+    let chatData = useSelector(state => type == 1 ? state.userReducer.chatsRoom.find(chat=> chat && chat.name === name) : state.userReducer.chatsPeople.find(chat=> chat && chat.name === name));
+    const myName = useSelector(state => state.userReducer.username);
     let newMess = null;
     let timeShort = "";
-
-    if (chatData) {
-        if (chatData.chatData[0]) {
+    if(chatData) {
+        if(chatData.chatData[0]){
             newMess = chatData.chatData[0];
-
             let arrTime = newMess.createAt.split(" ");
             let fullTime = arrTime[1];
-            timeShort = fullTime.substring(0, fullTime.length - 3);
+            timeShort = fullTime.substring(0, fullTime.length-3);
         }
     }
-
-    useEffect(() => {
-        // async function f(){
-        //     await waitConnection();
-        //     callAPIGetRoomChatMes(name);
-        //     client.onmessage = (message) => {
-        //         const dataFromServer = JSON.parse(message.data);
-        //         dispatch(saveToListChatsDetail(dataFromServer['data']));
-        //     }
-        // }
-        // f();
-    }, []);
     const decodeEntities = (encodedString) => {
         const elem = document.createElement("div");
         elem.innerHTML = encodedString;
         return elem.innerText;
     };
+    function getMessage(msg, ownChat, type, to) {
+        const isMyChat = ownChat === myName;
+        if (isVideo(msg)) return (isMyChat ? "Bạn " : type === 1 ? ownChat + ": " : "") + "đã gửi 1 video.";
+        if (!isJSON(msg)) return (isMyChat ? "Bạn: " : type === 1 ? ownChat + ": " : "") + msg;
+        const msgObject = JSON.parse(msg);
+        if (msgObject.text === "" && msgObject.imgs.length > 0)
+            return (
+                (isMyChat ? "Bạn đã gửi " : type === 1 ? ownChat + " đã gửi " : "") +
+                ` ${msgObject.imgs.length} hình ảnh.`
+            );
+        return (
+            (isMyChat ? "Bạn: " : type === 1 ? ownChat + ": " : "") +
+            decodeEntities(msgObject.text) // Giải mã mã HTML entities thành emoji
+        );
+    }
+
+    useEffect(()=>{
+    },[])
+
+
     return (
-        <div className={`chat_item chat_item-round d-flex ${props.isChoose ? 'chat_item-bgBlue' : 'chat_item-bgWhite'}`}>
+        <div className={`chat_item chat_item-round d-flex ${props.isChoose ? 'chat_item-bgBlue':'chat_item-bgWhite'}`}>
             <div className="chat_avatar-wrapper">
                 <div className="chat_avatar chat_avatar-circle">
                     <div className="img-wrapper">
@@ -57,24 +60,21 @@ function ChatItem(props) {
             <div className="chat-wrapper">
                 <div className="chat_content-wrapper">
                     <div className="chat_name ">
-                        <h4 className={`${props.isChoose ? 'chat_name-clWhite' : 'chat_name-clBlack'}`}>{props.name}</h4>
+                        <h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{props.name}</h4>
                     </div>
                     <div className="chat_message">
-                        <h5 className={`${props.isChoose ? 'chat_message-clWhite' : 'chat_message-clGrey'}`}>
-                            {newMess != null ? decodeEntities(newMess.mes) : ""}
-                        </h5>
+                        <h5 className={`${props.isChoose ? 'chat_message-clWhite':'chat_message-clGrey'}`}>{newMess != null ?  getMessage(newMess.mes, newMess.name, newMess.type, newMess.to): ""}</h5>
                     </div>
                 </div>
                 <div className="chat_time">
-                    <span className={`${props.isChoose ? 'chat_time-clWhite' : 'chat_time-clGrey'}`}>{timeShort}</span>
-                    <div style={{ visibility: props.isChoose ? "hidden" : "visible" }} className="num-unread-message">
+                    <span className={`${props.isChoose ? 'chat_time-clWhite':'chat_time-clGrey'}`}>{timeShort}</span>
+                    <div style={{visibility: props.isChoose ? "hidden": "visible"}} className="num-unread-message">
                         <span>2</span>
                     </div>
                 </div>
             </div>
         </div>
-    );
+    )
 }
+
 export default ChatItem;
-
-
