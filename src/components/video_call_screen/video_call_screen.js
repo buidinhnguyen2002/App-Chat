@@ -92,10 +92,17 @@ function VideoCallScreen(props) {
         }
     }
     const getHeightParticipantView = (num) => {
-        if(num == 3){
-            return '48%';
+        switch (num) {
+            case 1:
+                return '100%';
+                break;
+            case 2:
+                return '50%';
+            case 3:
+                return '50%';
+            default:
+                return '50%';
         }
-        return '100%';
     }
     return (
         <div>

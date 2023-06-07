@@ -3,7 +3,6 @@
   padding: 22px 29px 22px 33px;
   display: flex;
   justify-content: space-between;
-  //@include dimension();
   align-items: center;
   &-bgBlue{
     background-color: $color-blue-01;
@@ -83,6 +82,7 @@
     align-items: center;
     .chat_detail-icon{
       margin-right: 40px;
+      cursor: pointer;
       i{
         font-size: 24px;
         color: $color-grey-02;

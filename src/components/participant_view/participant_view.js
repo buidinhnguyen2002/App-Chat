@@ -53,7 +53,7 @@ function ParticipantView(props) {
         console.log(props.height + "HEIGHT"),
             <div className={` participant_view `} style={{width: props.width, height: props.height}}>
                 <audio ref={micRef} autoPlay playsInline muted={isLocal} />
-                {webcamOn && (
+                {webcamOn ? (
                     <ReactPlayer
                         playsinline
                         pip={false}
@@ -63,12 +63,14 @@ function ParticipantView(props) {
                         playing={true}
                         url={videoStream}
                         width="100%"
-                        height="auto"
+                        height="100%"
                         onError={(err) => {
                             console.log(err, "participant video error");
                         }}
                     />
-                )}
+                ) : <div className={"holder_participant"}>
+                    <p>{displayName}</p>
+                </div>}
             </div>
     );
 }
