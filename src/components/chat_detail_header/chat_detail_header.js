@@ -1,13 +1,43 @@
-import React from "react";
+import {
+    MeetingProvider,
+    MeetingConsumer,
+    useMeeting,
+    useParticipant,
+} from "@videosdk.live/react-sdk";
+import React, {useEffect, useState} from "react";
+
 import "./chat_detail_header.scss";
+import {useDispatch, useSelector} from "react-redux";
+import {authToken, createMeeting} from "../../service/VideoCallService";
+import {setMeetingRoom} from "../../store/actions/meetingAction";
+import {callAPISendChatRoom} from "../../service/loginService";
+import {HEADER_VIDEO_CALL} from "../../util/constants";
 
 
-class ChatDetailHeader extends React.Component {
-    constructor(props) {
-        super(props);
+function ChatDetailHeader (props) {
+
+    const currentChat = useSelector(state => state.userReducer.currentChat);
+    const isCalling = useSelector(state => state.userReducer.isCalling);
+    const myName = useSelector(state => state.userReducer.username);
+    const [meetingId, setMeetingId] = useState(null);
+    const dispatch = useDispatch();
+    const getMeetingAndToken = async (id) => {
+        const meetingId = id == null ? await createMeeting({token: authToken}): id;
+        setMeetingId(meetingId);
+        return meetingId.toString();
     }
-
-    render() {
+    const handelCallVideo = async () => {
+        const meetId = await getMeetingAndToken(null);
+        if(meetId){
+            const meetingRoom = {
+                meetId,
+                meetingName: currentChat.name,
+                owner: myName,
+                participants: [myName],
+            };
+            dispatch(setMeetingRoom(meetingRoom));
+        }
+    }
         return (
             <div className="chat_detail_header chat_detail_header-bgLight">
                 <div className="chat_detail_header-leading">
@@ -22,7 +52,7 @@ class ChatDetailHeader extends React.Component {
                     <div className="chat_detail_header-wrapper">
                         <div className="chat_content-wrapper">
                             <div className="chat_name ">
-                                <h4 className='chat_name-clBlack'>Pink Panda</h4>
+                                <h4 className='chat_name-clBlack'>{currentChat ? currentChat.name:''}</h4>
                             </div>
                             <div className="chat_message">
                                 <h5 className='chat_message-clGrey'>Online</h5>
@@ -31,7 +61,7 @@ class ChatDetailHeader extends React.Component {
                     </div>
                 </div>
                 <div className="chat_detail_header-trailing">
-                    <div className="video_call chat_detail-icon">
+                    <div className="video_call chat_detail-icon" onClick={handelCallVideo}>
                         <i className="bi bi-camera-video"></i>
                     </div>
                     <div className="audio_call chat_detail-icon">
@@ -45,9 +75,17 @@ class ChatDetailHeader extends React.Component {
                         <i className="bi bi-chevron-down"></i>
                     </div>
                 </div>
+                {/*{(videoCall && isCalling == true && meetingId != null) && <MeetingProvider*/}
+                {/*    config={{*/}
+                {/*        meetingId,*/}
+                {/*        micEnabled: true,*/}
+                {/*        webcamEnabled: true,*/}
+                {/*        name: "C.V. Raman",*/}
+                {/*    }}*/}
+                {/*    token={authToken}*/}
+                {/*> <VideoCallScreen meetingId={meetingId} handleLeaveVideoCall={handleLeaveVideoCall} joined={joined}/></MeetingProvider>}*/}
             </div>
         )
-    }
 
 }
 

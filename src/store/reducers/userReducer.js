@@ -6,6 +6,9 @@ const initialState = {
     chatsRoom: [],
     chatsPeople: [],
     currentChat: null,
+    images: [],
+    isCalling: false,
+    meetingRoom: null,
 };
 let isInit = true;
 
@@ -108,7 +111,7 @@ export default function userReducer(state = initialState, action) {
                 chatsRoom: updateChat,
                 currentChat: {
                     ...state.currentChat,
-                    chatData: [action.payload,...state.currentChat.chatData],
+                    chatData: state.currentChat.name === action.payload.to ? [  action.payload,...state.currentChat.chatData] : [...state.currentChat.chatData],
                 },
             }
         case 'SEND_CHAT':
@@ -149,6 +152,23 @@ export default function userReducer(state = initialState, action) {
                     chatData: [msgObj, ...state.currentChat.chatData],
                 }
             }
+        case 'SAVE_MY_IMAGES':
+            return {
+                ...state,
+                images: action.payload,
+            }
+        case 'SET_CALLING': {
+            return {
+                ...state,
+                isCalling: action.payload,
+            }
+        }
+        // case 'SET_MEETING_ROOM': {
+        //     return {
+        //         ...state,
+        //         meetingRoom: action.payload,
+        //     }
+        // }
         case 'LOGOUT_SUCCESS':
             return initialState;
         default:

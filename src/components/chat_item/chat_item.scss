@@ -72,8 +72,16 @@
     }
 
     .chat_message {
+      width: 200px;
+      //overflow: hidden;
       h5 {
         margin: 0;
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
       }
       &-clWhite{
         @include styleText(600, 14px, 19px, $primary-color-white);
