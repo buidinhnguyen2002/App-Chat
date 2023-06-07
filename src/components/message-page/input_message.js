@@ -67,5 +67,4 @@ function InputMessage(props) {
         </div>
     );
 }
-
 export default InputMessage;
