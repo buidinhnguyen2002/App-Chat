@@ -92,9 +92,9 @@ function VideoCallScreen(props) {
             return '100%';
             break;
         case 2:
-                return '49.5%';
+                return '49%';
             case 3:
-                return '49.5%';
+                return '49%';
         }
     }
     const getHeightParticipantView = (num) => {
@@ -105,7 +105,7 @@ function VideoCallScreen(props) {
             case 2:
                 return '50%';
             case 3:
-                return '50%';
+                return '49%';
             default:
                 return '50%';
         }
@@ -139,6 +139,7 @@ function VideoCallScreen(props) {
                                 width={presenterId == null ? getWidthParticipantView([...participants].length) : '100%'}
                                 height={presenterId == null ? getHeightParticipantView([...participants].length) : 'auto'}
                                 handleRejectVideoCall={handelRejectVideoCall}
+                                isItemSideBar={presenterId == null ? false: true}
                                 participantId={participantId}
                                 key={participantId}
                             />

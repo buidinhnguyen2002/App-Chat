@@ -20,7 +20,7 @@
     width: 100%;
     height: 100%;
     @include flexMiddle();
-    justify-content: space-between;
+    //justify-content: space-between;
     flex-wrap: wrap;
     border-radius: 30px;
     .ic-scale-window{
@@ -31,8 +31,10 @@
     }
   }
   .sidebar_container {
-    align-items: start;
+    align-items: center;
     width: 17%;
+    flex-direction: column;
+    justify-content: start;
   }
   .connecting-container {
     display: flex;
