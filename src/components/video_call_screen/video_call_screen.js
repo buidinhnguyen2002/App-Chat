@@ -18,6 +18,7 @@ import {
 } from "../../util/constants";
 import ParticipantView from "../participant_view/participant_view";
 import JoinRoomChatVideo from "../join_room_chat_video/join_room_chat_video";
+import PresenterView from "../participant_view/PresenterView";
 
 function VideoCallScreen(props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
@@ -34,8 +35,8 @@ function VideoCallScreen(props) {
     const [openMic, setOpenMic] = useState(true);
     const [openCamera, setOpenCamera] = useState(true);
     const [isFullScreen, setIsFullScreen] = useState(true);
-    const [screenCast, setScreenCast] = useState(true);
-    const {join, participants, enableScreenShare, disableScreenShare, toggleScreenShare} = useMeeting({
+    const [screenCast, setScreenCast] = useState(false);
+    const {join, participants, enableScreenShare, disableScreenShare, toggleScreenShare, presenterId} = useMeeting({
         onMeetingJoined: () => {
             setJoined("JOINED");
             callAPISendChatRoom(meetingRoom.meetingName, HEADER_JOIN_ROOM_MEETING);
@@ -58,7 +59,7 @@ function VideoCallScreen(props) {
         callAPIGetRoomChatMes(meetingRoom.meetingName);
     };
     const handelRejectVideoCall = (isLeave) => {
-        if(meetingRoom.participants.length === 1){
+        if(meetingRoom.participants.length === 1 && receiveCall == null){
             callAPISendChatRoom(meetingRoom.meetingName,HEADER_MEETING_END);
         }else if(isLeave == true){
             callAPISendChatRoom(meetingRoom.meetingName,HEADER_LEAVE_VIDEO_CALL+myName);
@@ -89,9 +90,9 @@ function VideoCallScreen(props) {
             return '100%';
             break;
         case 2:
-                return '49%';
+                return '49.5%';
             case 3:
-                return '49%';
+                return '49.5%';
         }
     }
     const getHeightParticipantView = (num) => {
@@ -123,15 +124,18 @@ function VideoCallScreen(props) {
         <div>
             {joined && joined == "JOINED" ? (
                 <div className={` video_call_window ${isFullScreen == false ? "window-scale" : "window-full-screen"}`}  >
-                    <div className="grid_view-container">
+                    {presenterId != null && <PresenterView key={presenterId} presenterId={presenterId}/>}
+                    <div className={`grid_view-container ${presenterId != null ? 'sidebar_container': ''}`} >
                         <div className="ic-scale-window" onClick={toggleFullScreen}>
                             {isFullScreen ? <i className="bi bi-box-arrow-down-left"></i> :
                                 <i className="bi bi-box-arrow-in-up-right"></i>}
                         </div>
-                        {[...participants.keys()].map((participantId) => (
+                        {[...participants.keys()].map((participantId, index) => (
+                            presenterId === participantId ? <></> :
                             <ParticipantView
-                                width={getWidthParticipantView([...participants].length)}
-                                height={getHeightParticipantView([...participants].length)}
+                                key={index}
+                                width={presenterId == null ? getWidthParticipantView([...participants].length) : '100%'}
+                                height={presenterId == null ? getHeightParticipantView([...participants].length) : 'auto'}
                                 handleRejectVideoCall={handelRejectVideoCall}
                                 participantId={participantId}
                                 key={participantId}
@@ -140,7 +144,7 @@ function VideoCallScreen(props) {
                     </div>
                     <div className="tool_bar">
                         <div className={`tool_bar-item screen_cast ${screenCast ? '': 'bg_white'}`} onClick={handleToggleScreenShare}>
-                            {screenCast ? <img src={screenCastActive} alt=""/>: <img src={screenCastNoneActive} alt=""/>}
+                            {screenCast ?  <img src={screenCastActive} alt=""/> : <img src={screenCastNoneActive} alt=""/>}
                         </div>
                         <div className={`tool_bar-item mic ${openMic ? '': 'bg_white'}`} onClick={toggleChangeMic}>
                             {openMic ? <i className="bi bi-mic-fill" style={{color: "white"}}></i> : <i className="bi bi-mic-mute-fill"></i>}
@@ -220,7 +224,7 @@ function VideoCallScreen(props) {
                     </div>}
                 </div>
             </div>) : (
-                <JoinRoomChatVideo joinMeeting={joinMeeting} closeJoinVideoCall={closeJoinVideoCall}/>
+                <JoinRoomChatVideo owner={meetingRoom.owner} joinMeeting={joinMeeting} closeJoinVideoCall={closeJoinVideoCall}/>
             )}
         </div>
     )

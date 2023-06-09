@@ -1,6 +1,7 @@
 @import "src/Assets/css/base";
 .join_room-container{
-  width: 300px;
+  //width: 300px;
+  min-width: 300px;
   position: absolute;
   background-color: $color-white-01;
   top: 50%;

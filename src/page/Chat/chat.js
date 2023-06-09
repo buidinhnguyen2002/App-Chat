@@ -137,13 +137,10 @@ function ChatPage(props) {
                         dispatch(setCalling(true));
                         return;
                     }
-                    if(isRejectVideoCall(dataMessage.mes)){
-                        dispatch(setCalling(false));
-                        return;
-                    }
                     if(isLeaveRoomMeeting(dataMessage.mes)){
                         const getParticipant = getNameParticipant(dataMessage.mes);
                         dispatch(removeParticipant(getParticipant));
+                        return;
                     }
                     dispatch(receiveChat(dataMessage));
                 }

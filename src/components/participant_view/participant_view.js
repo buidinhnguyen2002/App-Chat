@@ -3,8 +3,6 @@ import {useMeeting, useParticipant} from "@videosdk.live/react-sdk";
 import ReactPlayer from "react-player";
 import {useDispatch, useSelector} from "react-redux";
 import "./participant_view.scss"
-import PhoneDisconnect from "../../Assets/Image/PhoneDisconnect.png";
-import {leaveMeetingRoom} from "../../store/actions/meetingAction";
 
 function ParticipantView(props) {
     const myName = useSelector(state => state.userReducer.username);
@@ -12,9 +10,9 @@ function ParticipantView(props) {
     const [openMic, setOpenMic] = useState(true);
     const [openCamera, setOpenCamera] = useState(true);
     const [openScreenShare, setOpenScreenShare] = useState(false);
-    const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName, screenShareStream, screenShareOn, screenShareAudioStream } =
+    const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName } =
         useParticipant(props.participantId, );
-    const { leave, toggleMic, toggleWebcam, presenterId } = useMeeting();
+    const { leave, toggleMic, toggleWebcam } = useMeeting();
     const dispatch = useDispatch();
     const videoStream = useMemo(() => {
         if (webcamOn && webcamStream) {
@@ -23,40 +21,7 @@ function ParticipantView(props) {
             return mediaStream;
         }
     }, [webcamStream, webcamOn]);
-
-    const mediaStream = useMemo(() => {
-        if(presenterId === props.participantId) setOpenScreenShare(true);
-        if (screenShareOn && screenShareStream) {
-            const mediaStream = new MediaStream();
-            mediaStream.addTrack(screenShareStream.track);
-            return mediaStream;
-        }
-    }, [screenShareStream, screenShareOn, presenterId]);
-    const audioPlayer = useRef();
     useEffect(() => {
-        // if(openScreenShare){
-        //     if (
-        //         !isLocal &&
-        //         audioPlayer.current &&
-        //         screenShareOn &&
-        //         screenShareAudioStream
-        //     ) {
-        //         const mediaStreamA = new MediaStream();
-        //         mediaStreamA.addTrack(screenShareAudioStream.track);
-        //
-        //         audioPlayer.current.srcObject = mediaStreamA;
-        //         audioPlayer.current.play().catch((err) => {
-        //             if (
-        //                 err.message ===
-        //                 "play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD"
-        //             ) {
-        //                 console.error("audio" + err.message);
-        //             }
-        //         });
-        //     } else {
-        //         audioPlayer.current.srcObject = null;
-        //     }
-        // }
         if (micRef.current) {
             if (micOn && micStream) {
                 const mediaStream = new MediaStream();
@@ -72,7 +37,7 @@ function ParticipantView(props) {
                 micRef.current.srcObject = null;
             }
         }
-    }, [micStream, micOn,screenShareAudioStream, screenShareOn, isLocal]);
+    }, [micStream, micOn]);
     const toggleChangeMic = () => {
         setOpenMic(!openMic);
         toggleMic();
@@ -85,23 +50,7 @@ function ParticipantView(props) {
     return (
             <div className={` participant_view `} style={{width: props.width, height: props.height}}>
                 <audio ref={micRef} autoPlay playsInline muted={ isLocal} />
-                {openScreenShare ? (
-                    <ReactPlayer
-                        playsinline
-                        playIcon={<></>}
-                        pip={false}
-                        light={false}
-                        controls={false}
-                        muted={true}
-                        playing={true}
-                        url={mediaStream}
-                        width="100%"
-                        height="100%"
-                        onError={(err) => {
-                            console.log(err, "participant video error");
-                        }}
-                    />
-                ) : webcamOn ? (
+                { webcamOn ? (
                     <ReactPlayer
                         playsinline
                         pip={false}
