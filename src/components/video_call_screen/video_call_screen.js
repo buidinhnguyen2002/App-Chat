@@ -7,10 +7,18 @@ import connecting3 from "../../Assets/Image/connecting3.png";
 import {MeetingProvider, useMeeting, useParticipant} from "@videosdk.live/react-sdk";
 import {useDispatch, useSelector} from "react-redux";
 import {addParticipant, leaveMeetingRoom, rejectVideoCall} from "../../store/actions/meetingAction";
-import {callAPISendChatRoom} from "../../service/loginService";
-import {HEADER_JOIN_ROOM_MEETING, HEADER_REJECT_VIDEO_CALL, HEADER_VIDEO_CALL} from "../../util/constants";
+import {callAPIGetRoomChatMes, callAPISendChatRoom} from "../../service/loginService";
+import screenCastActive from "../../Assets/Image/Screencast-active.png";
+import screenCastNoneActive from "../../Assets/Image/Screencast-none-active.png";
+import {
+    HEADER_JOIN_ROOM_MEETING,
+    HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
+    HEADER_REJECT_VIDEO_CALL,
+    HEADER_VIDEO_CALL, HEADER_VIDEO_CHAT_END
+} from "../../util/constants";
 import ParticipantView from "../participant_view/participant_view";
 import JoinRoomChatVideo from "../join_room_chat_video/join_room_chat_video";
+import PresenterView from "../participant_view/PresenterView";
 
 function VideoCallScreen(props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
@@ -27,10 +35,12 @@ function VideoCallScreen(props) {
     const [openMic, setOpenMic] = useState(true);
     const [openCamera, setOpenCamera] = useState(true);
     const [isFullScreen, setIsFullScreen] = useState(true);
-    const {join, participants} = useMeeting({
+    const [screenCast, setScreenCast] = useState(false);
+    const {join, participants, enableScreenShare, disableScreenShare, toggleScreenShare, presenterId} = useMeeting({
         onMeetingJoined: () => {
             setJoined("JOINED");
             callAPISendChatRoom(meetingRoom.meetingName, HEADER_JOIN_ROOM_MEETING);
+            callAPIGetRoomChatMes(meetingRoom.meetingName);
         },
         onMeetingLeft: () => {
             console.log('LEAVE');
@@ -39,10 +49,24 @@ function VideoCallScreen(props) {
     const joinMeeting = () => {
         setJoined("JOINING");
         join();
-        callAPISendChatRoom(meetingRoom.meetingName,HEADER_VIDEO_CALL+ JSON.stringify(meetingRoom));
+        const participants = [...meetingRoom.participants];
+        if(!participants.includes(myName)) {
+            participants.push(myName);
+            dispatch(addParticipant(myName));
+        }
+        meetingRoom.participants = participants;
+        if(myName === meetingRoom.owner) callAPISendChatRoom(meetingRoom.meetingName,HEADER_VIDEO_CALL+ JSON.stringify(meetingRoom));
+        callAPIGetRoomChatMes(meetingRoom.meetingName);
     };
-    const handelRejectVideoCall = () => {
-        callAPISendChatRoom(meetingRoom.meetingName,HEADER_REJECT_VIDEO_CALL);
+    const handelRejectVideoCall = (isLeave) => {
+        if(meetingRoom.participants.length === 1 && receiveCall == null){
+            callAPISendChatRoom(meetingRoom.meetingName,HEADER_MEETING_END);
+        }else if(isLeave == true){
+            callAPISendChatRoom(meetingRoom.meetingName,HEADER_LEAVE_VIDEO_CALL+myName);
+        }else{
+            callAPISendChatRoom(meetingRoom.meetingName,HEADER_REJECT_VIDEO_CALL);
+        }
+        callAPIGetRoomChatMes(meetingRoom.meetingName);
         leave();
         dispatch(rejectVideoCall());
     }
@@ -57,30 +81,61 @@ function VideoCallScreen(props) {
     const toggleFullScreen = () => {
         setIsFullScreen(!isFullScreen);
     }
+    const closeJoinVideoCall = () => {
+        dispatch(rejectVideoCall());
+    }
     const getWidthParticipantView = (num) => {
         switch (num) {
         case 1:
             return '100%';
             break;
         case 2:
-                return '49%';
+                return '49.5%';
             case 3:
-                return '49%';
+                return '49.5%';
         }
-
     }
+    const getHeightParticipantView = (num) => {
+        switch (num) {
+            case 1:
+                return '100%';
+                break;
+            case 2:
+                return '50%';
+            case 3:
+                return '50%';
+            default:
+                return '50%';
+        }
+    }
+    const handleEnableScreenShare = () => {
+        // enableScreenShare();
+        setScreenCast(!screenCast);
+    };
+    const handleDisableScreenShare = () => {
+        disableScreenShare();
+    };
+
+    const handleToggleScreenShare = () => {
+        setScreenCast(!screenCast);
+        toggleScreenShare();
+    };
     return (
         <div>
             {joined && joined == "JOINED" ? (
-                <div className={` video_call_window ${isFullScreen == false ? "window-scale" : ""}`}  >
-                    <div className="grid_view-container">
+                <div className={` video_call_window ${isFullScreen == false ? "window-scale" : "window-full-screen"}`}  >
+                    {presenterId != null && <PresenterView key={presenterId} presenterId={presenterId}/>}
+                    <div className={`grid_view-container ${presenterId != null ? 'sidebar_container': ''}`} >
                         <div className="ic-scale-window" onClick={toggleFullScreen}>
                             {isFullScreen ? <i className="bi bi-box-arrow-down-left"></i> :
                                 <i className="bi bi-box-arrow-in-up-right"></i>}
                         </div>
-                        {[...participants.keys()].map((participantId) => (
+                        {[...participants.keys()].map((participantId, index) => (
+                            presenterId === participantId ? <></> :
                             <ParticipantView
-                                width={getWidthParticipantView([...participants].length)}
+                                key={index}
+                                width={presenterId == null ? getWidthParticipantView([...participants].length) : '100%'}
+                                height={presenterId == null ? getHeightParticipantView([...participants].length) : 'auto'}
                                 handleRejectVideoCall={handelRejectVideoCall}
                                 participantId={participantId}
                                 key={participantId}
@@ -88,16 +143,20 @@ function VideoCallScreen(props) {
                         ))}
                     </div>
                     <div className="tool_bar">
+                        <div className={`tool_bar-item screen_cast ${screenCast ? '': 'bg_white'}`} onClick={handleToggleScreenShare}>
+                            {screenCast ?  <img src={screenCastActive} alt=""/> : <img src={screenCastNoneActive} alt=""/>}
+                        </div>
                         <div className={`tool_bar-item mic ${openMic ? '': 'bg_white'}`} onClick={toggleChangeMic}>
                             {openMic ? <i className="bi bi-mic-fill" style={{color: "white"}}></i> : <i className="bi bi-mic-mute-fill"></i>}
                         </div>
                         <div className={`tool_bar-item camera ${openCamera ? '': 'bg_white'}`} onClick={toggleCamera}>
                             {openCamera ? <i className="bi bi-camera-video-fill" style={{color: "white"}}></i> : <i className="bi bi-camera-video-off-fill"></i>}
                         </div>
-                        <div className="tool_bar-leave" onClick={handelRejectVideoCall}>
+                        <div className="tool_bar-leave" onClick={()=> handelRejectVideoCall(true)}>
                             <img src={PhoneDisconnect} alt=""/>
                         </div>
                     </div>
+                    {isFullScreen == false && <div className="ic_full-screen" onClick={toggleFullScreen}><i className="bi bi-arrows-fullscreen"></i></div>}
                 </div>
             ) : (joined && joined == "JOINING") ? (
                 <div className={'video_call_window'}>
@@ -121,7 +180,7 @@ function VideoCallScreen(props) {
                         </div>
                         <p>Connecting...</p>
                         {receiveCall == true && <div className="receive_call">
-                            <div className={`receive_call_bar reject `} onClick={handelRejectVideoCall}>
+                            <div className={`receive_call_bar reject `} onClick={()=> handelRejectVideoCall}>
                                 {<i className="bi bi-x-lg" style={{color: "white"}}></i>}
                             </div>
                             <div className={`receive_call_bar phone `}>
@@ -165,54 +224,9 @@ function VideoCallScreen(props) {
                     </div>}
                 </div>
             </div>) : (
-                <JoinRoomChatVideo joinMeeting={joinMeeting}/>
+                <JoinRoomChatVideo owner={meetingRoom.owner} joinMeeting={joinMeeting} closeJoinVideoCall={closeJoinVideoCall}/>
             )}
         </div>
-
-        // <div className={'video_call_window'}>
-        //     <div className="connecting-container">
-        //         <div className="connecting-avatar-container">
-        //             <div className="avatar from">
-        //                 <img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200" alt=""/>
-        //                 <p className={'name_call'}>Camel</p>
-        //             </div>
-        //             <div className="connecting">
-        //                 <img src={connecting1} alt=""/>
-        //                 <img src={connecting2} alt=""/>
-        //                 <img src={connecting3} alt=""/>
-        //             </div>
-        //             <div className="avatar to">
-        //                 <img src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200" alt=""/>
-        //                 <p className={'name_call'}>Horse</p>
-        //             </div>
-        //         </div>
-        //         <p>Connecting...</p>
-        //         {receiveCall && <div className="receive_call">
-        //             <div className={`receive_call_bar reject `} onClick={props.handelRejectVideoCall}>
-        //                 {<i className="bi bi-x-lg" style={{color: "white"}}></i>}
-        //             </div>
-        //             <div className={`receive_call_bar phone `} onClick={toggleMic}>
-        //                 {<i className="bi bi-telephone-inbound" style={{color: "white"}}></i>}
-        //             </div>
-        //         </div>}
-        //         {receiveCall == null && <div className="receive_call">
-        //             <div className={`receive_call_bar reject close-call`} onClick={toggleCamera}>
-        //                 <img src={PhoneDisconnect} alt=""/>
-        //             </div>
-        //         </div>}
-        //     </div>
-        //     {startVideoCall && <div className="tool_bar">
-        //         <div className={`tool_bar-item mic ${openMic ? '': 'bg_white'}`} onClick={toggleMic}>
-        //             {openMic ? <i className="bi bi-mic-fill" style={{color: "white"}}></i> : <i className="bi bi-mic-mute-fill"></i>}
-        //         </div>
-        //         <div className={`tool_bar-item camera ${openCamera ? '': 'bg_white'}`} onClick={toggleCamera}>
-        //             {openCamera ? <i className="bi bi-camera-video-fill" style={{color: "white"}}></i> : <i className="bi bi-camera-video-off-fill"></i>}
-        //         </div>
-        //         <div className="tool_bar-leave" onClick={props.handleLeaveVideoCall}>
-        //             <img src={PhoneDisconnect} alt=""/>
-        //         </div>
-        //     </div>}
-        // </div>
     )
 
 }

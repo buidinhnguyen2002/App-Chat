@@ -1,14 +1,22 @@
 import React, {useState} from "react";
 import "./message_item.scss";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {saveAs} from 'file-saver';
 import {HEADER_MSG_VIDEO} from "../../util/constants";
-import {getURLVideo, isJoinRoomMeeting, isRejectRoomMeeting} from "../../util/function";
+import {
+    getMeetingRoom,
+    getURLVideo,
+    isJoinRoomMeeting,
+    isLeaveRoomMeeting, isMeetingEnd,
+    isRejectRoomMeeting,
+    isVideoCall
+} from "../../util/function";
+import {setMeetingRoom} from "../../store/actions/meetingAction";
 
 function MessageItem(props) {
-    const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
-    // const myName = dataReLogIn.userName;
+    const nameChat = useSelector(state => state.userReducer.currentChat.name);
     const myName = useSelector(state => state.userReducer.username);
+    const meetingRoom =useSelector(state => state.meetingReducer.meetingRoom);
     let listImg = props.isJson ? JSON.parse(props.mes).imgs : [];
     let mesText = props.isJson ? JSON.parse(props.mes).text : props.mes;
     const [imgDetail, setImgDetail] = useState('');
@@ -16,6 +24,8 @@ function MessageItem(props) {
     const [showImageDetail, setShowImageDetail] = useState(false);
     const [showVideoDetail, setShowVideoDetail] = useState(false);
     const video = getURLVideo(mesText);
+    const videoCall = isVideoCall(mesText) ? getMeetingRoom(mesText): null;
+    const dispatch = useDispatch();
     const setURLImageDetail = (e) => {
         setImgDetail(e.target.src);
         setShowImageDetail(true);
@@ -34,9 +44,16 @@ function MessageItem(props) {
         });
     }
     const getMessage = () => {
-        if(isJoinRoomMeeting(mesText)) return (props.name === myName ? 'Bạn ':myName) + ' đã tham gia đoạn chat video.';
-        if(isRejectRoomMeeting(mesText)) return (props.name === myName ? 'Bạn ' : props.name) + ' đã rời khỏi đoạn chat video.';
+        const owner = (props.name === myName ? 'Bạn ':props.name)
+        if(isMeetingEnd(mesText)) return ' Cuộc gọi video đã kết thúc.';
+        if(isRejectRoomMeeting(mesText)) return  owner + ' đã từ chối tham gia đoạn chat video.';
+        if(isJoinRoomMeeting(mesText)) return owner + ' đã tham gia đoạn chat video.';
+        if(isLeaveRoomMeeting(mesText)) return owner + ' đã rời khỏi đoạn chat video.';
         return  null;
+    }
+    const handelJoinVideoCall = (meetingRoom) => {
+        meetingRoom.participants = [myName];
+        dispatch(setMeetingRoom(meetingRoom));
     }
     return (
         <div>
@@ -51,6 +68,14 @@ function MessageItem(props) {
                     <video controls>
                         <source src={video} type={"video/mp4"}/>
                     </video>
+                </div>
+            </div> : videoCall != null ? <div className={`message_container d-flex ${props.name === myName ? 'message_container-flexRight':'message_container-flexleft'}`} onClick={()=>handelJoinVideoCall(videoCall)}>
+                <div className={'flex-container d-flex video_call-wrapper'}>
+                    <div className="ic_video_call"><i className="fa-solid fa-video"></i></div>
+                    <div className="main-content">
+                        <h4>Nhóm chat video</h4>
+                        <h5>Nhấn để tham gia</h5>
+                    </div>
                 </div>
             </div> :
                 getMessage() != null ? <p className={"mes_call"}>{getMessage()}</p> : <div style={{display: mesText === ''? "none": "flex"}} className={`message_container ${props.name === myName ? 'message_container-flexRight':'message_container-flexleft'}`}>

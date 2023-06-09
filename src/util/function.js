@@ -1,4 +1,10 @@
-import {HEADER_JOIN_ROOM_MEETING, HEADER_MSG_VIDEO, HEADER_REJECT_VIDEO_CALL, HEADER_VIDEO_CALL} from "./constants";
+import {
+    HEADER_JOIN_ROOM_MEETING,
+    HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
+    HEADER_MSG_VIDEO,
+    HEADER_REJECT_VIDEO_CALL,
+    HEADER_VIDEO_CALL
+} from "./constants";
 
 export const isVideo = (text) => {
     if(text.includes(HEADER_MSG_VIDEO)) return true;
@@ -11,6 +17,9 @@ export const isVideoCall = (text) => {
 export const getMeetingRoom = (text) => {
     return JSON.parse(text.substring(HEADER_VIDEO_CALL.length , text.length));
 }
+export const getNameParticipant = (text) => {
+    return text.substring(HEADER_LEAVE_VIDEO_CALL.length , text.length);
+}
 export const isRejectVideoCall = (text) => {
     if(text.startsWith(HEADER_REJECT_VIDEO_CALL)) return true;
     return false;
@@ -21,6 +30,14 @@ export const isJoinRoomMeeting = (text) => {
 }
 export const isRejectRoomMeeting = (text) => {
     if(text.startsWith(HEADER_REJECT_VIDEO_CALL)) return true;
+    return false;
+}
+export const isLeaveRoomMeeting = (text) => {
+    if(text.startsWith(HEADER_LEAVE_VIDEO_CALL)) return true;
+    return false;
+}
+export const isMeetingEnd = (text) => {
+    if(text.startsWith(HEADER_MEETING_END)) return true;
     return false;
 }
 export const getLayoutParticipant = (num) => {

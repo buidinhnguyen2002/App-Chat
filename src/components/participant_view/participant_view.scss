@@ -9,13 +9,34 @@
 .participant_view {
   gap: 5px;
   margin-bottom: 10px;
-  scale: 0.95;
-  transform: translateY(-10px);
   height: 100%;
+  border-radius: 30px;
   video {
     border-radius: 30px;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .holder_participant {
+    border-radius: 30px;
+    width: 100%;
+    height: 100%;
+    background-color: $primary-color-blue;
+    @include flexMiddle();
+    .title-container{
+      @include dimension(250px, 250px);
+      border-radius: 50%;
+      background-color: $primary-color-white;
+      @include styleText(600, 30px, 30px, $primary-color-blue);
+      @include flexMiddle();
+      p{
+        margin-bottom: 0px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 80%;
+      }
+    }
+
   }
 }

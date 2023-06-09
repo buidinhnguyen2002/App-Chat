@@ -1,0 +1,12 @@
+@import "src/Assets/css/base";
+.presenter{
+  width: 83% !important;
+  height: 100% !important;
+  margin-right: 10px;
+  background-color: $color-blue-02;
+  border-radius: 30px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  video {
+    object-fit: contain !important;
+  }
+}

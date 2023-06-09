@@ -14,16 +14,13 @@
   display: flex;
   ustify-content: center;
   align-items: center;
-  padding: 20px 10px 10px 10px;
+  padding: 35px 10px 10px 10px;
+  transition: all 0.3s linear;
   .grid_view-container{
     width: 100%;
     height: 100%;
-    //display: grid;
-    //grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    //grid-auto-flow: row;
-    //align-content: center;
-    //justify-content: center;
     @include flexMiddle();
+    justify-content: space-between;
     flex-wrap: wrap;
     border-radius: 30px;
     .ic-scale-window{
@@ -32,6 +29,10 @@
       right: 20px;
       cursor: pointer;
     }
+  }
+  .sidebar_container {
+    align-items: start;
+    width: 17%;
   }
   .connecting-container {
     display: flex;
@@ -54,6 +55,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
       }
       .reject {
         background-color: $color-red-01;
@@ -103,13 +105,25 @@
       }
     }
   }
+  &:hover {
+    .tool_bar{
+      opacity: 1;
+      transform: translateY(-20px);
+    }
+    .ic_full-screen{
+      opacity: 1;
+    }
+  }
   .tool_bar{
+    transition: all 0.2s linear;
     position: absolute;
-    bottom: 20px;
+    opacity: 0;
+    bottom: 0px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
     &-leave {
       background-color: $color-red-01;
       padding: 5px 15px;
@@ -125,24 +139,49 @@
     &-item{
       @include dimension(40px,40px);
       border-radius: 50%;
-      background-color: $color-grey-07;
+      background-color: $color-blue-04;
       display: flex;
       justify-content: center;
       align-items: center;
       margin: 0 10px;
       cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     .camera i{
       transform: translateY(1px);
     }
     .bg_white{
-      background-color: $primary-color-white !important;
+      background-color: $color-blue-02 !important;
     }
+    .screen_cast{
+      img{
+        @include dimension(24px, 24px);
+      }
+    }
+  }
+  .ic_full-screen{
+    @include positionAbsolute(0,0,unset,unset);
+    transition: all 0.2s linear;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-color: $color-white-opacity-02;
+    @include flexMiddle();
+    border-radius: 30px;
+    i{
+      @include styleText(900, 70px, 70px, $primary-color-white);
+      cursor: pointer;
+    }
+    z-index: 1;
   }
 }
 .window-scale{
   scale: 0.3;
+  right: 0 !important;
   top: 0;
   transform: translate(-30%, -100%);
-  right: 0;
+
+}
+.window-full-screen{
+  scale: 1;
 }
