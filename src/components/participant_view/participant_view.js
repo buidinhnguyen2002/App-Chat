@@ -65,8 +65,8 @@ function ParticipantView(props) {
                             console.log(err, "participant video error");
                         }}
                     />
-                ) : <div className={"holder_participant"}>
-                    <div className="title-container">
+                ) : <div className={`holder_participant ${props.isItemSideBar ? 'sidebar_item': ''}`}>
+                    <div className={`title-container `}>
                         <p>{displayName}</p>
                     </div>
                 </div>}

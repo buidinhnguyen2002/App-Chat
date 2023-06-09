@@ -12,6 +12,7 @@ import {
     isVideoCall
 } from "../../util/function";
 import {setMeetingRoom} from "../../store/actions/meetingAction";
+import {getMeetingAndToken, getRoom} from "../../service/VideoCallService";
 
 function MessageItem(props) {
     const nameChat = useSelector(state => state.userReducer.currentChat.name);
@@ -52,8 +53,24 @@ function MessageItem(props) {
         return  null;
     }
     const handelJoinVideoCall = (meetingRoom) => {
-        meetingRoom.participants = [myName];
-        dispatch(setMeetingRoom(meetingRoom));
+        getRoom(meetingRoom.meetId).then(data =>{
+            if(data.disabled){
+                getMeetingAndToken(null).then(meetId => {
+                    const meetingRoom = {
+                        meetId,
+                        meetingName: nameChat,
+                        owner: myName,
+                        participants: [myName],
+                        newRoom: true,
+                    };
+                    dispatch(setMeetingRoom(meetingRoom));
+                })
+            }else {
+                meetingRoom.participants = [myName];
+                meetingRoom.join = true;
+                dispatch(setMeetingRoom(meetingRoom));
+            }
+        } );
     }
     return (
         <div>

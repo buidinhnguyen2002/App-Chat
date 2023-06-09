@@ -19,6 +19,7 @@ import {
 import ParticipantView from "../participant_view/participant_view";
 import JoinRoomChatVideo from "../join_room_chat_video/join_room_chat_video";
 import PresenterView from "../participant_view/PresenterView";
+import {deactivateRoom} from "../../service/VideoCallService";
 
 function VideoCallScreen(props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
@@ -61,6 +62,7 @@ function VideoCallScreen(props) {
     const handelRejectVideoCall = (isLeave) => {
         if(meetingRoom.participants.length === 1 && receiveCall == null){
             callAPISendChatRoom(meetingRoom.meetingName,HEADER_MEETING_END);
+            deactivateRoom(meetingRoom.meetId);
         }else if(isLeave == true){
             callAPISendChatRoom(meetingRoom.meetingName,HEADER_LEAVE_VIDEO_CALL+myName);
         }else{
@@ -90,9 +92,9 @@ function VideoCallScreen(props) {
             return '100%';
             break;
         case 2:
-                return '49.5%';
+                return '49%';
             case 3:
-                return '49.5%';
+                return '49%';
         }
     }
     const getHeightParticipantView = (num) => {
@@ -103,7 +105,7 @@ function VideoCallScreen(props) {
             case 2:
                 return '50%';
             case 3:
-                return '50%';
+                return '49%';
             default:
                 return '50%';
         }
@@ -137,6 +139,7 @@ function VideoCallScreen(props) {
                                 width={presenterId == null ? getWidthParticipantView([...participants].length) : '100%'}
                                 height={presenterId == null ? getHeightParticipantView([...participants].length) : 'auto'}
                                 handleRejectVideoCall={handelRejectVideoCall}
+                                isItemSideBar={presenterId == null ? false: true}
                                 participantId={participantId}
                                 key={participantId}
                             />
@@ -224,7 +227,7 @@ function VideoCallScreen(props) {
                     </div>}
                 </div>
             </div>) : (
-                <JoinRoomChatVideo owner={meetingRoom.owner} joinMeeting={joinMeeting} closeJoinVideoCall={closeJoinVideoCall}/>
+                <JoinRoomChatVideo meetingRoom={meetingRoom} joinMeeting={joinMeeting} closeJoinVideoCall={closeJoinVideoCall}/>
             )}
         </div>
     )

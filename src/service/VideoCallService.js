@@ -11,3 +11,32 @@ export const createMeeting = async ({ token }) => {
     const { roomId } = await res.json();
     return roomId;
 };
+
+export const getRoom = async ( meetingId) => {
+    const res = await fetch(`https://api.videosdk.live/v2/rooms/${meetingId}`, {
+        method: "GET",
+        headers: {
+            authorization: `${authToken}`,
+            "Content-Type": "application/json",
+        },
+    });
+    const data = await res.json();
+    console.log(data);
+    return data;
+};
+export const deactivateRoom = async ( meetingId) => {
+    const res = await fetch(`https://api.videosdk.live/v2/rooms/deactivate`, {
+        method: "POST",
+        headers: {
+            authorization: `${authToken}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"roomId" : meetingId}),
+    });
+    const data = await res.json();
+    console.log(data);
+};
+export const getMeetingAndToken = async (id) => {
+    const meetingId = id == null ? await createMeeting({token: authToken}): id;
+    return meetingId.toString();
+}

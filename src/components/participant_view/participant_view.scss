@@ -7,10 +7,10 @@
 
 }
 .participant_view {
-  gap: 5px;
   margin-bottom: 10px;
   height: 100%;
   border-radius: 30px;
+  margin-right: 10px;
   video {
     border-radius: 30px;
     width: 100%;
@@ -34,9 +34,17 @@
         margin-bottom: 0px;
         text-overflow: ellipsis;
         white-space: nowrap;
-        max-width: 80%;
       }
     }
 
+  }
+  .sidebar_item{
+    height: 122px !important;
+    .title-container{
+      @include dimension(80px, 80px);
+      @include styleText(600, 16px, 16px, $primary-color-blue);
+      padding: 10px;
+      overflow: hidden;
+    }
   }
 }

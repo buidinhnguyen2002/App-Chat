@@ -1,13 +1,15 @@
 import "./join_room_chat_video.scss"
 function JoinRoomChatVideo(props){
     const getTitle = () => {
-        if(props.owner === ''){
+        if(props.meetingRoom.newRoom) return "Đoạn chat video đã kết thúc.";
+        if(props.meetingRoom.join != null){
             return "Tham gia đoạn chat.";
         }
         return "Gọi cho nhóm.";
     }
     const getNameButton = () => {
-        if(props.owner === ''){
+        if(props.meetingRoom.newRoom) return "Bắt đầu cuộc gọi mới.";
+        if(props.meetingRoom.join != null){
             return "Tham gia";
         }
         return "Gọi.";
