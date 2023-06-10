@@ -3,16 +3,15 @@ import {useMeeting, useParticipant} from "@videosdk.live/react-sdk";
 import ReactPlayer from "react-player";
 import {useDispatch, useSelector} from "react-redux";
 import "./participant_view.scss"
-import PhoneDisconnect from "../../Assets/Image/PhoneDisconnect.png";
-import {leaveMeetingRoom} from "../../store/actions/meetingAction";
 
 function ParticipantView(props) {
     const myName = useSelector(state => state.userReducer.username);
     const micRef = useRef(null);
     const [openMic, setOpenMic] = useState(true);
     const [openCamera, setOpenCamera] = useState(true);
+    const [openScreenShare, setOpenScreenShare] = useState(false);
     const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName } =
-        useParticipant(props.participantId);
+        useParticipant(props.participantId, );
     const { leave, toggleMic, toggleWebcam } = useMeeting();
     const dispatch = useDispatch();
     const videoStream = useMemo(() => {
@@ -22,7 +21,6 @@ function ParticipantView(props) {
             return mediaStream;
         }
     }, [webcamStream, webcamOn]);
-
     useEffect(() => {
         if (micRef.current) {
             if (micOn && micStream) {
@@ -50,9 +48,9 @@ function ParticipantView(props) {
     }
 
     return (
-            <div className={` participant_view `} style={{width: props.width}}>
-                <audio ref={micRef} autoPlay playsInline muted={isLocal} />
-                {webcamOn && (
+            <div className={` participant_view `} style={{width: props.width, height: props.height}}>
+                <audio ref={micRef} autoPlay playsInline muted={ isLocal} />
+                { webcamOn ? (
                     <ReactPlayer
                         playsinline
                         pip={false}
@@ -62,23 +60,16 @@ function ParticipantView(props) {
                         playing={true}
                         url={videoStream}
                         width="100%"
-                        height="auto"
+                        height="100%"
                         onError={(err) => {
                             console.log(err, "participant video error");
                         }}
                     />
-                )}
-                {/*<div className="tool_bar">*/}
-                {/*    <div className={`tool_bar-item mic ${openMic ? '': 'bg_white'}`} onClick={toggleChangeMic}>*/}
-                {/*        {openMic ? <i className="bi bi-mic-fill" style={{color: "white"}}></i> : <i className="bi bi-mic-mute-fill"></i>}*/}
-                {/*    </div>*/}
-                {/*    <div className={`tool_bar-item camera ${openCamera ? '': 'bg_white'}`} onClick={toggleCamera}>*/}
-                {/*        {openCamera ? <i className="bi bi-camera-video-fill" style={{color: "white"}}></i> : <i className="bi bi-camera-video-off-fill"></i>}*/}
-                {/*    </div>*/}
-                {/*    <div className="tool_bar-leave" onClick={props.handleRejectVideoCall}>*/}
-                {/*        <img src={PhoneDisconnect} alt=""/>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
+                ) : <div className={`holder_participant ${props.isItemSideBar ? 'sidebar_item': ''}`}>
+                    <div className={`title-container `}>
+                        <p>{displayName}</p>
+                    </div>
+                </div>}
             </div>
     );
 }

@@ -75,15 +75,6 @@ function ChatDetailHeader (props) {
                         <i className="bi bi-chevron-down"></i>
                     </div>
                 </div>
-                {/*{(videoCall && isCalling == true && meetingId != null) && <MeetingProvider*/}
-                {/*    config={{*/}
-                {/*        meetingId,*/}
-                {/*        micEnabled: true,*/}
-                {/*        webcamEnabled: true,*/}
-                {/*        name: "C.V. Raman",*/}
-                {/*    }}*/}
-                {/*    token={authToken}*/}
-                {/*> <VideoCallScreen meetingId={meetingId} handleLeaveVideoCall={handleLeaveVideoCall} joined={joined}/></MeetingProvider>}*/}
             </div>
         )
 

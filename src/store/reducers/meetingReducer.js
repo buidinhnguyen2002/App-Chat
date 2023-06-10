@@ -38,6 +38,17 @@ export default function meetingReducer(state = initialState, action) {
                 meetingRoom: null,
             }
         }
+        case 'REMOVE_PARTICIPANT': {
+            let participants = [];
+            if(state.meetingRoom) participants= [...state.meetingRoom.participants].filter(participant => participant != action.payload);
+            return {
+                ...state,
+                meetingRoom: {
+                    ...state.meetingRoom,
+                    participants: [...state.meetingRoom.participants].filter(participant => participant != action.payload),
+                }
+            }
+        }
         default:
             return state;
     }

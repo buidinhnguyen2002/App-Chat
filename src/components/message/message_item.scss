@@ -4,11 +4,15 @@
   width: 100%;
   display: flex;
   padding: 8px 25px;
-
+  .message_link {
+    max-width: 50%;
+    max-height: 450px;
+  }
 }
 .mes_call {
   text-align: center;
   font-size: 14px;
+  margin-bottom: 0;
 }
 
 .message_container-flexRight {
@@ -140,6 +144,36 @@
       &:before{
         transform: translate(7px, 5px);
       }
+    }
+  }
+}
+
+.video_call-wrapper{
+  cursor: pointer;
+  border-radius: 16px;
+  background-color: $primary-color-white;
+  padding: 12px 20px;
+  @include flexMiddle();
+  .ic_video_call {
+    padding: 20px;
+    border-radius: 50%;
+    background-color: $color-green-01;
+    @include dimension(50px, 50px);
+    @include flexMiddle();
+    margin-right: 20px;
+    i{
+      @include styleText(900, 18px, 20px, $primary-color-white);
+      transform: translateY(1px);
+    }
+  }
+  .main-content {
+    h4{
+      @include styleText(700, 18px, 20px, $primary-color-text);
+      margin-bottom: 7px;
+    }
+    h5{
+      @include styleText(500, 16px, 18px, $primary-color-subtext);
+      margin-bottom: 0;
     }
   }
 }
