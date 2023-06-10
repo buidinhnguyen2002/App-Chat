@@ -7,12 +7,13 @@ import {
     getMeetingRoom,
     getURLVideo,
     isJoinRoomMeeting,
-    isLeaveRoomMeeting, isMeetingEnd,
+    isLeaveRoomMeeting, isLink, isMeetingEnd,
     isRejectRoomMeeting,
     isVideoCall
 } from "../../util/function";
 import {setMeetingRoom} from "../../store/actions/meetingAction";
 import {getMeetingAndToken, getRoom} from "../../service/VideoCallService";
+import LinkPreview from "../link_review/link_preview";
 
 function MessageItem(props) {
     const nameChat = useSelector(state => state.userReducer.currentChat.name);
@@ -93,6 +94,10 @@ function MessageItem(props) {
                         <h4>Nhóm chat video</h4>
                         <h5>Nhấn để tham gia</h5>
                     </div>
+                </div>
+            </div> : isLink(mesText) ? <div className={`message_container ${props.name === myName ? 'message_container-flexRight':'message_container-flexleft'}`}>
+                <div className={`message_link`}>
+                    <LinkPreview isMyChat={props.name === myName} url={mesText}/>
                 </div>
             </div> :
                 getMessage() != null ? <p className={"mes_call"}>{getMessage()}</p> : <div style={{display: mesText === ''? "none": "flex"}} className={`message_container ${props.name === myName ? 'message_container-flexRight':'message_container-flexleft'}`}>

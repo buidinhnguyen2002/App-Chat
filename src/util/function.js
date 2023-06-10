@@ -62,3 +62,8 @@ export function isJSON(str) {
         return false;
     }
 }
+export
+function isLink(str) {
+    const linkRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+    return linkRegex.test(str);
+}
