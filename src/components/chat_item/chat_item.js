@@ -63,7 +63,6 @@ function ChatItem(props) {
     useEffect(()=>{
     },[])
 
-
         return (
             <div className={`chat_item chat_item-round d-flex ${props.isChoose ? 'chat_item-bgBlue':'chat_item-bgWhite'}`}>
                 <div className="chat_avatar-wrapper">
