@@ -31,7 +31,7 @@ function WindowChat(props) {
                     <div key={msg.id} ref={(chatData.length - 1) === index ? scrollTargetRef : null}
                                        className={'msgItem'}
                                        >
-                        <MessageItem name={msg.name} mes={msg.mes} isJson={isJSON(msg.mes) ? true : false}/>
+                        <MessageItem type={msg.type} name={msg.name} mes={msg.mes} isJson={isJSON(msg.mes) ? true : false}/>
                     </div>
                         // isJSON(msg.mes) ? <div key={msg.id} ref={(chatData.length - 1) === index ? scrollTargetRef : null}
                         //                        className={'msgItem'}
