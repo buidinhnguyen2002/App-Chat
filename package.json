@@ -8,6 +8,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@videosdk.live/react-sdk": "^0.1.74",
+    "crypto-js": "^4.1.1",
     "file-saver": "^2.0.5",
     "firebase": "^9.22.1",
     "get-link-preview": "^1.0.7",

@@ -5,6 +5,7 @@ import {
     HEADER_REJECT_VIDEO_CALL,
     HEADER_VIDEO_CALL
 } from "./constants";
+import CryptoJS from "crypto-js";
 
 export const isVideo = (text) => {
     if(text.includes(HEADER_MSG_VIDEO)) return true;
@@ -62,8 +63,16 @@ export function isJSON(str) {
         return false;
     }
 }
-export
-function isLink(str) {
+export function isLink(str) {
     const linkRegex = /^(ftp|http|https):\/\/[^ "]+$/;
     return linkRegex.test(str);
+}
+export function encryptData(data) {
+    const dataEncrypt = CryptoJS.AES.encrypt(JSON.stringify(data), process.env.REACT_APP_SECRET_KEY).toString();
+    return dataEncrypt;
+}
+export function decryptData(data) {
+    const decryptedBytes = CryptoJS.AES.decrypt(data, process.env.REACT_APP_SECRET_KEY);
+    const dataDescrypt = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
+    return dataDescrypt;
 }
