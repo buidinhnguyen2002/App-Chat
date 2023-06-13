@@ -12,15 +12,16 @@ import {authToken, createMeeting} from "../../service/VideoCallService";
 import {setMeetingRoom} from "../../store/actions/meetingAction";
 import {callAPISendChatRoom} from "../../service/loginService";
 import {HEADER_VIDEO_CALL} from "../../util/constants";
+import OptionsSideBar from "../options_side_bar/options_side_bar";
 
 
 function ChatDetailHeader (props) {
-
     const currentChat = useSelector(state => state.userReducer.currentChat);
     const isCalling = useSelector(state => state.userReducer.isCalling);
     const myName = useSelector(state => state.userReducer.username);
     const [meetingId, setMeetingId] = useState(null);
     const dispatch = useDispatch();
+    const [openOptionChat, setOpenOptionChat] = useState(false);
     const getMeetingAndToken = async (id) => {
         const meetingId = id == null ? await createMeeting({token: authToken}): id;
         setMeetingId(meetingId);
@@ -37,6 +38,9 @@ function ChatDetailHeader (props) {
             };
             dispatch(setMeetingRoom(meetingRoom));
         }
+    }
+    const toggleOpenOptionChat = () => {
+        setOpenOptionChat(!openOptionChat);
     }
         return (
             <div className="chat_detail_header chat_detail_header-bgLight">
@@ -72,9 +76,10 @@ function ChatDetailHeader (props) {
                     </div>
                     <div className="more chat_detail-icon">
                         <div className="vertical-line"></div>
-                        <i className="bi bi-chevron-down"></i>
+                        <i className="fa-solid fa-chevron-down" style={{transform: openOptionChat ? "rotate(90deg)": ""}} onClick={toggleOpenOptionChat}></i>
                     </div>
                 </div>
+                <OptionsSideBar openOption={openOptionChat}/>
             </div>
         )
 

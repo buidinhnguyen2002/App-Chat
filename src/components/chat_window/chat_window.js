@@ -9,6 +9,7 @@ import {useNavigate} from "react-router-dom";
 import MessageItem from "../message/message_item";
 import chat from "../../page/Chat/chat";
 import {isJSON} from "../../util/function";
+import OptionsSideBar from "../options_side_bar/options_side_bar";
 
 function WindowChat(props) {
     const currentChats = useSelector(state => state.userReducer.currentChat);
