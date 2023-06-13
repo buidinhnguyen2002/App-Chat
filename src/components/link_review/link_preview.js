@@ -7,7 +7,6 @@ function LinkPreview(props) {
     return (
         <div>
             {  <div className="link_preview">
-                    {console.log(data)},
                 <div className="link_preview-card">
                     <div className={`${data ? "link": 'message_item message_item-round link-preview d-flex'} ${props.isMyChat ? "message_item-bgBlue" : "message_item-bgWhite"} `}>
                         <a className={`${props.isMyChat ? 'cl-white': 'cl-grey'}`} href={props.url} target="_blank" rel="noopener noreferrer" style={{color: data ? "white": ''}}>{props.url}</a>

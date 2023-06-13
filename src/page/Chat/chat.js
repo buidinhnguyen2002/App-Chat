@@ -54,6 +54,10 @@ function ChatPage(props) {
     const [meetingId, setMeetingId] = useState(null);
     useEffect(() => {
         const storedData = sessionStorage.getItem('dataReLogIn');
+        if(!storedData){
+            navigate('/');
+            return;
+        }
         const dataReLogIn = decryptData(storedData);
         if(!dataReLogIn.isLogin){
             navigate('/');
