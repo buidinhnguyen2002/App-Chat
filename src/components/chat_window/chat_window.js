@@ -28,16 +28,21 @@ function WindowChat(props) {
             <div className="window-chat-body d-flex" style={{flexDirection: "column"}}>
                 {
                     chatData.map((msg, index) => (
-                        isJSON(msg.mes) ? <div ref={(chatData.length - 1) === index ? scrollTargetRef : null}
-                                               className={'msgItem'}
-                                               key={msg.id}>
-                                <MessageItem key={msg.id} name={msg.name} mes={msg.mes} isJson={true}/>
-                            </div> :
-                            <div ref={(chatData.length - 1) === index ? scrollTargetRef : null}
-                                 className={'msgItem'}
-                                 key={msg.id}>
-                                <MessageItem key={msg.id} name={msg.name} mes={msg.mes}/>
-                            </div>
+                    <div key={msg.id} ref={(chatData.length - 1) === index ? scrollTargetRef : null}
+                                       className={'msgItem'}
+                                       >
+                        <MessageItem name={msg.name} mes={msg.mes} isJson={isJSON(msg.mes) ? true : false}/>
+                    </div>
+                        // isJSON(msg.mes) ? <div key={msg.id} ref={(chatData.length - 1) === index ? scrollTargetRef : null}
+                        //                        className={'msgItem'}
+                        //                        >
+                        //         <MessageItem name={msg.name} mes={msg.mes} isJson={true}/>
+                        //     </div> :
+                        //     <div key={msg.id} ref={(chatData.length - 1) === index ? scrollTargetRef : null}
+                        //          className={'msgItem'}
+                        //          >
+                        //         <MessageItem name={msg.name} mes={msg.mes}/>
+                        //     </div>
                     ))
                 }
             </div>

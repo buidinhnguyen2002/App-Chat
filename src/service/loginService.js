@@ -1,5 +1,6 @@
 import {w3cwebsocket as W3CWebSocket} from "websocket";
 import store from "../store/store";
+import CryptoJS from "crypto-js";
 
 const urlServer = 'ws://140.238.54.136:8080/chat/chat';
 export var client = new W3CWebSocket(urlServer);
@@ -60,7 +61,10 @@ export const callAPIGetPeopleChatMes = (name) => {
 }
 
 export const callAPIReLogIn = () => {
-    const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
+    const storedData = sessionStorage.getItem('dataReLogIn');
+    const decryptedBytes = CryptoJS.AES.decrypt(storedData, process.env.REACT_APP_SECRET_KEY);
+    const dataReLogIn = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
+    // const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
     client.send(JSON.stringify(
         {
             "action": "onchat",

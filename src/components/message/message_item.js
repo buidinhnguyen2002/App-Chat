@@ -77,7 +77,7 @@ function MessageItem(props) {
         <div>
             <div className={`image_container d-flex ${props.name === myName ? 'message_container-flexRight':'message_container-flexleft'}`}>
                 <div className={'flex-container d-flex'}>
-                    {listImg.map((img, index) => <div className={"image_item"}><img src={img} alt="" onClick={setURLImageDetail}/></div>)}
+                    {listImg.map((img, index) => <div key={index} className={"image_item"}><img src={img} alt="" onClick={setURLImageDetail}/></div>)}
                 </div>
             </div>
             {video !== '' ? <div className={`message_container ${props.name === myName ? 'message_container-flexRight':'message_container-flexleft'}`}>

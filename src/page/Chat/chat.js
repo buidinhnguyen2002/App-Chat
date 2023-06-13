@@ -23,6 +23,7 @@ import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
 import VideoCallScreen from "../../components/video_call_screen/video_call_screen";
 import {
+    decryptData, encryptData,
     getMeetingRoom,
     getNameParticipant,
     isLeaveRoomMeeting,
@@ -34,6 +35,8 @@ import ChatDetailHeader from "../../components/chat_detail_header/chat_detail_he
 import {MeetingProvider} from "@videosdk.live/react-sdk";
 import {authToken} from "../../service/VideoCallService";
 import {removeParticipant, setCalling, setMeetingRoom} from "../../store/actions/meetingAction";
+import CryptoJS from "crypto-js";
+import store from "../../store/store";
 
 function ChatPage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
@@ -50,8 +53,9 @@ function ChatPage(props) {
     }
     const [meetingId, setMeetingId] = useState(null);
     useEffect(() => {
-        const isLogin = sessionStorage.getItem('isLogIn');
-        if (!isLogin) {
+        const storedData = sessionStorage.getItem('dataReLogIn');
+        const dataReLogIn = decryptData(storedData);
+        if(!dataReLogIn.isLogin){
             navigate('/');
             return;
         }
@@ -68,10 +72,12 @@ function ChatPage(props) {
                     const dataFromServer = JSON.parse(message.data);
                     if (dataFromServer['event'] === 'RE_LOGIN') {
                         const dataFromServer = JSON.parse(message.data);
-                        const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
+                        const storedData = sessionStorage.getItem('dataReLogIn');
+                        const dataReLogIn = decryptData(storedData);
                         console.log(dataFromServer, "RELO");
                         dataReLogIn.keyReLogIn = dataFromServer['data']?.['RE_LOGIN_CODE'];
-                        sessionStorage.setItem('dataReLogIn', JSON.stringify(dataReLogIn));
+                        const encryptedData = encryptData(dataReLogIn);
+                        sessionStorage.setItem('dataReLogIn', encryptedData);
                         dispatch(loginSuccess(dataReLogIn.userName));
                         fetchAndSetMyImage(dataReLogIn.userName);
                     }
