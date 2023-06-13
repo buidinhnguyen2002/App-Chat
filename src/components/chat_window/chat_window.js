@@ -52,17 +52,29 @@ function WindowChat(props) {
     return (
         <div className={"window-chat"}>
             <div className="window-chat-header">
-                <ChatDetailHeader />
+                <ChatDetailHeader/>
             </div>
-            <div className="window-chat-body d-flex" style={{ flexDirection: "column" }}>
+            <div className="window-chat-body d-flex" style={{flexDirection: "column"}}>
                 {chatData.map((msg, index) => (
-                    <div ref={chatData.length - 1 === index ? scrollTargetRef : null} className={"msgItem" + `${chatData.length - 1 === index ? " alo" : " loa"}`} key={msg.id}>
-                        <MessageItem key={msg.id} name={msg.name} mes={convertEntitiesToEmoji(msg.mes)} />
+                    <div ref={chatData.length - 1 === index ? scrollTargetRef : null}
+                         className={"msgItem" + `${chatData.length - 1 === index ? " alo" : " loa"}`} key={msg.id}>
+                        <MessageItem key={msg.id} name={msg.name} mes={convertEntitiesToEmoji(msg.mes)}/>
                     </div>
+                    // isJSON(msg.mes) ? <div key={msg.id} ref={(chatData.length - 1) === index ? scrollTargetRef : null}
+                    //                        className={'msgItem'}
+                    //                        >
+                    //         <MessageItem name={msg.name} mes={msg.mes} isJson={true}/>
+                    //     </div> :
+                    //     <div key={msg.id} ref={(chatData.length - 1) === index ? scrollTargetRef : null}
+                    //          className={'msgItem'}
+                    //          >
+                    //         <MessageItem name={msg.name} mes={msg.mes}/>
+                    //     </div>
                 ))}
             </div>
-            <InputMessage />
+            <InputMessage/>
         </div>
     );
 }
+
 export default WindowChat;

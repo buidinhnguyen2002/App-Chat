@@ -14,6 +14,8 @@ import loginService from '../../service/loginService';
 import {loginSuccess, saveListChat} from "../../store/actions/userAction";
 import {connect, useDispatch} from "react-redux";
 import {redirect, Link, Navigate, useNavigate, json} from "react-router-dom";
+import CryptoJS from 'crypto-js';
+import {decryptData, encryptData} from "../../util/function";
 
 function Login(props) {
     const [status, setStatus] = useState(props.status);
@@ -26,10 +28,10 @@ function Login(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const isLogin = sessionStorage.getItem('isLogIn');
+        const storedData = sessionStorage.getItem('dataReLogIn');
         reConnectionServer();
-        if (isLogin) {
-            navigate('/chat',);
+        if(storedData){
+            navigate('/chat');
         }
     }, [navigate]);
     const handleOnchangeInput = (event) => {
@@ -58,12 +60,13 @@ function Login(props) {
             const dataFromServer = JSON.parse(message.data);
             console.log(dataFromServer);
             if (dataFromServer['event'] === 'LOGIN') {
-                sessionStorage.setItem('isLogIn', true);
                 const dataReLogIn = {
                     userName: userName,
                     keyReLogIn: dataFromServer['data']['RE_LOGIN_CODE'],
+                    isLogin: true,
                 };
-                sessionStorage.setItem('dataReLogIn', JSON.stringify(dataReLogIn));
+                const encryptedData = encryptData(dataReLogIn);
+                sessionStorage.setItem('dataReLogIn', encryptedData);
                 dispatch(loginSuccess(userName));
                 return navigate('/chat');
             }

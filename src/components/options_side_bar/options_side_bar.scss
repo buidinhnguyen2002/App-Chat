@@ -1,0 +1,66 @@
+@import "src/Assets/css/base";
+.options_side-bar {
+  @include positionAbsolute(92px, unset, 0px, unset);
+  position: fixed;
+  @include dimension(350px, 550px);
+  background-color: $primary-color-white;
+  padding: 15px 20px;
+  z-index: 100;
+  transition: all 0.3s ease-out;
+  &-open{
+    transform: translateX(0);
+  }
+  &-close{
+    transform: translateX(100%);
+  }
+  .avatar-container {
+   @include flexMiddle();
+    img {
+      @include dimension(80px, 80px);
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+  .title{
+    text-align: center;
+    @include styleText(600, 18px, 20px, $primary-color-text);
+    margin: 5px 0;
+  }
+  .options_chat{
+    cursor: pointer;
+    &-item{
+      display: flex;
+      justify-content: space-between;
+      border-radius: 10px;
+      transition: all 0.2s linear;
+      padding: 10px 20px 10px 5px;
+      &:hover{
+        background-color: $color-blue-02;
+      }
+      span{
+        @include styleText(500, 16px, 18px, $primary-color-text);
+        display: inline-block;
+      }
+      i{
+        transition: all 0.2s linear;
+      }
+    }
+    .drop_down {
+      .drop_down-item{
+        padding: 7px 5px;
+        &:hover{
+          background-color: $color-blue-02;
+        }
+        border-radius: 10px;
+        transition: all 0.2s linear;
+        span{
+          margin-left: 15px;
+          @include styleText(500, 16px, 18px, $primary-color-text);
+        }
+        i{
+          @include styleText(500, 16px, 18px, $primary-color-blue);
+        }
+      }
+    }
+  }
+}
