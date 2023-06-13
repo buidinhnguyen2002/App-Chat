@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./chat.scss";
 import NavigationBar from "../../components/navigation_bar/navigation_bar";
-import {listAll, ref, getDownloadURL} from "firebase/storage";
+import {listAll, ref, getDownloadURL, getStorage} from "firebase/storage";
 import {redirect, useNavigate, Outlet} from "react-router-dom";
 import {
     callAPICheckUser,
@@ -93,7 +93,7 @@ function ChatPage(props) {
                     }
                 }
             })
-
+            await getGroupAvatar(listChats);
             for (let i = 0; i < listChats.length; i++) {
                 const name = listChats[i].name;
                 const type = listChats[i].type;
@@ -161,6 +161,22 @@ function ChatPage(props) {
         }
         f();
     }, []);
+    const getGroupAvatar = async (list) => {
+        for(let i=0; i< list.length; i++){
+            const chat = list[i];
+            if(chat.type === 0) continue;
+            const chatName = chat.name;
+            const storage = getStorage();
+            const imageRef = ref(storage, `group_avatar/${chatName}/avatar`);
+            try {
+                const downloadURL = await getDownloadURL(imageRef);
+                chat.urlAvatar = downloadURL;
+            }catch (e) {
+                chat.urlAvatar = "https://png.pngtree.com/element_our/png_detail/20181021/group-avatar-icon-design-vector-png_141882.jpg";
+            }
+        }
+        dispatch(saveListChat(list));
+    }
     const fetchAndSetMyImage = (myName) => {
         const imageListRef = ref(storage, `images/${myName}/`);
         listAll(imageListRef).then((response)=> {

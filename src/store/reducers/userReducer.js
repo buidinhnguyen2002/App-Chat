@@ -36,6 +36,8 @@ export default function userReducer(state = initialState, action) {
                 const chatChoose = state.chats[0];
                 if(chatChoose.type === 1){
                     currentChat = state.chatsRoom[0];
+                    const urlAvatar= state.chats.find(room => room.name === currentChat.name).urlAvatar;
+                    currentChat.urlAvatar = urlAvatar;
                 }
                 if(chatChoose.type === 0){
                     currentChat = state.chatsPeople[0];
@@ -45,7 +47,7 @@ export default function userReducer(state = initialState, action) {
             return {
                 ...state,
                 chatsPeople: [...action.payload],
-                currentChat: currentChat.length !== 0 ? currentChat : state.currentChat,
+                currentChat: currentChat && currentChat.length !== 0 ? currentChat : state.currentChat,
 
             }
         case 'CHANGE_CURRENT_CHAT':
@@ -54,8 +56,10 @@ export default function userReducer(state = initialState, action) {
             let currentChatChoose = null;
             if(type == 1){
                 const room= state.chatsRoom.find(room => room.name === nameChat);
-                console.log(room)
+                const urlAvatar= state.chats.find(room => room.name === nameChat).urlAvatar;
+                room.urlAvatar = urlAvatar;
                 currentChatChoose = room;
+                console.log(room+"HELLO")
             }
             if(type == 0){
                 const people= state.chatsPeople.find(people => people.name === nameChat);
@@ -83,14 +87,12 @@ export default function userReducer(state = initialState, action) {
                 }
             }
         case 'UPDATE_CHATS':
-
             const updateChats = state.chatsRoom.map((room,index) => {
                 if(room.name === action.payload.name){
                     return action.payload;
                 }
                 return room;
             });
-            console.log(updateChats, 'update chat');
             return {
                 ...state,
                 chatsRoom: updateChats,
@@ -163,12 +165,23 @@ export default function userReducer(state = initialState, action) {
                 isCalling: action.payload,
             }
         }
-        // case 'SET_MEETING_ROOM': {
-        //     return {
-        //         ...state,
-        //         meetingRoom: action.payload,
-        //     }
-        // }
+        case 'UPDATE_AVATAR': {
+            const currentChat = { ...state.currentChat };
+            currentChat.urlAvatar = action.payload.urlAvatar;
+            const chats = [...state.chats];
+            const chatsUpdate = chats.map(room => {
+                if(room.name === action.payload.nameChat){
+                    room.urlAvatar = action.payload.urlAvatar;
+                    return room;
+                }
+                return room;
+            });
+            return {
+                ...state,
+                currentChat: currentChat,
+                chats: chatsUpdate,
+            }
+        }
         case 'LOGOUT_SUCCESS':
             return initialState;
         default:

@@ -63,4 +63,13 @@ export function saveAllImage(images) {
         payload: images,
     }
 }
+export function updateAvatar(nameChat, urlAvatar) {
+    return {
+        type: "UPDATE_AVATAR",
+        payload: {
+            nameChat,
+            urlAvatar,
+        },
+    }
+}
 
