@@ -7,8 +7,6 @@ import {v4} from "uuid";
 import {updateAvatar} from "../../store/actions/userAction";
 function OptionsSideBar(props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
-    // const chats = useSelector(state => state.userReducer.chats);
-    // const urlAvatar = chats && currentChat ? chats.find(chat => chat.name === currentChat.name).urlAvatar : '';
     const [isOpenOptionsChat, setOpenOptionsChat] = useState(false);
     const fileInputRef = useRef(null);
     const dispatch = useDispatch();

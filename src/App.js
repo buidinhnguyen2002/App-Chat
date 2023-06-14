@@ -190,29 +190,6 @@ import {saveListChat} from "./store/actions/userAction";
 // }
 
 function App() {
-
-    const dispatch = useDispatch();
-    const chatLoader = async () =>{
-        await waitConnection();
-        callAPIReLogIn();
-        callAPIGetUserList();
-        client.onmessage = (message) => {
-            const dataFromServer = JSON.parse(message.data);
-            if (dataFromServer['event'] === 'RE_LOGIN') {
-                const dataFromServer = JSON.parse(message.data);
-                const dataReLogIn = JSON.parse(sessionStorage.getItem('dataReLogIn'));
-                console.log(dataFromServer, "RELO");
-                dataReLogIn.keyReLogIn = dataFromServer['data']?.['RE_LOGIN_CODE'];
-                sessionStorage.setItem('dataReLogIn', JSON.stringify(dataReLogIn));
-            }
-            if(dataFromServer['event'] === 'GET_USER_LIST'){
-                const responseListChat = dataFromServer['data'];
-                console.log(dataFromServer, "CHAT");
-                dispatch(saveListChat(responseListChat));
-            }
-        }
-        return null;
-    }
     const router = createBrowserRouter(
         [
             {

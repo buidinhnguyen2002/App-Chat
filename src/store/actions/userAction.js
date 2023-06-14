@@ -1,4 +1,5 @@
 
+
 export function loginSuccess(username) {
     return {
         type: 'LOGIN_SUCCESS',
@@ -72,4 +73,18 @@ export function updateAvatar(nameChat, urlAvatar) {
         },
     }
 }
-
+export function updateMyAvatar(name,urlAvatar) {
+    return {
+        type: "UPDATE_MY_AVATAR",
+        payload: {
+            name,
+            urlAvatar,
+        },
+    }
+}
+export function savePeopleAvatar(peopleAvatars) {
+    return {
+        type: "SAVE_PEOPLE_AVATAR",
+        payload: peopleAvatars,
+    }
+}

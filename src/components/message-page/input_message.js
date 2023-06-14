@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import "./messages.scss";
-import {callAPIGetRoomChatMes, callAPIGetUserList, callAPISendChatRoom, client} from "../../service/loginService";
+import {callAPIGetRoomChatMes, callAPISendChatRoom, client} from "../../service/loginService";
 import {useDispatch, useSelector} from "react-redux";
 import {saveListChat, sendChat, updateChat} from "../../store/actions/userAction";
 import {isAllOf} from "@reduxjs/toolkit";

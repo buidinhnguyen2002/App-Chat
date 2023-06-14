@@ -7,8 +7,7 @@ const initialState = {
     chatsPeople: [],
     currentChat: null,
     images: [],
-    isCalling: false,
-    meetingRoom: null,
+    avatarPeople: [],
 };
 let isInit = true;
 
@@ -180,6 +179,20 @@ export default function userReducer(state = initialState, action) {
                 ...state,
                 currentChat: currentChat,
                 chats: chatsUpdate,
+            }
+        }
+        case 'UPDATE_MY_AVATAR': {
+            const avatarPeople = [...state.avatarPeople];
+            avatarPeople.find(people => people.name === action.payload.name).urlAvatar = action.payload.urlAvatar;
+            return {
+                ...state,
+                avatarPeople: avatarPeople,
+            }
+        }
+        case 'SAVE_PEOPLE_AVATAR': {
+            return {
+                ...state,
+                avatarPeople: action.payload,
             }
         }
         case 'LOGOUT_SUCCESS':
