@@ -1,10 +1,11 @@
 import {
+    GROUP_AVATAR_HOLDER,
     HEADER_AUDIO_CALL,
     HEADER_JOIN_ROOM_MEETING, HEADER_JOIN_ROOM_MEETING_AUDIO, HEADER_LEAVE_AUDIO_CALL,
     HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
     HEADER_MSG_VIDEO,
     HEADER_REJECT_VIDEO_CALL,
-    HEADER_VIDEO_CALL
+    HEADER_VIDEO_CALL, USER_AVATAR_HOLDER
 } from "./constants";
 import CryptoJS from "crypto-js";
 
@@ -91,4 +92,25 @@ export function decryptData(data) {
     const decryptedBytes = CryptoJS.AES.decrypt(data, process.env.REACT_APP_SECRET_KEY);
     const dataDescrypt = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
     return dataDescrypt;
+}
+export const getAvatar = (type, peopleAvarars, groupAvatars, name) => {
+    // let urlAvatar ='';
+    // if(currentChat.type == 0){
+    //     const avatar = peopleAvarars.find(ava => ava.name === currentChat.name);
+    //     urlAvatar = avatar ? avatar.urlAvatar : USER_AVATAR_HOLDER;
+    // }else{
+    //     const avatar = groupAvatars.find(ava => ava.name === currentChat.name);
+    //     urlAvatar = avatar ? avatar.urlAvatar : GROUP_AVATAR_HOLDER
+    // }
+    // return urlAvatar;
+
+    let urlAvatar ='';
+    if(type == 0){
+        const avatar = peopleAvarars.find(ava => ava.name === name);
+        urlAvatar = avatar ? avatar.urlAvatar : USER_AVATAR_HOLDER;
+    }else{
+        const avatar = groupAvatars.find(ava => ava.name === name);
+        urlAvatar = avatar ? avatar.urlAvatar : GROUP_AVATAR_HOLDER
+    }
+    return urlAvatar;
 }

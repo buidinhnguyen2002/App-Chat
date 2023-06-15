@@ -11,17 +11,31 @@ import {useDispatch, useSelector} from "react-redux";
 import {authToken, createMeeting} from "../../service/VideoCallService";
 import {setAudioCall, setMeetingRoom} from "../../store/actions/meetingAction";
 import {callAPISendChatRoom} from "../../service/loginService";
-import {HEADER_VIDEO_CALL} from "../../util/constants";
+import {GROUP_AVATAR_HOLDER, HEADER_VIDEO_CALL, USER_AVATAR_HOLDER} from "../../util/constants";
 import OptionsSideBar from "../options_side_bar/options_side_bar";
+import {getAvatar} from "../../util/function";
 
 
 function ChatDetailHeader (props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
     const isCalling = useSelector(state => state.userReducer.isCalling);
     const myName = useSelector(state => state.userReducer.username);
+    const peopleAvarars = useSelector(state => state.userReducer.avatarPeople);
+    const groupAvatars =  useSelector(state => state.userReducer.avatarGroups);
     const [meetingId, setMeetingId] = useState(null);
     const dispatch = useDispatch();
     const [openOptionChat, setOpenOptionChat] = useState(false);
+    // const getAvatar = () => {
+    //     let urlAvatar ='';
+    //     if(currentChat.type == 0){
+    //         const avatar = peopleAvarars.find(ava => ava.name === currentChat.name);
+    //         urlAvatar = avatar ? avatar.urlAvatar : USER_AVATAR_HOLDER;
+    //     }else{
+    //         const avatar = groupAvatars.find(ava => ava.name === currentChat.name);
+    //         urlAvatar = avatar ? avatar.urlAvatar : GROUP_AVATAR_HOLDER
+    //     }
+    //     return urlAvatar;
+    // }
     const getMeetingAndToken = async (id) => {
         const meetingId = id == null ? await createMeeting({token: authToken}): id;
         setMeetingId(meetingId);
@@ -49,7 +63,7 @@ function ChatDetailHeader (props) {
                     <div className="chat_avatar-wrapper">
                         <div className="chat_avatar chat_avatar-circle">
                             <div className="img-wrapper">
-                                <img src={currentChat ? currentChat.urlAvatar : ''} alt=""/>
+                                { currentChat && <img src={getAvatar(currentChat.type === 0 ? 0 : 1, peopleAvarars, groupAvatars, currentChat.name)} alt=""/>}
                             </div>
                         </div>
                         <span className="chat_status chat_status-active"></span>

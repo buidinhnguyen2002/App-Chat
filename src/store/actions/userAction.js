@@ -88,3 +88,9 @@ export function savePeopleAvatar(peopleAvatars) {
         payload: peopleAvatars,
     }
 }
+export function saveGroupAvatar(groupAvatars) {
+    return {
+        type: "SAVE_GROUP_AVATAR",
+        payload: groupAvatars,
+    }
+}

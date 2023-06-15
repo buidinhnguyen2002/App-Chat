@@ -8,6 +8,7 @@ const initialState = {
     currentChat: null,
     images: [],
     avatarPeople: [],
+    avatarGroups: [],
 };
 let isInit = true;
 
@@ -193,6 +194,12 @@ export default function userReducer(state = initialState, action) {
             return {
                 ...state,
                 avatarPeople: action.payload,
+            }
+        }
+        case 'SAVE_GROUP_AVATAR': {
+            return {
+                ...state,
+                avatarGroups: action.payload,
             }
         }
         case 'LOGOUT_SUCCESS':
