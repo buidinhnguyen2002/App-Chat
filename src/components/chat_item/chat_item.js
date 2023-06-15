@@ -32,6 +32,11 @@ function ChatItem(props) {
             timeShort = fullTime.substring(0, fullTime.length-3);
         }
     }
+    const decodeEntities = (encodedString) => {
+        const elem = document.createElement("div");
+        elem.innerHTML = encodedString;
+        return elem.innerText;
+    };
     const getMessageVideoCall = (isMyChat,mesText, ownChat, type, to) => {
         const owner = (isMyChat ? 'Bạn ' : type === 1 ?ownChat+ '': '');
         if(isMeetingEnd(mesText)) return ' Cuộc gọi video đã kết thúc.';
@@ -49,11 +54,20 @@ function ChatItem(props) {
         if(getMessageMeeting != null) return getMessageMeeting;
         if(!isJSON(msg)) return (isMyChat ? 'Bạn: ' : type === 1 ? ownChat+ ": " : '') + msg;
         const msgObject = JSON.parse(msg);
-        if(msgObject.text === '' && msgObject.imgs.length > 0) return (isMyChat ? 'Bạn đã gửi ' : type === 1 ? ownChat+ ' đã gửi ' : '') + ` ${msgObject.imgs.length} hình ảnh.`;
-        return (isMyChat ? 'Bạn: ' : type === 1 ? ownChat+ ": " : '') + msgObject.text;
+        if (msgObject.text === "" && msgObject.imgs.length > 0)
+            return (
+                (isMyChat ? "Bạn đã gửi " : type === 1 ? ownChat + " đã gửi " : "") +
+                ` ${msgObject.imgs.length} hình ảnh.`
+            );
+        return (
+            (isMyChat ? "Bạn: " : type === 1 ? ownChat + ": " : "") +
+            decodeEntities(msgObject.text) // Giải mã mã HTML entities thành emoji
+        );
     }
+
     useEffect(()=>{
     },[])
+
         return (
             <div className={`chat_item chat_item-round d-flex ${props.isChoose ? 'chat_item-bgBlue':'chat_item-bgWhite'}`}>
                 <div className="chat_avatar-wrapper">
@@ -82,6 +96,6 @@ function ChatItem(props) {
                 </div>
             </div>
         )
-}
+    }
 
-export default ChatItem;
+    export default ChatItem;

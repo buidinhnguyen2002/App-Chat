@@ -21,7 +21,15 @@ function MessageItem(props) {
     const avatarAuthorMessage = useSelector(state => state.userReducer.avatarPeople).find(avatar => avatar.name === props.name);
     const urlAvatar = avatarAuthorMessage ? avatarAuthorMessage.urlAvatar : USER_AVATAR_HOLDER;
     const meetingRoom =useSelector(state => state.meetingReducer.meetingRoom);
-    let listImg = props.isJson ? JSON.parse(props.mes).imgs : [];
+    let listImg = [];
+    if (props.isJson) {
+        try {
+            listImg = JSON.parse(props.mes).imgs;
+        } catch (error) {
+            console.error("Error parsing JSON:", error);
+        }
+    }
+
     let mesText = props.isJson ? JSON.parse(props.mes).text : props.mes;
     const [imgDetail, setImgDetail] = useState('');
     const [videoDetail, setVideoDetail] = useState('');

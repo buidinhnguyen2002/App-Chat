@@ -1,33 +1,44 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import "./messages.scss";
-import {callAPIGetRoomChatMes, callAPISendChatRoom, client} from "../../service/loginService";
-import {useDispatch, useSelector} from "react-redux";
-import {saveListChat, sendChat, updateChat} from "../../store/actions/userAction";
-import {isAllOf} from "@reduxjs/toolkit";
-import {storage} from "../../firebase";
-import {ref, uploadBytes, getDownloadURL, uploadBytesResumable} from "firebase/storage";
-import {v4} from "uuid";
-import {HEADER_MSG_VIDEO} from "../../util/constants";
+import { callAPIGetRoomChatMes, callAPIGetUserList, callAPISendChatRoom, client } from "../../service/loginService";
+import { useDispatch, useSelector } from "react-redux";
+import { saveListChat, sendChat, updateChat } from "../../store/actions/userAction";
+import { isAllOf } from "@reduxjs/toolkit";
+import { storage } from "../../firebase";
+import { ref, uploadBytes, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { v4 } from "uuid";
+import { HEADER_MSG_VIDEO } from "../../util/constants";
+import { Picker } from "emoji-mart";
+import "emoji-mart/css/emoji-mart.css";
+import he from 'he';
+
 
 function InputMessage(props) {
-    const currentAuth = useSelector(state => state.userReducer.username);
-    const currentChats = useSelector(state => state.userReducer.currentChat);
-    const [msg, setMsg] = useState({'text': '', 'imgs': []});
+    const currentAuth = useSelector((state) => state.userReducer.username);
+    const currentChats = useSelector((state) => state.userReducer.currentChat);
+    const [msg, setMsg] = useState({ text: "", imgs: [] });
     const [videos, setVideos] = useState([]);
     const [videosBuffer, setVideosBuffer] = useState([]);
     const dispatch = useDispatch();
     const [msgImgs, setMsgImgs] = useState([]);
     const [msgFileImgs, setMsgFileImgs] = useState([]);
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
     const handleOnchangeInput = (event) => {
         const value = event.target.value;
-        const currentMsg = {...msg};
+        const currentMsg = { ...msg };
         currentMsg.text = value;
         setMsg(currentMsg);
-    }
-    const sendMsg = async () => {
-        await handleUploadToFirebase();
-    }
+    };
+
+    const toggleEmojiPicker = () => {
+        setShowEmojiPicker(!showEmojiPicker);
+    };
+    const handleAddEmoji = (emoji) => {
+        const currentMsg = { ...msg };
+        currentMsg.text += emoji.native;
+        setMsg(currentMsg);
+    };
     const handleUploadVideosToFirebase = async () => {
         let newVideos = [];
         const uploadTasks = videos.map((video) => {
@@ -35,30 +46,28 @@ function InputMessage(props) {
             const videoRef = ref(storage, `videos/${currentAuth}/${video.name + v4()}`);
             const uploadTask = uploadBytesResumable(videoRef, video);
             return new Promise((resolve, reject) => {
-                uploadTask.on(
-                    "state_changed",
-                    null,
-                    null,
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref)
-                            .then((downloadURL) => {
-                                newVideos = [...newVideos, downloadURL];
-                                callAPISendChatRoom(currentChats.name, HEADER_MSG_VIDEO + downloadURL);
-                                callAPIGetRoomChatMes(currentChats.name);
-                                resolve();
-                            })
-                            .catch((error) => {
-                                console.error("Lỗi khi lấy URL tải xuống:", error);
-                                reject(error);
-                            });
-                    }
-                );
+                uploadTask.on("state_changed", null, null, () => {
+                    getDownloadURL(uploadTask.snapshot.ref)
+                        .then((downloadURL) => {
+                            newVideos = [...newVideos, downloadURL];
+                            callAPISendChatRoom(currentChats.name, HEADER_MSG_VIDEO + downloadURL);
+                            callAPIGetRoomChatMes(currentChats.name);
+                            resolve();
+                        })
+                        .catch((error) => {
+                            console.error("Lỗi khi lấy URL tải xuống:", error);
+                            reject(error);
+                        });
+                });
             });
         });
-    }
+    };
+    const convertEmojiToEntities = (text) => {
+        return he.encode(text, { decimal: true });
+    };
     const handleUploadToFirebase = async () => {
         const newMsg = {
-            ...msg,
+            text: convertEmojiToEntities(msg.text),
             imgs: [],
         };
         const uploadTasks = msgFileImgs.map((image) => {
@@ -66,32 +75,27 @@ function InputMessage(props) {
             const imageRef = ref(storage, `images/${currentAuth}/${image.name + v4()}`);
             const uploadTask = uploadBytesResumable(imageRef, image);
             return new Promise((resolve, reject) => {
-                uploadTask.on(
-                    "state_changed",
-                    null,
-                    null,
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref)
-                            .then((downloadURL) => {
-                                const newImgs = [...newMsg.imgs, downloadURL];
-                                newMsg.imgs = newImgs;
-                                resolve();
-                            })
-                            .catch((error) => {
-                                console.error("Lỗi khi lấy URL tải xuống:", error);
-                                reject(error);
-                            });
-                    }
-                );
+                uploadTask.on("state_changed", null, null, () => {
+                    getDownloadURL(uploadTask.snapshot.ref)
+                        .then((downloadURL) => {
+                            const newImgs = [...newMsg.imgs, downloadURL];
+                            newMsg.imgs = newImgs;
+                            resolve();
+                        })
+                        .catch((error) => {
+                            console.error("Lỗi khi lấy URL tải xuống:", error);
+                            reject(error);
+                        });
+                });
             });
         });
         Promise.all(uploadTasks)
             .then(() => {
-                if (newMsg.text !== '' || newMsg.imgs.length !== 0) {
+                if (newMsg.text !== "" || newMsg.imgs.length !== 0) {
                     callAPISendChatRoom(currentChats.name, JSON.stringify(newMsg));
                     callAPIGetRoomChatMes(currentChats.name);
                 }
-                setMsg({'text': '', 'imgs': []});
+                setMsg({ text: "", imgs: [] });
                 setMsgImgs([]);
                 setMsgFileImgs([]);
                 setVideos([]);
@@ -104,7 +108,7 @@ function InputMessage(props) {
     };
 
     const handleKeyPress = (event) => {
-        if (event.key === 'Enter') {
+        if (event.key === "Enter") {
             sendMsg();
         }
     };
@@ -119,7 +123,7 @@ function InputMessage(props) {
         let countNotVideo = 0;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            if (file.type.startsWith('image/')) {
+            if (file.type.startsWith("image/")) {
                 newFileImgs.push(file);
                 const fileReader = new FileReader();
                 fileReader.onload = function () {
@@ -128,12 +132,12 @@ function InputMessage(props) {
                         setMsgImgs(newBuffersImg);
                         setMsgFileImgs(newFileImgs);
                     }
-                }
+                };
                 fileReader.readAsDataURL(file);
             } else {
                 countNotImg++;
             }
-            if (file.type.startsWith('video/')) {
+            if (file.type.startsWith("video/")) {
                 const videoObjectURL = URL.createObjectURL(file);
                 newBufferVideos.push(videoObjectURL);
                 newFileVideos.push(file);
@@ -143,43 +147,53 @@ function InputMessage(props) {
                         setVideos(newFileVideos);
                         setVideosBuffer(newBufferVideos);
                     }
-                }
+                };
                 fileReader.readAsDataURL(file);
             } else {
                 countNotVideo++;
             }
         }
-    }
+    };
+
+    const sendMsg = async () => {
+        await handleUploadToFirebase();
+    };
 
     return (
         <div className="container-input">
             <div className="rectangle-16">
                 <div className="container-input-file">
-                    <input type="file" className={"input_file"} onChange={uploadImg} multiple/>
+                    <input type="file" className={"input_file"} onChange={uploadImg} multiple />
                     <i className="fa-solid fa-link"></i>
                 </div>
                 <div className="message">
                     <div className="message_img">
-                        {msgImgs.map((file, index) => (<div className="message_img-item d-flex">
-                            <div className="message_img-item-close">
-                                <i className="bi bi-x"></i>
+                        {msgImgs.map((file, index) => (
+                            <div className="message_img-item d-flex" key={index}>
+                                <div className="message_img-item-close">
+                                    <i className="bi bi-x"></i>
+                                </div>
+                                <img src={file} alt="" className={"imgLoad"} />
                             </div>
-                            <img src={file} alt="" className={"imgLoad"}/>
-                        </div>))}
+                        ))}
                     </div>
                     <div className="message_videos">
                         {videosBuffer.map((video, index) => (
-                            <div className={'message_video-item d-flex'}>
+                            <div className="message_video-item d-flex" key={index}>
                                 <video controls>
-                                    <source src={video} type={"video/mp4"}/>
+                                    <source src={video} type={"video/mp4"} />
                                 </video>
                             </div>
                         ))}
                     </div>
-                    <input type="text" placeholder="Write a message ..." onChange={handleOnchangeInput}
-                           value={msg.text} onKeyPress={handleKeyPress}/>
+                    <input type="text" placeholder="Write a message ..." onChange={handleOnchangeInput} value={msg.text} onKeyPress={handleKeyPress} />
+                    <i className="fa-regular fa-face-smile" onClick={toggleEmojiPicker}></i>
+                    {showEmojiPicker && (
+                        <div className="emoji-picker-container">
+                            <Picker set="facebook" exclude={['flags']} onSelect={handleAddEmoji} />
+                        </div>
+                    )}
                 </div>
-                <i className="fa-regular fa-face-smile"></i>
             </div>
             <button className="rectangle-17" onClick={sendMsg}>
                 <i className="fa-regular fa-paper-plane"></i>
@@ -187,6 +201,5 @@ function InputMessage(props) {
         </div>
     );
 }
-
 
 export default InputMessage;
