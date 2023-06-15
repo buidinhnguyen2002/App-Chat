@@ -3,6 +3,7 @@ import {useMeeting, useParticipant} from "@videosdk.live/react-sdk";
 import ReactPlayer from "react-player";
 import {useDispatch, useSelector} from "react-redux";
 import "./participant_view.scss"
+import {addParticipant} from "../../store/actions/meetingAction";
 
 function ParticipantView(props) {
     const myName = useSelector(state => state.userReducer.username);
@@ -12,7 +13,7 @@ function ParticipantView(props) {
     const [openScreenShare, setOpenScreenShare] = useState(false);
     const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName } =
         useParticipant(props.participantId, );
-    const { leave, toggleMic, toggleWebcam } = useMeeting();
+    const { leave, toggleMic, toggleWebcam, disableWebcam, participants } = useMeeting();
     const dispatch = useDispatch();
     const videoStream = useMemo(() => {
         if (webcamOn && webcamStream) {
@@ -22,6 +23,7 @@ function ParticipantView(props) {
         }
     }, [webcamStream, webcamOn]);
     useEffect(() => {
+        if(props.isJoin) dispatch(addParticipant(displayName));
         if (micRef.current) {
             if (micOn && micStream) {
                 const mediaStream = new MediaStream();

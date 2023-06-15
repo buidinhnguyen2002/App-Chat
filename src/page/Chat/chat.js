@@ -25,8 +25,8 @@ import VideoCallScreen from "../../components/video_call_screen/video_call_scree
 import {
     decryptData, encryptData,
     getMeetingRoom,
-    getNameParticipant,
-    isLeaveRoomMeeting,
+    getNameParticipant, isAudioCall, isJoinRoomMeeting, isJoinRoomMeetingAudio,
+    isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
     isRejectVideoCall,
     isVideoCall
 } from "../../util/function";
@@ -34,13 +34,20 @@ import {HEADER_ACCEPT_VIDEO_CALL, HEADER_REJECT_VIDEO_CALL, HEADER_VIDEO_CALL} f
 import ChatDetailHeader from "../../components/chat_detail_header/chat_detail_header";
 import {MeetingProvider} from "@videosdk.live/react-sdk";
 import {authToken} from "../../service/VideoCallService";
-import {removeParticipant, setCalling, setMeetingRoom} from "../../store/actions/meetingAction";
+import {
+    addParticipant,
+    removeParticipant,
+    setAudioCall,
+    setCalling,
+    setMeetingRoom
+} from "../../store/actions/meetingAction";
 import CryptoJS from "crypto-js";
 import store from "../../store/store";
 
 function ChatPage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
     const currentChat = useSelector(state => state.userReducer.currentChat);
+    const audioCall = useSelector(state => state.meetingReducer.isAudioCall);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [videoCall, setVideoCall] = useState(false);
@@ -94,7 +101,7 @@ function ChatPage(props) {
                     }
                 }
             })
-            await getGroupAvatar(listChats);
+            // await getGroupAvatar(listChats);
             for (let i = 0; i < listChats.length; i++) {
                 const name = listChats[i].name;
                 const type = listChats[i].type;
@@ -139,7 +146,7 @@ function ChatPage(props) {
             });
             dispatch(saveToListChatsDetail(chatsRoom));
             dispatch(saveToListChatsPeople(chatPeople));
-            await getPeopleAvatar(listPeople);
+            // await getPeopleAvatar(listPeople);
             // callAPICheckUser();
             client.onmessage = (message) => {
                 const dataFromServer = JSON.parse(message.data);
@@ -155,12 +162,23 @@ function ChatPage(props) {
                         const meetingRoom = getMeetingRoom(dataMessage.mes);
                         dispatch(setMeetingRoom(meetingRoom));
                         dispatch(setCalling(true));
+                        dispatch(addParticipant());
                         return;
                     }
-                    if(isLeaveRoomMeeting(dataMessage.mes)){
+                    if(isAudioCall(dataMessage.mes)){
+                        const meetingRoom = getMeetingRoom(dataMessage.mes);
+                        dispatch(setMeetingRoom(meetingRoom));
+                        dispatch(setCalling(true));
+                        dispatch(setAudioCall(true));
+                        return;
+                    }
+                    if(isJoinRoomMeeting(dataMessage.mes) || isJoinRoomMeetingAudio(dataMessage.mes)){
+                        const participant = dataMessage.name;
+                        dispatch(addParticipant(participant));
+                    }
+                    if(isLeaveRoomMeeting(dataMessage.mes) || isLeaveRoomMeetingAudio(dataMessage.mes)){
                         const getParticipant = getNameParticipant(dataMessage.mes);
                         dispatch(removeParticipant(getParticipant));
-                        return;
                     }
                     dispatch(receiveChat(dataMessage));
                 }
@@ -261,7 +279,7 @@ function ChatPage(props) {
                 config={{
                     meetingId: meetingRoom.meetId,
                     micEnabled: true,
-                    webcamEnabled: true,
+                    webcamEnabled: audioCall == true ? false : true,
                     name: currentAuth,
                 }}
                 token={authToken}

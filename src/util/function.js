@@ -1,5 +1,6 @@
 import {
-    HEADER_JOIN_ROOM_MEETING,
+    HEADER_AUDIO_CALL,
+    HEADER_JOIN_ROOM_MEETING, HEADER_JOIN_ROOM_MEETING_AUDIO, HEADER_LEAVE_AUDIO_CALL,
     HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
     HEADER_MSG_VIDEO,
     HEADER_REJECT_VIDEO_CALL,
@@ -15,8 +16,15 @@ export const isVideoCall = (text) => {
     if(text.startsWith(HEADER_VIDEO_CALL)) return true;
     return false;
 }
+export const isAudioCall = (text) => {
+    if(text.startsWith(HEADER_AUDIO_CALL)) return true;
+    return false;
+}
 export const getMeetingRoom = (text) => {
     return JSON.parse(text.substring(HEADER_VIDEO_CALL.length , text.length));
+}
+export const getMeetingRoomAudio = (text) => {
+    return JSON.parse(text.substring(HEADER_AUDIO_CALL.length , text.length));
 }
 export const getNameParticipant = (text) => {
     return text.substring(HEADER_LEAVE_VIDEO_CALL.length , text.length);
@@ -29,12 +37,20 @@ export const isJoinRoomMeeting = (text) => {
     if(text.startsWith(HEADER_JOIN_ROOM_MEETING)) return true;
     return false;
 }
+export const isJoinRoomMeetingAudio = (text) => {
+    if(text.startsWith(HEADER_JOIN_ROOM_MEETING_AUDIO)) return true;
+    return false;
+}
 export const isRejectRoomMeeting = (text) => {
     if(text.startsWith(HEADER_REJECT_VIDEO_CALL)) return true;
     return false;
 }
 export const isLeaveRoomMeeting = (text) => {
     if(text.startsWith(HEADER_LEAVE_VIDEO_CALL)) return true;
+    return false;
+}
+export const isLeaveRoomMeetingAudio = (text) => {
+    if(text.startsWith(HEADER_LEAVE_AUDIO_CALL)) return true;
     return false;
 }
 export const isMeetingEnd = (text) => {

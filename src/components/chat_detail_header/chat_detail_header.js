@@ -9,7 +9,7 @@ import React, {useEffect, useState} from "react";
 import "./chat_detail_header.scss";
 import {useDispatch, useSelector} from "react-redux";
 import {authToken, createMeeting} from "../../service/VideoCallService";
-import {setMeetingRoom} from "../../store/actions/meetingAction";
+import {setAudioCall, setMeetingRoom} from "../../store/actions/meetingAction";
 import {callAPISendChatRoom} from "../../service/loginService";
 import {HEADER_VIDEO_CALL} from "../../util/constants";
 import OptionsSideBar from "../options_side_bar/options_side_bar";
@@ -27,7 +27,7 @@ function ChatDetailHeader (props) {
         setMeetingId(meetingId);
         return meetingId.toString();
     }
-    const handelCallVideo = async () => {
+    const handelCallVideo = async (isAudioCall) => {
         const meetId = await getMeetingAndToken(null);
         if(meetId){
             const meetingRoom = {
@@ -38,6 +38,7 @@ function ChatDetailHeader (props) {
             };
             dispatch(setMeetingRoom(meetingRoom));
         }
+        dispatch(setAudioCall(isAudioCall));
     }
     const toggleOpenOptionChat = () => {
         setOpenOptionChat(!openOptionChat);
@@ -65,10 +66,10 @@ function ChatDetailHeader (props) {
                     </div>
                 </div>
                 <div className="chat_detail_header-trailing">
-                    <div className="video_call chat_detail-icon" onClick={handelCallVideo}>
+                    <div className="video_call chat_detail-icon" onClick={()=>handelCallVideo(false)}>
                         <i className="bi bi-camera-video"></i>
                     </div>
-                    <div className="audio_call chat_detail-icon">
+                    <div className="audio_call chat_detail-icon" onClick={()=>handelCallVideo(true)}>
                         <i className="bi bi-telephone"></i>
                     </div>
                     <div className="find_message chat_detail-icon">
