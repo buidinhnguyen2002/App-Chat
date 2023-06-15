@@ -38,7 +38,7 @@ function ListChats(props) {
                 <div className="chats_container">
                     {typeof listChats !== 'undefined' && Array.isArray(listChats) ? listChats.map((chatItem,index) => (
                         <div key={chatItem.actionTime} name={chatItem.name} type={chatItem.type} className="chat-item" onClick={(e)=>changeChatIndex(index,e)}>
-                            <ChatItem type={chatItem.type} name={chatItem.name} isChoose={chatIndex == index ? true : false} />
+                            <ChatItem type={chatItem.type} name={chatItem.name} isChoose={chatIndex == index ? true : false} urlAvatar={chatItem.urlAvatar}/>
                         </div>
                     )): <div></div>}
                 </div>

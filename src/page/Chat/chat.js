@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./chat.scss";
 import NavigationBar from "../../components/navigation_bar/navigation_bar";
-import {listAll, ref, getDownloadURL} from "firebase/storage";
+import {listAll, ref, getDownloadURL, getStorage, getMetadata} from "firebase/storage";
 import {redirect, useNavigate, Outlet} from "react-router-dom";
 import {
     callAPICheckUser,
@@ -14,8 +14,8 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {
     loginSuccess,
-    receiveChat, saveAllImage,
-    saveListChat,
+    receiveChat, saveAllImage, saveGroupAvatar,
+    saveListChat, savePeopleAvatar,
     saveToListChatsDetail,
     saveToListChatsPeople, updateChat
 } from "../../store/actions/userAction";
@@ -25,8 +25,8 @@ import VideoCallScreen from "../../components/video_call_screen/video_call_scree
 import {
     decryptData, encryptData,
     getMeetingRoom,
-    getNameParticipant,
-    isLeaveRoomMeeting,
+    getNameParticipant, isAudioCall, isJoinRoomMeeting, isJoinRoomMeetingAudio,
+    isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
     isRejectVideoCall,
     isVideoCall
 } from "../../util/function";
@@ -34,13 +34,20 @@ import {HEADER_ACCEPT_VIDEO_CALL, HEADER_REJECT_VIDEO_CALL, HEADER_VIDEO_CALL} f
 import ChatDetailHeader from "../../components/chat_detail_header/chat_detail_header";
 import {MeetingProvider} from "@videosdk.live/react-sdk";
 import {authToken} from "../../service/VideoCallService";
-import {removeParticipant, setCalling, setMeetingRoom} from "../../store/actions/meetingAction";
+import {
+    addParticipant,
+    removeParticipant,
+    setAudioCall,
+    setCalling,
+    setMeetingRoom
+} from "../../store/actions/meetingAction";
 import CryptoJS from "crypto-js";
 import store from "../../store/store";
 
 function ChatPage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
     const currentChat = useSelector(state => state.userReducer.currentChat);
+    const audioCall = useSelector(state => state.meetingReducer.isAudioCall);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [videoCall, setVideoCall] = useState(false);
@@ -68,6 +75,8 @@ function ChatPage(props) {
             callAPIReLogIn();
             callAPIGetUserList();
             let listChats = [];
+            let listPeople = [];
+            let listRoom = [];
             let chatsRoom = [];
             let chatPeople = [];
             let countChat = 0;
@@ -93,14 +102,16 @@ function ChatPage(props) {
                     }
                 }
             })
-
+            // await getGroupAvatar(listChats);
             for (let i = 0; i < listChats.length; i++) {
                 const name = listChats[i].name;
                 const type = listChats[i].type;
                 if (type === 1) {
+                    if(!listRoom.includes(name)) listRoom.push(name);
                     callAPIGetRoomChatMes(name);
                 }
                 if (type === 0) {
+                    if(!listPeople.includes(name)) listPeople.push(name);
                     callAPIGetPeopleChatMes(name);
                 }
             }
@@ -120,6 +131,13 @@ function ChatPage(props) {
                         countChat++;
                     }
                     if(dataFromServer['event'] === 'GET_ROOM_CHAT_MES'){
+                        console.log(dataFromServer['data']);
+                        let owner = {};
+                        owner.name = dataFromServer['data'].own;
+                        const userList = [...dataFromServer['data'].userList, owner];
+                        userList.forEach(user=> {
+                           if(!listPeople.includes(user.name)) listPeople.push(user.name);
+                        });
                         chatsRoom.push(dataFromServer['data']);
                         countChat++;
                     }
@@ -130,6 +148,9 @@ function ChatPage(props) {
             });
             dispatch(saveToListChatsDetail(chatsRoom));
             dispatch(saveToListChatsPeople(chatPeople));
+            // await getPeopleAvatar(listPeople);
+            await fetchAndSetAvatar(listRoom, "group_avatar/", true);
+            await fetchAndSetAvatar(listPeople, "people_avatar/", false);
             // callAPICheckUser();
             client.onmessage = (message) => {
                 const dataFromServer = JSON.parse(message.data);
@@ -145,12 +166,23 @@ function ChatPage(props) {
                         const meetingRoom = getMeetingRoom(dataMessage.mes);
                         dispatch(setMeetingRoom(meetingRoom));
                         dispatch(setCalling(true));
+                        dispatch(addParticipant());
                         return;
                     }
-                    if(isLeaveRoomMeeting(dataMessage.mes)){
+                    if(isAudioCall(dataMessage.mes)){
+                        const meetingRoom = getMeetingRoom(dataMessage.mes);
+                        dispatch(setMeetingRoom(meetingRoom));
+                        dispatch(setCalling(true));
+                        dispatch(setAudioCall(true));
+                        return;
+                    }
+                    if(isJoinRoomMeeting(dataMessage.mes) || isJoinRoomMeetingAudio(dataMessage.mes)){
+                        const participant = dataMessage.name;
+                        dispatch(addParticipant(participant));
+                    }
+                    if(isLeaveRoomMeeting(dataMessage.mes) || isLeaveRoomMeetingAudio(dataMessage.mes)){
                         const getParticipant = getNameParticipant(dataMessage.mes);
                         dispatch(removeParticipant(getParticipant));
-                        return;
                     }
                     dispatch(receiveChat(dataMessage));
                 }
@@ -161,6 +193,115 @@ function ChatPage(props) {
         }
         f();
     }, []);
+    const fetchAndSetAvatar = async (list, folderPath, isGroup) => {
+        const storage = getStorage();
+        const folderRef = ref(storage, folderPath);
+        const holderAvatar = isGroup ? 'https://png.pngtree.com/element_our/png_detail/20181021/group-avatar-icon-design-vector-png_141882.jpg': 'data:image/jpeg;base64,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';
+        try {
+            const result = await listAll(folderRef);
+            let avatars = [];
+            for (const folder of result.prefixes) {
+                for (let i = 0; i < list.length; i++) {
+                    const keyName = list[i];
+                    const stor = getStorage();
+                    if (folder.name === keyName) {
+                        const path = folder.fullPath + '/avatar';
+                        const imageRef = ref(stor, path);
+                        try {
+                            const downloadURL = await getDownloadURL(imageRef);
+                            const avatar = {
+                                name: keyName,
+                                urlAvatar: downloadURL,
+                            }
+                            avatars.push(avatar);
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    } else {
+                        const avatar = {
+                            name: keyName,
+                            urlAvatar: holderAvatar,
+                        }
+                        avatars.push(avatar);
+                    }
+                }
+            }
+            if(isGroup){
+                dispatch(saveGroupAvatar(avatars));
+            }else{
+                dispatch(savePeopleAvatar(avatars));
+            }
+        } catch (error) {
+            console.error("Error listing folders:", error);
+        }
+    }
+    const getPeopleAvatar = async (listPeople) => {
+        const storage = getStorage();
+        const folderRef = ref(storage, "people_avatar/");
+        try {
+            const result = await listAll(folderRef);
+            let avatarPeoples = [];
+            for (const folder of result.prefixes) {
+                for (let i = 0; i < listPeople.length; i++) {
+                    const people = listPeople[i];
+                    const stor = getStorage();
+                    if (folder.name === people) {
+                        const path = folder.fullPath + '/avatar';
+                        const imageRef = ref(stor, path);
+                        try {
+                            const downloadURL = await getDownloadURL(imageRef);
+                            const avatar = {
+                                name: people,
+                                urlAvatar: downloadURL,
+                            }
+                            avatarPeoples.push(avatar);
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    } else {
+                        const avatar = {
+                            name: people,
+                            urlAvatar: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwsKDQgJDwoQCAgICA0ICAgIDg8IDQgNFREWFhQRExMYHiggGBolGxMTITEhJSkrOi46Fx8zODMtNygtLisBCgoKDQ0NDg0NESsZHxkrKysrKystKy0rKysrKysrKysrKystKysrKysrKysrKysrKysrKysrKysrKysrKysrK//AABEIAN4A4wMBIgACEQEDEQH/xAAaAAEAAwEBAQAAAAAAAAAAAAAAAQQFAgMG/8QANRABAAECAgcHAgUEAwAAAAAAAAECEQMhBAUSFDFSkRMiQVFhYqEVMjNCcYHhI0Ny8WOCsf/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABYRAQEBAAAAAAAAAAAAAAAAAAARAf/aAAwDAQACEQMRAD8A+8AaQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQLGi6HiY03+2jzlBXLtzB1ZhU8b1z6rEaNhx/bjoUfNj6SdFwp/twrYuq8Or7f6clGIl7aRoleDOcXjnh4KJAAAAAAAAAAAAAAAAAAAAAjOYjxmbQCzq/RJxqrz+HTx9W9TTFMRERaIytDx0PB7Oimm2cxer9VhlQAAAHniYcVxNMxeJ+GDpujTg1TH5Z+2X0SprDA7TDqi3ejOJUYIj/AElUAAAAAAAAAAAAAAAAAAHtoWHt4uHHlN5eK3qiP6s/45IN4BFAAAAETGUx6JAfM6RTs14lPhFWThZ1lERjV+uasqACgAAAAAAAAAAAAAAAAuap/F/6qb10PE2MSieGdpRX0giJSgAAAAAiqqIiZ8Ii4MDWU3xq/TJWd41W3XXV4TVeP0cKgAoAAAAAAAAAAAAAAAAI/wDb3SA3tXY/aYcZ96nKVt85oePODXt/lnKql9BhYtOJEVRN4n4ZV2FwAC4ChrTH2KJpie9XPwtaRj04cTVM29PGXz+lY1WLVNU/tAPLNINIAAAAAAAAAAAAAAAAAAAgEvXRtJrwZ7s3pnjTLxulBt6NrHCxOM7FXlPBcpxKZ4VRP7vl9lOfnMfpkRX004tMcaoj91PH1nh0ZU9+fTNi5+fXNGyQemkY9eNMzVOXhHk4QlcQEXSAAAAAAAAAAAAAAAAAi6YiZmIiLzPCIaOh6sv3q5ynPYhBQw8OqubU0zV6xwW8LVeJVxmKY6tjDwqaIiKaYpj0dzHoisyNTx44nw6+kUc9TSAZv0ijnqPpFHPU0gGb9Io56j6RRz1NIBm/SKOeXE6n/wCRqgMLF1Zi05x349FWuiqjjTNP6vprOMXBpxItVTFQPmUr+matmi9VEXjxpUPiyoAKAAAAAAAAAABEXmI8Zm0IaeqdGvfFqi+fdiQWNX6DGHEVznXVnn+VesmC7KgXLgBcAC4ABcAC4AXLgi38s3WGgxVE4lMWq4zEeLTui38wD5bzjhMcYSv610bYntYjKrjDPuqJAUAAAAAAAAdYNG3VTRx2pfRYdEUU00RFopizI1Ph3xKquWGzKKm5dzcug6uXc3Lg6uXc3Lg6uXc3Lg6uXc3Lg6uXc3Lg6uXc3Lg6uXc3Lg50jDjEpqptxibPnK6dmaqeWbPpbsPWVGzi1e7NcRWAUAAAAAAAAaWp4yxJ85s0Zln6o+3E/wAl+QTcu5BXQi5cRIi5cE3LuQV0XRdAOrl3IDq5dyA6uXcgOrszW8Z4dXnDRZ+t5/C/cRnAAAAAADw7f2/J2/t+Qe48O39vybx7fkGzqie7iR47V19gaBpuxXPdymOES1N+p5J6oLYqb9TyT1N+p5J6gtipv1PJPU36nknqC2Km/U8k9TfqeSeoLYqb9TyT1N+p5J6gtipv1PJPU36nknqC2Km/U8k9TfqeSeoLYqb9TyT1N+p5J6gtipv1PJPU36nknqC2zdbTnhR4xd779TyT1ZGmaZ2lczs/blGYJHhvHt+Tt/b8qPceHb+35O39vyD3Hh2/t+UA/9k=',
+                        }
+                        avatarPeoples.push(avatar);
+                    }
+                }
+            }
+            dispatch(savePeopleAvatar(avatarPeoples));
+        } catch (error) {
+            console.error("Error listing folders:", error);
+        }
+    }
+    const getGroupAvatar = async (list) => {
+        const storage = getStorage();
+        const folderRef = ref(storage, "group_avatar/");
+        try {
+            const result = await listAll(folderRef);
+            for (const folder of result.prefixes) {
+                for (let i = 0; i < list.length; i++) {
+                    const chat = list[i];
+                    if (chat.type === 0) continue;
+                    const chatName = chat.name;
+                    const stor = getStorage();
+                    if (folder.name === chatName) {
+                        const path = folder.fullPath + '/avatar';
+                        const imageRef = ref(stor, path);
+                        try {
+                            const downloadURL = await getDownloadURL(imageRef);
+                            chat.urlAvatar = downloadURL;
+                        } catch (error) {
+                            chat.urlAvatar = "https://png.pngtree.com/element_our/png_detail/20181021/group-avatar-icon-design-vector-png_141882.jpg";
+                        }
+                    } else {
+                        chat.urlAvatar = "https://png.pngtree.com/element_our/png_detail/20181021/group-avatar-icon-design-vector-png_141882.jpg";
+                    }
+                }
+            }
+            dispatch(saveListChat(list));
+        } catch (error) {
+            console.error("Error listing folders:", error);
+        }
+    };
     const fetchAndSetMyImage = (myName) => {
         const imageListRef = ref(storage, `images/${myName}/`);
         listAll(imageListRef).then((response)=> {
@@ -183,7 +324,7 @@ function ChatPage(props) {
                 config={{
                     meetingId: meetingRoom.meetId,
                     micEnabled: true,
-                    webcamEnabled: true,
+                    webcamEnabled: audioCall == true ? false : true,
                     name: currentAuth,
                 }}
                 token={authToken}

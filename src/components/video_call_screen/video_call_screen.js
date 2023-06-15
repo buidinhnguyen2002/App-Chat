@@ -6,13 +6,14 @@ import connecting2 from "../../Assets/Image/connecting2.png";
 import connecting3 from "../../Assets/Image/connecting3.png";
 import {MeetingProvider, useMeeting, useParticipant} from "@videosdk.live/react-sdk";
 import {useDispatch, useSelector} from "react-redux";
-import {addParticipant, leaveMeetingRoom, rejectVideoCall} from "../../store/actions/meetingAction";
+import {addParticipant, leaveMeetingRoom, rejectVideoCall, setCalling} from "../../store/actions/meetingAction";
 import {callAPIGetRoomChatMes, callAPISendChatRoom} from "../../service/loginService";
 import screenCastActive from "../../Assets/Image/Screencast-active.png";
 import screenCastNoneActive from "../../Assets/Image/Screencast-none-active.png";
 import {
-    HEADER_JOIN_ROOM_MEETING,
-    HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
+    HEADER_AUDIO_CALL,
+    HEADER_JOIN_ROOM_MEETING, HEADER_JOIN_ROOM_MEETING_AUDIO, HEADER_LEAVE_AUDIO_CALL,
+    HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END, HEADER_REJECT_AUDIO_CALL,
     HEADER_REJECT_VIDEO_CALL,
     HEADER_VIDEO_CALL, HEADER_VIDEO_CHAT_END
 } from "../../util/constants";
@@ -24,8 +25,8 @@ import {deactivateRoom} from "../../service/VideoCallService";
 function VideoCallScreen(props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
     const meetingRoom = useSelector(state => state.meetingReducer.meetingRoom);
-    const participant = useSelector(state => state.meetingReducer.meetingRoom.participants);
     const myName = useSelector(state => state.userReducer.username);
+    const isAudioCall = useSelector(state => state.meetingReducer.isAudioCall);
     const dispatch = useDispatch();
     const receiveCall = useSelector(state => state.meetingReducer.isCalling);
     const meetingId = props.meetingId;
@@ -34,13 +35,18 @@ function VideoCallScreen(props) {
     const [myParticipantId, setMyParticipantId] = useState(null);
     const { leave, toggleMic, toggleWebcam } = useMeeting();
     const [openMic, setOpenMic] = useState(true);
-    const [openCamera, setOpenCamera] = useState(true);
+    const [openCamera, setOpenCamera] = useState( isAudioCall ? false: true);
     const [isFullScreen, setIsFullScreen] = useState(true);
     const [screenCast, setScreenCast] = useState(false);
-    const {join, participants, enableScreenShare, disableScreenShare, toggleScreenShare, presenterId} = useMeeting({
+    const {join, participants, enableScreenShare, disableScreenShare, toggleScreenShare, presenterId, disableWebcam} = useMeeting({
         onMeetingJoined: () => {
             setJoined("JOINED");
-            callAPISendChatRoom(meetingRoom.meetingName, HEADER_JOIN_ROOM_MEETING);
+            if(isAudioCall) {
+                callAPISendChatRoom(meetingRoom.meetingName, HEADER_JOIN_ROOM_MEETING_AUDIO);
+            }else{
+                callAPISendChatRoom(meetingRoom.meetingName, HEADER_JOIN_ROOM_MEETING);
+            }
+            dispatch(setCalling(false));
             callAPIGetRoomChatMes(meetingRoom.meetingName);
         },
         onMeetingLeft: () => {
@@ -56,17 +62,25 @@ function VideoCallScreen(props) {
             dispatch(addParticipant(myName));
         }
         meetingRoom.participants = participants;
-        if(myName === meetingRoom.owner) callAPISendChatRoom(meetingRoom.meetingName,HEADER_VIDEO_CALL+ JSON.stringify(meetingRoom));
+        if(myName === meetingRoom.owner) {
+            if(isAudioCall){
+                callAPISendChatRoom(meetingRoom.meetingName,HEADER_AUDIO_CALL+ JSON.stringify(meetingRoom));
+            }else{
+                callAPISendChatRoom(meetingRoom.meetingName,HEADER_VIDEO_CALL+ JSON.stringify(meetingRoom));
+            }
+        }
         callAPIGetRoomChatMes(meetingRoom.meetingName);
     };
     const handelRejectVideoCall = (isLeave) => {
-        if(meetingRoom.participants.length === 1 && receiveCall == null){
+        if(meetingRoom.participants.length === 1 && receiveCall != true){
             callAPISendChatRoom(meetingRoom.meetingName,HEADER_MEETING_END);
             deactivateRoom(meetingRoom.meetId);
         }else if(isLeave == true){
-            callAPISendChatRoom(meetingRoom.meetingName,HEADER_LEAVE_VIDEO_CALL+myName);
+            const header = isAudioCall ? HEADER_LEAVE_AUDIO_CALL : HEADER_LEAVE_VIDEO_CALL;
+            callAPISendChatRoom(meetingRoom.meetingName,header+myName);
         }else{
-            callAPISendChatRoom(meetingRoom.meetingName,HEADER_REJECT_VIDEO_CALL);
+            const header = isAudioCall ? HEADER_REJECT_AUDIO_CALL : HEADER_REJECT_AUDIO_CALL;
+            callAPISendChatRoom(meetingRoom.meetingName,header);
         }
         callAPIGetRoomChatMes(meetingRoom.meetingName);
         leave();
@@ -138,6 +152,7 @@ function VideoCallScreen(props) {
                                 key={index}
                                 width={presenterId == null ? getWidthParticipantView([...participants].length) : '100%'}
                                 height={presenterId == null ? getHeightParticipantView([...participants].length) : 'auto'}
+                                isJoin={meetingRoom.join == true ? true: false}
                                 handleRejectVideoCall={handelRejectVideoCall}
                                 isItemSideBar={presenterId == null ? false: true}
                                 participantId={participantId}

@@ -34,3 +34,9 @@ export function rejectVideoCall() {
         payload: null,
     }
 }
+export function setAudioCall(isAudioCall) {
+    return {
+        type: "SET_AUDIO_CALL",
+        payload: isAudioCall,
+    }
+}

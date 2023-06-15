@@ -12,6 +12,7 @@ import { Picker } from "emoji-mart";
 import "emoji-mart/css/emoji-mart.css";
 import he from 'he';
 
+
 function InputMessage(props) {
     const currentAuth = useSelector((state) => state.userReducer.username);
     const currentChats = useSelector((state) => state.userReducer.currentChat);

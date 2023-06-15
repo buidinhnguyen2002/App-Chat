@@ -19,6 +19,7 @@
       @include dimension(80px, 80px);
       border-radius: 50%;
       object-fit: cover;
+      border: 1px solid $color-blue-02;
     }
   }
   .title{
@@ -47,6 +48,7 @@
     }
     .drop_down {
       .drop_down-item{
+        position: relative;
         padding: 7px 5px;
         &:hover{
           background-color: $color-blue-02;
@@ -60,6 +62,13 @@
         i{
           @include styleText(500, 16px, 18px, $primary-color-blue);
         }
+        .input_file_img {
+          @include positionAbsolute(0, 0, unset, unset);
+          display: none;
+          @include dimension(100%, 100%);
+          cursor: pointer;
+        }
+
       }
     }
   }
