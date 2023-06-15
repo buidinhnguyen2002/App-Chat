@@ -1,4 +1,5 @@
 
+
 export function loginSuccess(username) {
     return {
         type: 'LOGIN_SUCCESS',
@@ -63,4 +64,33 @@ export function saveAllImage(images) {
         payload: images,
     }
 }
-
+export function updateAvatar(nameChat, urlAvatar) {
+    return {
+        type: "UPDATE_AVATAR",
+        payload: {
+            nameChat,
+            urlAvatar,
+        },
+    }
+}
+export function updateMyAvatar(name,urlAvatar) {
+    return {
+        type: "UPDATE_MY_AVATAR",
+        payload: {
+            name,
+            urlAvatar,
+        },
+    }
+}
+export function savePeopleAvatar(peopleAvatars) {
+    return {
+        type: "SAVE_PEOPLE_AVATAR",
+        payload: peopleAvatars,
+    }
+}
+export function saveGroupAvatar(groupAvatars) {
+    return {
+        type: "SAVE_GROUP_AVATAR",
+        payload: groupAvatars,
+    }
+}

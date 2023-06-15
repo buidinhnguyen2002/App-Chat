@@ -1,6 +1,7 @@
 const initialState = {
     meetingRoom: null,
     isCalling: null,
+    isAudioCall: null,
 };
 export default function meetingReducer(state = initialState, action) {
     switch (action.type) {
@@ -14,14 +15,18 @@ export default function meetingReducer(state = initialState, action) {
             return {
                 ...state,
                 meetingRoom: null,
+                isCalling: null,
+                isAudioCall: null,
             }
         }
         case 'ADD_PARTICIPANTS': {
+            const participantsTemp = [...state.meetingRoom.participants];
+            if(!participantsTemp.includes(action.payload)) participantsTemp.push(action.payload);
             return {
                 ...state,
                 meetingRoom: {
                     ...state.meetingRoom,
-                    participants: [...state.meetingRoom.participants, action.payload],
+                    participants: participantsTemp,
                 }
             }
         }
@@ -36,17 +41,22 @@ export default function meetingReducer(state = initialState, action) {
                 ...state,
                 isCalling: null,
                 meetingRoom: null,
+                isAudioCall: null,
             }
         }
         case 'REMOVE_PARTICIPANT': {
-            let participants = [];
-            if(state.meetingRoom) participants= [...state.meetingRoom.participants].filter(participant => participant != action.payload);
             return {
                 ...state,
                 meetingRoom: {
                     ...state.meetingRoom,
                     participants: [...state.meetingRoom.participants].filter(participant => participant != action.payload),
                 }
+            }
+        }
+        case 'SET_AUDIO_CALL': {
+            return {
+                ...state,
+                isAudioCall: action.payload,
             }
         }
         default:
