@@ -1,6 +1,6 @@
 import {
     GROUP_AVATAR_HOLDER,
-    HEADER_AUDIO_CALL,
+    HEADER_AUDIO_CALL, HEADER_CONNECT_CHAT_PEOPLE,
     HEADER_JOIN_ROOM_MEETING, HEADER_JOIN_ROOM_MEETING_AUDIO, HEADER_LEAVE_AUDIO_CALL,
     HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
     HEADER_MSG_VIDEO,
@@ -58,6 +58,10 @@ export const isMeetingEnd = (text) => {
     if(text.startsWith(HEADER_MEETING_END)) return true;
     return false;
 }
+export const isConnectChatPeople = (text) => {
+    if(text.startsWith(HEADER_CONNECT_CHAT_PEOPLE)) return true;
+    return false;
+}
 export const getLayoutParticipant = (num) => {
 
     return false;
@@ -84,6 +88,11 @@ export function isLink(str) {
     const linkRegex = /^(ftp|http|https):\/\/[^ "]+$/;
     return linkRegex.test(str);
 }
+export function getAuthName(){
+    const storedData = sessionStorage.getItem('dataReLogIn');
+    const dataReLogIn = decryptData(storedData);
+    return dataReLogIn.userName;
+}
 export function encryptData(data) {
     const dataEncrypt = CryptoJS.AES.encrypt(JSON.stringify(data), process.env.REACT_APP_SECRET_KEY).toString();
     return dataEncrypt;
@@ -92,6 +101,12 @@ export function decryptData(data) {
     const decryptedBytes = CryptoJS.AES.decrypt(data, process.env.REACT_APP_SECRET_KEY);
     const dataDescrypt = JSON.parse(decryptedBytes.toString(CryptoJS.enc.Utf8));
     return dataDescrypt;
+}
+export function getCurrentTime() {
+    const date = new Date();
+    const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
+        + ':' + date.getMinutes()+':' + date.getSeconds();
+    return newTime;
 }
 export const getAvatar = (type, peopleAvarars, groupAvatars, name) => {
     // let urlAvatar ='';

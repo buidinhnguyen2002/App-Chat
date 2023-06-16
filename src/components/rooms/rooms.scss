@@ -5,6 +5,7 @@
   transform: translate(-50%, -50%);
   background-color: $primary-color-white;
   border-radius: 15px;
+  z-index: 100;
 }
 
 .create-room {
@@ -22,7 +23,7 @@
 
 .create-room input {
   padding: 14px 54px 14px 78px;
-  @include dimension(327px, 30px);
+  @include dimension(100%, 30px);
   border-radius: 20px;
   background-color: $color-blue-02;
   @include styleText(400, 13px, 22px, $primary-color-text);
@@ -36,20 +37,23 @@
 .create-room input::placeholder {
   color: $color-blue-03;
 }
-
+.btn_container{
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
 .create-room-btn, .join-room-btn {
   background-color: $color-blue-01;
   color: $primary-color-white;
   border: none;
-  padding: 10px 20px;
-  font-size: 20px;
+  padding: 5px 10px;
+  font-size: 12px;
   cursor: pointer;
   margin: 0 5px;
-  transform: scale(0.5);
   border-radius: 20px;
   &:hover {
     background-color: $color-blue-02;
-    @include styleText(400, 20px, 30px, $primary-color-blue);
+    @include styleText(400, 12px, 12px, $primary-color-blue);
   }
 }
 

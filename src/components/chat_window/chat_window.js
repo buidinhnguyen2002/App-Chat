@@ -12,7 +12,7 @@ import {isJSON} from "../../util/function";
 
 function WindowChat(props) {
     const currentChats = useSelector(state => state.userReducer.currentChat);
-    const chatData = currentChats !== null ? [...currentChats.chatData].reverse() : [];
+    const chatData = currentChats ? [...currentChats.chatData].reverse() : [];
     const dispatch = useDispatch();
     const scrollTargetRef = useRef(null);
     useEffect(() => {
@@ -58,18 +58,9 @@ function WindowChat(props) {
                 {chatData.map((msg, index) => (
                     <div ref={chatData.length - 1 === index ? scrollTargetRef : null}
                          className={"msgItem" + `${chatData.length - 1 === index ? " alo" : " loa"}`} key={msg.id}>
-                        <MessageItem key={msg.id} name={msg.name} mes={convertEntitiesToEmoji(msg.mes)}/>
+                        <MessageItem key={msg.id} name={msg.name}  type={msg.type} mes={msg.mes}/>
+                        {/*<MessageItem key={msg.id} name={msg.name}  type={msg.type} mes={convertEntitiesToEmoji(msg.mes)}/>*/}
                     </div>
-                    // isJSON(msg.mes) ? <div key={msg.id} ref={(chatData.length - 1) === index ? scrollTargetRef : null}
-                    //                        className={'msgItem'}
-                    //                        >
-                    //         <MessageItem name={msg.name} mes={msg.mes} isJson={true}/>
-                    //     </div> :
-                    //     <div key={msg.id} ref={(chatData.length - 1) === index ? scrollTargetRef : null}
-                    //          className={'msgItem'}
-                    //          >
-                    //         <MessageItem name={msg.name} mes={msg.mes}/>
-                    //     </div>
                 ))}
             </div>
             <InputMessage/>
