@@ -13,17 +13,18 @@ import {
 } from "../../service/loginService";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    addPeople, changeCurrentChat,
     loginSuccess,
-    receiveChat, saveAllImage, saveGroupAvatar,
+    receiveChat, receiveChatPeople, saveAllImage, saveGroupAvatar,
     saveListChat, savePeopleAvatar,
     saveToListChatsDetail,
-    saveToListChatsPeople, updateChat
+    saveToListChatsPeople, setInitChat, updateChat, updateChatPeople
 } from "../../store/actions/userAction";
 import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
 import VideoCallScreen from "../../components/video_call_screen/video_call_screen";
 import {
-    decryptData, encryptData,
+    decryptData, encryptData, getAuthName,
     getMeetingRoom,
     getNameParticipant, isAudioCall, isJoinRoomMeeting, isJoinRoomMeetingAudio,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
@@ -43,11 +44,13 @@ import {
 } from "../../store/actions/meetingAction";
 import CryptoJS from "crypto-js";
 import store from "../../store/store";
+import {setError, setUserExist} from "../../store/actions/apiAction";
 
 function ChatPage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
     const currentChat = useSelector(state => state.userReducer.currentChat);
     const audioCall = useSelector(state => state.meetingReducer.isAudioCall);
+    const userCheck = useSelector(state => state.apiReducer.userCheck);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [videoCall, setVideoCall] = useState(false);
@@ -95,7 +98,7 @@ function ChatPage(props) {
                         fetchAndSetMyImage(dataReLogIn.userName);
                     }
                     if(dataFromServer['event'] === 'GET_USER_LIST'){
-                        const responseListChat = dataFromServer['data'];
+                        const responseListChat = dataFromServer['data'].filter(chat => chat.name !== getAuthName());
                         dispatch(saveListChat(responseListChat));
                         listChats = responseListChat;
                         resolve();
@@ -122,16 +125,16 @@ function ChatPage(props) {
                         let chatData = dataFromServer['data'];
                         if(chatData.length !== 0){
                             let chatObj = {
-                                name: chatData[0].to,
+                                name: chatData[0].to === getAuthName() ? chatData[0].name : chatData[0].to,
                                 type: chatData[0].type,
                                 chatData: chatData,
                             };
+                            console.log(chatObj);
                             chatPeople.push(chatObj);
                         }
                         countChat++;
                     }
                     if(dataFromServer['event'] === 'GET_ROOM_CHAT_MES'){
-                        console.log(dataFromServer['data']);
                         let owner = {};
                         owner.name = dataFromServer['data'].own;
                         const userList = [...dataFromServer['data'].userList, owner];
@@ -148,20 +151,19 @@ function ChatPage(props) {
             });
             dispatch(saveToListChatsDetail(chatsRoom));
             dispatch(saveToListChatsPeople(chatPeople));
-            // await getPeopleAvatar(listPeople);
-            await fetchAndSetAvatar(listRoom, "group_avatar/", true);
-            await fetchAndSetAvatar(listPeople, "people_avatar/", false);
-            // callAPICheckUser();
+            // await fetchAndSetAvatar(listRoom, "group_avatar/", true);
+            // await fetchAndSetAvatar(listPeople, "people_avatar/", false);
+            dispatch(setInitChat());
             client.onmessage = (message) => {
                 const dataFromServer = JSON.parse(message.data);
                 console.log(dataFromServer, 'check user')
                 const dataMessage = dataFromServer['data'];
-                const date = new Date();
-                const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
-                    + ':' + date.getMinutes()+':' + date.getSeconds();
-                dataMessage.createAt = newTime;
-                // console.log(dataMessage, 'DATA MESSGE');
                 if(dataFromServer['event'] === 'SEND_CHAT'){
+                    console.log(dataMessage);
+                    const date = new Date();
+                    const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
+                        + ':' + date.getMinutes()+':' + date.getSeconds();
+                    dataMessage.createAt = newTime;
                     if(isVideoCall(dataMessage.mes)){
                         const meetingRoom = getMeetingRoom(dataMessage.mes);
                         dispatch(setMeetingRoom(meetingRoom));
@@ -184,10 +186,59 @@ function ChatPage(props) {
                         const getParticipant = getNameParticipant(dataMessage.mes);
                         dispatch(removeParticipant(getParticipant));
                     }
-                    dispatch(receiveChat(dataMessage));
+                    if(dataMessage.type === 0){
+                        dispatch(receiveChatPeople(dataMessage));
+                    }else {
+                        dispatch(receiveChat(dataMessage));
+                    }
                 }
                 if (dataFromServer['event'] === 'GET_ROOM_CHAT_MES') {
                     dispatch(updateChat(dataFromServer['data']));
+                }
+                if (dataFromServer['event'] === 'GET_PEOPLE_CHAT_MES') {
+                    dispatch(updateChatPeople(dataFromServer['data']));
+                }
+                if (dataFromServer['event'] === 'CHECK_USER') {
+                    const data = dataFromServer['data'];
+                    console.log(dataFromServer);
+                    const namePeople = document.getElementById('roomName').value;
+                    dispatch(addPeople(namePeople));
+                    dispatch(changeCurrentChat(namePeople, 0));
+                    // if(data.status === true){
+                    //     dispatch(addPeople(userCheck));
+                    // }
+                    // dispatch(setError('User not exist.'));
+                }
+                if (dataFromServer['event'] === 'GET_USER_LIST') {
+                    const responseListChat = dataFromServer['data'].filter(chat => chat.name !== getAuthName());
+                    dispatch(saveListChat(responseListChat));
+                }
+                if(dataFromServer['event'] === 'CREATE_ROOM'){
+                    const status = dataFromServer['status'];
+                    const msg = dataFromServer['mes'];
+                    if(status === 'error'){
+                        dispatch(setError(msg));
+                        return;
+                    }
+                    const roomName = document.getElementById('roomName').value;
+                    callAPIGetUserList();
+                    callAPIGetRoomChatMes(roomName);
+                    dispatch(changeCurrentChat(roomName, 1));
+                    dispatch(setError(null));
+                }
+                if (dataFromServer['event'] === 'JOIN_ROOM') {
+                    const status = dataFromServer.status;
+                    const msg = dataFromServer['mes'];
+                    console.log(dataFromServer)
+                    if (status === 'success') {
+                        const roomName = document.getElementById('roomName').value;
+                        callAPIGetUserList();
+                        callAPIGetRoomChatMes(roomName);
+                        dispatch(setError(null));
+                    } else {
+                        dispatch(setError(msg));
+                        return;
+                    }
                 }
             }
         }

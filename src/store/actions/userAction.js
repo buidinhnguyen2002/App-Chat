@@ -52,9 +52,21 @@ export function updateChat(newChats) {
         payload: newChats,
     }
 }
+export function updateChatPeople(newChats) {
+    return {
+        type: "UPDATE_CHAT_PEOPLE",
+        payload: newChats,
+    }
+}
 export function receiveChat(chat) {
     return {
         type: "RECEIVE_CHAT",
+        payload: chat,
+    }
+}
+export function receiveChatPeople(chat) {
+    return {
+        type: "RECEIVE_CHAT_PEOPLE",
         payload: chat,
     }
 }
@@ -92,5 +104,17 @@ export function saveGroupAvatar(groupAvatars) {
     return {
         type: "SAVE_GROUP_AVATAR",
         payload: groupAvatars,
+    }
+}
+export function addPeople(name) {
+    return {
+        type: "ADD_PEOPLE",
+        payload: name,
+    }
+}
+export function setInitChat() {
+    return {
+        type: "SET_INIT_CHAT",
+        payload: null,
     }
 }

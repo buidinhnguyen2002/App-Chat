@@ -53,6 +53,7 @@ export const callAPIGetPeopleChatMes = (name) => {
                 "event": "GET_PEOPLE_CHAT_MES",
                 "data": {
                     "name": name,
+                    // "name": '191302800',
                     "page": 1,
                 }
             }
@@ -168,13 +169,26 @@ export const callAPISendChatRoom = (to, mes)=>{
         }
     }));
 }
-export const callAPICheckUser = ()=>{
+export const callAPISendChatPeople = (to, mes)=>{
+    client.send(JSON.stringify({
+        "action": "onchat",
+        "data": {
+            "event": "SEND_CHAT",
+            "data": {
+                "type": "people",
+                "to": to,
+                "mes": mes,
+            }
+        }
+    }));
+}
+export const callAPICheckUser = (name)=>{
     client.send(JSON.stringify({
         "action": "onchat",
         "data": {
             "event": "CHECK_USER",
             "data": {
-                "user": "nguyen................................"
+                "user": name,
             }
         }
     }));

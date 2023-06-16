@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./messages.scss";
-import { callAPIGetRoomChatMes, callAPIGetUserList, callAPISendChatRoom, client } from "../../service/loginService";
+import {
+    callAPIGetPeopleChatMes,
+    callAPIGetRoomChatMes,
+    callAPIGetUserList, callAPISendChatPeople,
+    callAPISendChatRoom,
+    client
+} from "../../service/loginService";
 import { useDispatch, useSelector } from "react-redux";
 import { saveListChat, sendChat, updateChat } from "../../store/actions/userAction";
 import { isAllOf } from "@reduxjs/toolkit";
@@ -50,8 +56,14 @@ function InputMessage(props) {
                     getDownloadURL(uploadTask.snapshot.ref)
                         .then((downloadURL) => {
                             newVideos = [...newVideos, downloadURL];
-                            callAPISendChatRoom(currentChats.name, HEADER_MSG_VIDEO + downloadURL);
-                            callAPIGetRoomChatMes(currentChats.name);
+                            const msg = HEADER_MSG_VIDEO + downloadURL;
+                            // callAPISendChatRoom(currentChats.name, HEADER_MSG_VIDEO + downloadURL);
+                            // callAPIGetRoomChatMes(currentChats.name);
+                            if(currentChats.type === 0 ){
+                                sendVideoToPeople(msg);
+                            }else{
+                                sendVideoToRoom(msg);
+                            }
                             resolve();
                         })
                         .catch((error) => {
@@ -92,8 +104,13 @@ function InputMessage(props) {
         Promise.all(uploadTasks)
             .then(() => {
                 if (newMsg.text !== "" || newMsg.imgs.length !== 0) {
-                    callAPISendChatRoom(currentChats.name, JSON.stringify(newMsg));
-                    callAPIGetRoomChatMes(currentChats.name);
+                    // callAPISendChatRoom(currentChats.name, JSON.stringify(newMsg));
+                    // callAPIGetRoomChatMes(currentChats.name);
+                    if(currentChats.type ===0 ){
+                        sendChatPeople(newMsg);
+                    }else{
+                        sendChatRoom(newMsg);
+                    }
                 }
                 setMsg({ text: "", imgs: [] });
                 setMsgImgs([]);
@@ -106,6 +123,22 @@ function InputMessage(props) {
             });
         handleUploadVideosToFirebase();
     };
+    const sendChatRoom = (msg) => {
+        callAPISendChatRoom(currentChats.name, JSON.stringify(msg));
+        callAPIGetRoomChatMes(currentChats.name);
+    }
+    const sendVideoToRoom = (msg) => {
+        callAPISendChatRoom(currentChats.name, msg);
+        callAPIGetRoomChatMes(currentChats.name);
+    }
+    const sendVideoToPeople = (msg) => {
+        callAPISendChatPeople(currentChats.name, msg);
+        callAPIGetPeopleChatMes(currentChats.name);
+    }
+    const sendChatPeople = (msg) => {
+        callAPISendChatPeople(currentChats.name, JSON.stringify(msg));
+        callAPIGetPeopleChatMes(currentChats.name);
+    }
 
     const handleKeyPress = (event) => {
         if (event.key === "Enter") {
