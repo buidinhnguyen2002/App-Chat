@@ -30,10 +30,11 @@ function Login(props) {
     useEffect(() => {
         const storedData = sessionStorage.getItem('dataReLogIn');
         reConnectionServer();
-        if(storedData){
+        if (storedData) {
             navigate('/chat');
         }
     }, [navigate]);
+
     const handleOnchangeInput = (event) => {
         const {name, value} = event.target;
         if (name === 'userName') {
@@ -55,26 +56,50 @@ function Login(props) {
     }
 
     const handleLogin = () => {
+        if (userName === '' || password === '') {
+            alert('Vui lòng nhập tài khoản và mật khẩu');
+            return;
+        }
+
         callAPILogin(userName, password);
         client.onmessage = (message) => {
             const dataFromServer = JSON.parse(message.data);
             console.log(dataFromServer);
             if (dataFromServer['event'] === 'LOGIN') {
-                const dataReLogIn = {
-                    userName: userName,
-                    keyReLogIn: dataFromServer['data']['RE_LOGIN_CODE'],
-                    isLogin: true,
-                };
-                const encryptedData = encryptData(dataReLogIn);
-                sessionStorage.setItem('dataReLogIn', encryptedData);
-                dispatch(loginSuccess(userName));
-                return navigate('/chat');
+                if (dataFromServer['data'] && dataFromServer['data']['RE_LOGIN_CODE']) {
+                    const dataReLogIn = {
+                        userName: userName,
+                        keyReLogIn: dataFromServer['data']['RE_LOGIN_CODE'],
+                        isLogin: true,
+                    };
+                    const encryptedData = encryptData(dataReLogIn);
+                    sessionStorage.setItem('dataReLogIn', encryptedData);
+                    dispatch(loginSuccess(userName));
+                    return navigate('/chat');
+                } else {
+                    alert('Tài khoản hoặc mật khẩu không chính xác');
+                }
             }
-        }
+        };
+
+        client.onerror = () => {
+            alert('Đã xảy ra lỗi khi kết nối đến máy chủ. Vui lòng thử lại sau.');
+        };
     };
+
+
     const handleRegister = () => {
+        if (userName === '' || password === '' || retypePassword === '') {
+            alert('Vui lòng nhập thông tin');
+            return;
+        }
+        if (password !== retypePassword) {
+            alert('Mật khẩu và mật khẩu nhập lại không trùng nhau');
+            return;
+        }
         callAPIRegister(userName, password);
-    }
+        alert('Đăng kí thành công!');
+    };
     const toggleShowPassword = (event) => {
         const name = event.target.parentElement.getAttribute('name');
         const value = name == 'showPassword' ? !showPassword : !showRetypePassword;
