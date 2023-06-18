@@ -48,6 +48,7 @@ function ChatDetailHeader (props) {
                 meetId,
                 meetingName: currentChat.name,
                 owner: myName,
+                type: currentChat.type === 0 ? 0 : 1,
                 participants: [myName],
             };
             dispatch(setMeetingRoom(meetingRoom));

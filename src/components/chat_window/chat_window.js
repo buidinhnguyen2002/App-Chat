@@ -20,19 +20,6 @@ function WindowChat(props) {
             scrollTargetRef.current.scrollIntoView({behavior: 'smooth'});
         }
     },);
-
-    // function isJSON(str) {
-    //     try {
-    //         const searchStrings = ["{", "}", "[", "]", "text", "imgs"];
-    //         for (const searchStringsKey of searchStrings) {
-    //             if (!str.includes(searchStringsKey)) return false;
-    //         }
-    //         JSON.parse(str);
-    //         return true;
-    //     } catch (error) {
-    //         return false;
-    //     }
-    // }
     const decodeEntities = (text) => {
         const element = document.createElement("textarea");
         element.innerHTML = text;
@@ -58,7 +45,7 @@ function WindowChat(props) {
                 {chatData.map((msg, index) => (
                     <div ref={chatData.length - 1 === index ? scrollTargetRef : null}
                          className={"msgItem" + `${chatData.length - 1 === index ? " alo" : " loa"}`} key={msg.id}>
-                        <MessageItem key={msg.id} name={msg.name}  type={msg.type} mes={msg.mes}/>
+                        <MessageItem key={msg.id} name={msg.name}  type={msg.type} mes={msg.mes} createAt={msg.createAt}/>
                         {/*<MessageItem key={msg.id} name={msg.name}  type={msg.type} mes={convertEntitiesToEmoji(msg.mes)}/>*/}
                     </div>
                 ))}

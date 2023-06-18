@@ -114,8 +114,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: $primary-color-text;
-  opacity: 0.9;
+  background-color: $color-black-opacity-09;
   z-index: 99;
   display: flex;
   justify-content: center;
@@ -171,6 +170,7 @@
   padding: 12px 20px;
   @include flexMiddle();
   .ic_video_call {
+    position: relative;
     padding: 20px;
     border-radius: 50%;
     background-color: $color-green-01;
@@ -181,6 +181,9 @@
       @include styleText(900, 18px, 20px, $primary-color-white);
       transform: translateY(1px);
     }
+  }
+  .ic_bg-red{
+    background-color: $color-red-01;
   }
   .main-content {
     h4{
@@ -215,4 +218,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.call_failed {
+  position: absolute;
+  top: 16%;
+  left: 50%;
+  transform: translateX(-100%);
 }

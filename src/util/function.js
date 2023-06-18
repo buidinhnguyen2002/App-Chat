@@ -1,11 +1,11 @@
 import {
-    GROUP_AVATAR_HOLDER,
-    HEADER_AUDIO_CALL, HEADER_CONNECT_CHAT_PEOPLE,
+    GROUP_AVATAR_HOLDER, HEADER_ACCEPT_VIDEO_CALL,
+    HEADER_AUDIO_CALL, HEADER_AUDIO_CALL_FAILED, HEADER_CONNECT_CHAT_PEOPLE,
     HEADER_JOIN_ROOM_MEETING, HEADER_JOIN_ROOM_MEETING_AUDIO, HEADER_LEAVE_AUDIO_CALL,
     HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
-    HEADER_MSG_VIDEO,
-    HEADER_REJECT_VIDEO_CALL,
-    HEADER_VIDEO_CALL, USER_AVATAR_HOLDER
+    HEADER_MSG_VIDEO, HEADER_REJECT_CALL_PEOPLE,
+    HEADER_REJECT_VIDEO_CALL, HEADER_REQUEST_AUDIO_CALL, HEADER_REQUEST_CALL,
+    HEADER_VIDEO_CALL, HEADER_VIDEO_CALL_FAILED, USER_AVATAR_HOLDER
 } from "./constants";
 import CryptoJS from "crypto-js";
 
@@ -17,8 +17,38 @@ export const isVideoCall = (text) => {
     if(text.startsWith(HEADER_VIDEO_CALL)) return true;
     return false;
 }
+export const isAcceptCall = (text) => {
+    if(text.startsWith(HEADER_ACCEPT_VIDEO_CALL)) return true;
+    return false;
+}
+export const isRequestCall = (text) => {
+    if(text.startsWith(HEADER_REQUEST_CALL)) return true;
+    return false;
+}
+export const isRequestAudioCall = (text) => {
+    if(text.startsWith(HEADER_REQUEST_AUDIO_CALL)) return true;
+    return false;
+}
+export const getMeetingIdFromRequestCall = (text) => {
+    return text.substring(HEADER_REQUEST_CALL.length , text.length)
+}
+export const getMeetingIdFromRequestAudioCall = (text) => {
+    return text.substring(HEADER_REQUEST_AUDIO_CALL.length , text.length)
+}
 export const isAudioCall = (text) => {
     if(text.startsWith(HEADER_AUDIO_CALL)) return true;
+    return false;
+}
+export const isRejectCallPeople = (text) => {
+    if(text.startsWith(HEADER_REJECT_CALL_PEOPLE)) return true;
+    return false;
+}
+export const isAudioCallFailed = (text) => {
+    if(text.startsWith(HEADER_AUDIO_CALL_FAILED)) return true;
+    return false;
+}
+export const isVideoCallFailed = (text) => {
+    if(text.startsWith(HEADER_VIDEO_CALL_FAILED)) return true;
     return false;
 }
 export const getMeetingRoom = (text) => {
@@ -106,6 +136,10 @@ export function getCurrentTime() {
     const date = new Date();
     const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
         + ':' + date.getMinutes()+':' + date.getSeconds();
+    return newTime;
+}
+export function getTimeHourAndMinute(msg) {
+    const newTime = msg.substring(msg.length - 8, msg.length-3);
     return newTime;
 }
 export const getAvatar = (type, peopleAvarars, groupAvatars, name) => {

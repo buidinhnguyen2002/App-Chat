@@ -53,7 +53,6 @@ export const callAPIGetPeopleChatMes = (name) => {
                 "event": "GET_PEOPLE_CHAT_MES",
                 "data": {
                     "name": name,
-                    // "name": '191302800',
                     "page": 1,
                 }
             }
