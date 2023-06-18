@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
@@ -9,13 +9,13 @@ import imgPolygon1 from '../../Assets/Image/Polygon 1.png';
 import imgPolygon2 from '../../Assets/Image/Polygon 2.png';
 import imgPolygon3 from '../../Assets/Image/Polygon 3.png';
 import imgSubtract from '../../Assets/Image/Subtract.png';
-import {callAPILogin, callAPIRegister, client, reConnectionServer, responseLogin} from '../../service/loginService';
+import { callAPILogin, callAPIRegister, client, reConnectionServer, responseLogin } from '../../service/loginService';
 import loginService from '../../service/loginService';
-import {loginSuccess, saveListChat} from "../../store/actions/userAction";
-import {connect, useDispatch} from "react-redux";
-import {redirect, Link, Navigate, useNavigate, json} from "react-router-dom";
+import { loginSuccess, saveListChat } from "../../store/actions/userAction";
+import { connect, useDispatch } from "react-redux";
+import { redirect, Link, Navigate, useNavigate, json } from "react-router-dom";
 import CryptoJS from 'crypto-js';
-import {decryptData, encryptData} from "../../util/function";
+import { decryptData, encryptData } from "../../util/function";
 
 function Login(props) {
     const [status, setStatus] = useState(props.status);
@@ -24,6 +24,8 @@ function Login(props) {
     const [retypePassword, setRetypePassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showRetypePassword, setShowRetypePassword] = useState(false);
+    const [error, setError] = useState('');
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -36,7 +38,7 @@ function Login(props) {
     }, [navigate]);
 
     const handleOnchangeInput = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         if (name === 'userName') {
             setUserName(value);
         }
@@ -47,6 +49,7 @@ function Login(props) {
             setRetypePassword(value);
         }
     }
+
     const changeStatus = () => {
         if (status == 'login') {
             setStatus('register');
@@ -57,7 +60,7 @@ function Login(props) {
 
     const handleLogin = () => {
         if (userName === '' || password === '') {
-            alert('Vui lòng nhập tài khoản và mật khẩu');
+            setError('Vui lòng nhập tài khoản và mật khẩu');
             return;
         }
 
@@ -77,34 +80,36 @@ function Login(props) {
                     dispatch(loginSuccess(userName));
                     return navigate('/chat');
                 } else {
-                    alert('Tài khoản hoặc mật khẩu không chính xác');
+                    setError('Tài khoản hoặc mật khẩu không chính xác');
                 }
             }
         };
 
         client.onerror = () => {
-            alert('Đã xảy ra lỗi khi kết nối đến máy chủ. Vui lòng thử lại sau.');
+            setError('Đã xảy ra lỗi khi kết nối đến máy chủ. Vui lòng thử lại sau.');
         };
     };
 
 
     const handleRegister = () => {
         if (userName === '' || password === '' || retypePassword === '') {
-            alert('Vui lòng nhập thông tin');
+            setError('Vui lòng nhập thông tin');
             return;
         }
         if (password !== retypePassword) {
-            alert('Mật khẩu và mật khẩu nhập lại không trùng nhau');
+            setError('Mật khẩu và mật khẩu nhập lại không được trùng nhau');
             return;
         }
         callAPIRegister(userName, password);
         alert('Đăng kí thành công!');
     };
+
     const toggleShowPassword = (event) => {
         const name = event.target.parentElement.getAttribute('name');
         const value = name == 'showPassword' ? !showPassword : !showRetypePassword;
         setShowPassword(value);
     }
+
     return (
         <div className="login-background col-12 d-flex justify-content-center align-items-center">
             <div className="login-container">
@@ -113,43 +118,43 @@ function Login(props) {
                 </div>
                 <div className="input-container">
                     <input className="d-block" type="text" name="userName" placeholder="Username" value={userName}
-                           onChange={(event) => handleOnchangeInput(event)}/>
+                           onChange={(event) => handleOnchangeInput(event)} />
                     <div className="password-wrapper">
                         <input className="d-block" name="password" type={showPassword ? 'text' : 'password'}
                                placeholder="Password" value={password}
-                               onChange={(event) => handleOnchangeInput(event)}/>
-                        <span style={{cursor: 'pointer'}} name="showPassword" onClick={toggleShowPassword}>
-                                <i className={showPassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
-                            </span>
+                               onChange={(event) => handleOnchangeInput(event)} />
+                        <span style={{ cursor: 'pointer' }} name="showPassword" onClick={toggleShowPassword}>
+              <i className={showPassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
+            </span>
                     </div>
                     {status === 'register' && <div className="password-wrapper">
                         <input className="d-block" type={showRetypePassword ? 'text' : 'password'} name="retypePassword"
                                placeholder="Retype password" value={retypePassword}
-                               onChange={(event) => handleOnchangeInput(event)}/>
-                        <span style={{cursor: 'pointer'}} name="showRetypePassword" onClick={toggleShowPassword}>
-                                <i className={showRetypePassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
-                            </span>
+                               onChange={(event) => handleOnchangeInput(event)} />
+                        <span style={{ cursor: 'pointer' }} name="showRetypePassword" onClick={toggleShowPassword}>
+              <i className={showRetypePassword ? 'bi bi-eye' : 'bi bi-eye-slash'}></i>
+            </span>
                     </div>}
                 </div>
+                {error && <p className="error-message">{error}</p>}
                 <button className="btn-login col-12"
                         onClick={status === 'login' ? handleLogin : handleRegister}>{status === 'login' ? 'Login' : 'Register'}</button>
-                <hr style={{borderColor: "#FFFFFF", borderWidth: "1px"}}/>
+                <hr style={{ borderColor: "#FFFFFF", borderWidth: "1px" }} />
                 <div className="register-container" onClick={changeStatus}>
                     <a>{status === 'login' ? 'Register' : 'Login'}</a></div>
             </div>
             <div className="img-decoration-container">
-                <img className="img-polygon1" src={imgPolygon1} alt=""/>
-                <img className="img-polygon2" src={imgPolygon2} alt=""/>
-                <img className="img-polygon3" src={imgPolygon3} alt=""/>
+                <img className="img-polygon1" src={imgPolygon1} alt="" />
+                <img className="img-polygon2" src={imgPolygon2} alt="" />
+                <img className="img-polygon3" src={imgPolygon3} alt="" />
                 <div className="img-ellipse-wrapper">
-                    <img className="img-ellipse1" src={imgEllipse1} alt=""/>
-                    <img className="img-ellipse2" src={imgEllipse2} alt=""/>
+                    <img className="img-ellipse1" src={imgEllipse1} alt="" />
+                    <img className="img-ellipse2" src={imgEllipse2} alt="" />
                 </div>
-                <img className="img-subtract" src={imgSubtract} alt=""/>
+                <img className="img-subtract" src={imgSubtract} alt="" />
             </div>
 
         </div>
     );
 }
-
 export default Login;

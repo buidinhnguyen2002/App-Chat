@@ -10,6 +10,7 @@
     .title-login {
       text-align: left;
       margin-bottom: 60px;
+
       .title-form {
         font-family: 'JK Abode', sans-serif;
         color: white;
@@ -17,13 +18,16 @@
         line-height: 96px;
         font-weight: 400;
       }
+
       img {
         width: 190px;
         object-fit: cover;
       }
     }
+
     .input-container {
       color: #999999;
+
       input {
         width: 100%;
         margin-bottom: 30px;
@@ -35,13 +39,16 @@
         color: white;
         font-size: 24px;
         line-height: 36px;
+
+        &::placeholder {
+          font-weight: 400;
+        }
       }
-      input::placeholder {
-        font-weight: 400;
-      }
-      .password-wrapper{
+
+      .password-wrapper {
         position: relative;
-        i{
+
+        i {
           position: absolute;
           font-size: 20px;
           top: 50%;
@@ -58,65 +65,79 @@
       border: none;
       outline: none;
       margin-bottom: 10px;
-      transition: all 0.5s linear ;
+      transition: all 0.5s linear;
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
-    .btn-login:hover{
-      opacity: 0.8;
-    }
-    .register-container>a{
+
+    .register-container > a {
       color: #999999;
       font-size: 20px;
       font-weight: bold;
     }
+
+    .error-message {
+      color: red;
+      font-size: 16px;
+      margin-top: 10px;
+      text-align: center;
+    }
   }
-  .img-decoration-container{
+
+  .img-decoration-container {
     position: absolute;
     width: 100%;
     height: 100%;
     pointer-events: none;
+
     img {
       position: absolute;
       object-fit: cover;
     }
-    .img-polygon1{
 
+    .img-polygon1 {
+      width: 150px;
+      bottom: 30px;
+      right: 60px;
     }
+
+    .img-polygon2 {
+      width: 150px;
+      bottom: 0;
+      right: 0;
+    }
+
+    .img-polygon3 {
+      width: 150px;
+      bottom: -55px;
+      right: -65px;
+    }
+
     .img-ellipse-wrapper {
       position: relative;
       top: 50%;
       transform: translateY(-40%);
       width: 100%;
       height: 100%;
+
       .img-ellipse1 {
         height: 600px;
         left: 0;
       }
+
       .img-ellipse2 {
         height: 50px;
         left: 100px;
         top: 65px;
       }
     }
+
     .img-subtract {
       top: 0;
       right: 0;
       width: 300px;
     }
-    .img-polygon1{
-      width:150px;
-      bottom: 30px;
-      right: 60px;
-    }
-    .img-polygon2{
-      width:150px;
-      bottom: 0;
-      right: 0;
-    }
-    .img-polygon3{
-      width:150px;
-      bottom: -55px;
-      right: -65px;
-    }
   }
-
 }

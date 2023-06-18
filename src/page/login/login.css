@@ -67,6 +67,12 @@
   font-size: 20px;
   font-weight: bold;
 }
+.login-background .login-container .error-message {
+  color: red;
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: center;
+}
 .login-background .img-decoration-container {
   position: absolute;
   width: 100%;
@@ -76,6 +82,21 @@
 .login-background .img-decoration-container img {
   position: absolute;
   object-fit: cover;
+}
+.login-background .img-decoration-container .img-polygon1 {
+  width: 150px;
+  bottom: 30px;
+  right: 60px;
+}
+.login-background .img-decoration-container .img-polygon2 {
+  width: 150px;
+  bottom: 0;
+  right: 0;
+}
+.login-background .img-decoration-container .img-polygon3 {
+  width: 150px;
+  bottom: -55px;
+  right: -65px;
 }
 .login-background .img-decoration-container .img-ellipse-wrapper {
   position: relative;
@@ -97,21 +118,6 @@
   top: 0;
   right: 0;
   width: 300px;
-}
-.login-background .img-decoration-container .img-polygon1 {
-  width: 150px;
-  bottom: 30px;
-  right: 60px;
-}
-.login-background .img-decoration-container .img-polygon2 {
-  width: 150px;
-  bottom: 0;
-  right: 0;
-}
-.login-background .img-decoration-container .img-polygon3 {
-  width: 150px;
-  bottom: -55px;
-  right: -65px;
 }
 
 /*# sourceMappingURL=login.css.map */
