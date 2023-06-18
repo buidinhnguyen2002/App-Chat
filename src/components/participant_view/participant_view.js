@@ -50,7 +50,7 @@ function ParticipantView(props) {
     }
 
     return (
-            <div className={` participant_view `} style={{width: props.width, height: props.height}}>
+         props.type === 1 ? <div className={` participant_view `} style={{width: props.width, height: props.height}}>
                 <audio ref={micRef} autoPlay playsInline muted={ isLocal} />
                 { webcamOn ? (
                     <ReactPlayer
@@ -72,7 +72,29 @@ function ParticipantView(props) {
                         <p>{displayName}</p>
                     </div>
                 </div>}
-            </div>
+            </div> : <div className={` participant_view ${displayName === myName ? 'my_view': ''}`} style={displayName === myName ? {width: "20%", height: "auto"} :{width: "100%", height: "100%"}}>
+             <audio ref={micRef} autoPlay playsInline muted={ isLocal} />
+             { webcamOn ? (
+                 <ReactPlayer
+                     playsinline
+                     pip={false}
+                     light={false}
+                     controls={false}
+                     muted={true}
+                     playing={true}
+                     url={videoStream}
+                     width="100%"
+                     height="100%"
+                     onError={(err) => {
+                         console.log(err, "participant video error");
+                     }}
+                 />
+             ) : <div className={`holder_participant ${displayName === myName ? 'my_holder': ''}`}>
+                 <div className={`title-container `}>
+                     <p>{displayName}</p>
+                 </div>
+             </div>}
+         </div>
     );
 }
 export default ParticipantView;

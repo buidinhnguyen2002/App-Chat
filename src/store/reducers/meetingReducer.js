@@ -1,7 +1,16 @@
+import {
+    HEADER_AUDIO_CALL,
+    HEADER_AUDIO_CALL_FAILED,
+    HEADER_VIDEO_CALL,
+    HEADER_VIDEO_CALL_FAILED
+} from "../../util/constants";
+import {callAPIGetPeopleChatMes, callAPISendChatPeople} from "../../service/loginService";
+
 const initialState = {
     meetingRoom: null,
     isCalling: null,
     isAudioCall: null,
+    isRequestCall: null,
 };
 export default function meetingReducer(state = initialState, action) {
     switch (action.type) {
@@ -45,6 +54,7 @@ export default function meetingReducer(state = initialState, action) {
             }
         }
         case 'REMOVE_PARTICIPANT': {
+            if(state.meetingRoom == null) return;
             return {
                 ...state,
                 meetingRoom: {
@@ -57,6 +67,30 @@ export default function meetingReducer(state = initialState, action) {
             return {
                 ...state,
                 isAudioCall: action.payload,
+            }
+        }
+        case 'SET_ACCEPT_CALL': {
+            let newMeetingRoom = {...state.meetingRoom};
+            if(action.payload){
+                newMeetingRoom.accept = action.payload;
+                const headerMeeting = state.isAudioCall ? HEADER_AUDIO_CALL : HEADER_VIDEO_CALL;
+                callAPISendChatPeople(state.meetingRoom.meetingName,headerMeeting+ JSON.stringify(newMeetingRoom));
+                callAPIGetPeopleChatMes(state.meetingRoom.meetingName);
+            }else{
+                newMeetingRoom = null;
+                const headerMeeting = state.isAudioCall ? HEADER_AUDIO_CALL_FAILED : HEADER_VIDEO_CALL_FAILED;
+                callAPISendChatPeople(state.meetingRoom.meetingName,headerMeeting);
+                callAPIGetPeopleChatMes(state.meetingRoom.meetingName);
+            }
+            return {
+                ...state,
+                meetingRoom: newMeetingRoom,
+            }
+        }
+        case 'SET_REQUEST_CALL': {
+            return {
+                ...state,
+                isRequestCall: action.payload,
             }
         }
         default:

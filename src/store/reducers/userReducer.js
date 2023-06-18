@@ -74,31 +74,16 @@ export default function userReducer(state = initialState, action) {
                 ...state,
                 currentChat: currentChatChoose,
             }
-        case '':
-            let chatRecive = action.payload;
-            let newListChat = [];
-            let chat = null;
-            if(chatRecive.type == 1){
-                chat = state.chatsRoom.find(room => room.name === chatRecive.to);
-                newListChat = [chatRecive, ...chat.chatData];
-            }
-            return {
-                ...state,
-                chatsRoom: {
-                    ...state.chatsRoom,
-
-                }
-            }
         case 'UPDATE_CHATS':
-            let isExist = false;
+            // let isExist = false;
             const updateChats = state.chatsRoom.map((room,index) => {
                 if(room.name === action.payload.name){
-                    isExist = true;
+                    // isExist = true;
                     return action.payload;
                 }
                 return room;
             });
-            if(!isExist) updateChats.push(action.payload);
+            // if(!isExist) updateChats.push(action.payload);
             return {
                 ...state,
                 chatsRoom: updateChats,

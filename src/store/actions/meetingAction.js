@@ -28,6 +28,18 @@ export function setCalling(isCalling) {
         payload: isCalling,
     }
 }
+export function setAcceptCall(isAccept) {
+    return {
+        type: "SET_ACCEPT_CALL",
+        payload: isAccept,
+    }
+}
+export function setRequestCall(isRequest) {
+    return {
+        type: "SET_REQUEST_CALL",
+        payload: isRequest,
+    }
+}
 export function rejectVideoCall() {
     return {
         type: "REJECT_VIDEO_CALL",

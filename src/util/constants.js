@@ -7,7 +7,12 @@ export const HEADER_REJECT_AUDIO_CALL = 'cmVqZWN0QXVkaW9DYWxs'; // rejectAudioCa
 export const HEADER_LEAVE_VIDEO_CALL = 'bGVhdmVWaWRlb0NhbGw='; //leaveVideoCall
 export const HEADER_LEAVE_AUDIO_CALL = 'bGVhdmVBdWRpb0NhbGw='; //leaveAudioCall
 export const HEADER_MEETING_END = 'bWVldGluZ0VuZA=='; //meetingEnd
+export const HEADER_REJECT_CALL_PEOPLE = 'cmVqZWN0Q2FsbFBlb3BsZQ=='; // rejectCallPeople
+export const HEADER_AUDIO_CALL_FAILED = 'YXVkaW9DYWxsRmFpbGVk'; // audioCallFailed
+export const HEADER_VIDEO_CALL_FAILED = 'dmlkZW9DYWxsRmFpbGVk'; // videoCallFailed
 export const HEADER_ACCEPT_VIDEO_CALL = 'YWNjZXB0'; //accept
+export const HEADER_REQUEST_CALL = 'cmVxdWVzdENhbGw='; // requestCall
+export const HEADER_REQUEST_AUDIO_CALL = 'YXVkaW9DYWxsUmVxdWVzdA=='; // audioCallRequest
 export const HEADER_JOIN_ROOM_MEETING = 'am9pblJvb21NZWV0aW5n'; //joinRoomMeeting
 export const HEADER_JOIN_ROOM_MEETING_AUDIO = 'am9pbk1lZXRpbmdBdWRpbw=='; // joinMeetingAudio
 export const HEADER_CONNECT_CHAT_PEOPLE = 'Y29ubmVjdENoYXRQZW9wbGU='; // connectChatPeople
