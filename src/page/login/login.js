@@ -74,6 +74,10 @@ function Login(props) {
     };
     const handleRegister = () => {
         callAPIRegister(userName, password);
+        client.onmessage = (message) => {
+            const dataFromServer = JSON.parse(message.data);
+            console.log(dataFromServer);
+        }
     }
     const toggleShowPassword = (event) => {
         const name = event.target.parentElement.getAttribute('name');

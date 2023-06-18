@@ -5,7 +5,7 @@ import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/login
 import {useDispatch, useSelector} from "react-redux";
 import {saveToListChatsDetail} from "../../store/actions/userAction";
 import {
-    getAvatar, isAudioCall, isAudioCallFailed,
+    getAvatar, isAcceptCall, isAudioCall, isAudioCallFailed,
     isJoinRoomMeeting, isJoinRoomMeetingAudio,
     isJSON,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
@@ -41,7 +41,8 @@ function ChatItem(props) {
         const owner = (isMyChat ? 'Bạn ' : type === 1 ?ownChat+ '': '');
         if(isVideoCallFailed(mesText)) return (isMyChat ? to : 'Bạn') + ' đã từ chối cuộc gọi video.';
         if(isAudioCallFailed(mesText)) return (isMyChat ? to : 'Bạn') + ' đã từ chối cuộc gọi thoại.';
-        if(isRejectCallPeople(mesText)) return  owner + ' đã từ chối cuộc gọi.';
+        if(isRejectCallPeople(mesText)) return  (ownChat === myName ? 'Bạn' : ownChat) + ' đã từ chối cuộc gọi.';
+        if(isAcceptCall(mesText)) return (ownChat === myName ? 'Bạn' : ownChat) + ' đã chấp nhận cuộc gọi.'
         if(isRequestCall(mesText)) return ownChat + ' đang gọi video cho bạn.';
         if(isRequestAudioCall(mesText)) return ownChat + ' đang gọi cho bạn.';
         if(isMeetingEnd(mesText)) return ' Cuộc gọi đã kết thúc.';
