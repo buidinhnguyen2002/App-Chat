@@ -155,11 +155,17 @@ function Login() {
                 </div>
                 {error && <p className="error-message">{error}</p>}
                 {registerSuccess && (
-                    <div className="success-message">
-                        <span className="tick-icon">&#10004;</span>
-                        <p>Đăng ký thành công!</p>
-                    </div>
+                    <>
+                        <div className="success-message show-overlay">
+                            <div className="tick-icon">
+                                <span>&#10004;</span>
+                            </div>
+                            <p>Đăng ký thành công!</p>
+                        </div>
+                        <div className="overlay"></div>
+                    </>
                 )}
+
 
                 <button className="btn-login col-12" onClick={status === 'login' ? handleLogin : handleRegister}>
                     {status === 'login' ? 'Login' : 'Register'}
