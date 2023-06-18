@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "./messages.scss";
 import {
     callAPIGetPeopleChatMes,
@@ -29,7 +29,7 @@ function InputMessage(props) {
     const [msgImgs, setMsgImgs] = useState([]);
     const [msgFileImgs, setMsgFileImgs] = useState([]);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
+    const fileInputRef = useRef(null);
     const handleOnchangeInput = (event) => {
         const value = event.target.value;
         const currentMsg = { ...msg };
@@ -191,13 +191,15 @@ function InputMessage(props) {
     const sendMsg = async () => {
         await handleUploadToFirebase();
     };
-
+    const handleChooseFile = () => {
+        fileInputRef.current.click();
+    };
     return (
         <div className="container-input">
             <div className="rectangle-16">
                 <div className="container-input-file">
-                    <input type="file" className={"input_file"} onChange={uploadImg} multiple />
-                    <i className="fa-solid fa-link"></i>
+                    <input type="file" className={"input_file"} onChange={uploadImg} ref={fileInputRef} multiple />
+                    <i className="fa-solid fa-link" onClick={handleChooseFile}></i>
                 </div>
                 <div className="message">
                     <div className="message_img">
