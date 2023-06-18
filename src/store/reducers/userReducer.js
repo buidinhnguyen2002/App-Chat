@@ -271,6 +271,12 @@ export default function userReducer(state = initialState, action) {
                 chats: chatsTmp,
             }
         }
+        case 'CLEAR_CURRENT_CHAT': {
+            return {
+                ...state,
+                currentChat: null,
+            }
+        }
         case 'LOGOUT_SUCCESS':
             return initialState;
         default:

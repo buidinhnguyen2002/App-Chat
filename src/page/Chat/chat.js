@@ -113,12 +113,11 @@ function ChatPage(props) {
                         const dataFromServer = JSON.parse(message.data);
                         const storedData = sessionStorage.getItem('dataReLogIn');
                         const dataReLogIn = decryptData(storedData);
-                        console.log(dataFromServer, "RELO");
                         dataReLogIn.keyReLogIn = dataFromServer['data']?.['RE_LOGIN_CODE'];
                         const encryptedData = encryptData(dataReLogIn);
                         sessionStorage.setItem('dataReLogIn', encryptedData);
                         dispatch(loginSuccess(dataReLogIn.userName));
-                        fetchAndSetMyImage(dataReLogIn.userName);
+                        // fetchAndSetMyImage(dataReLogIn.userName);
                     }
                     if(dataFromServer['event'] === 'GET_USER_LIST'){
                         const responseListChat = dataFromServer['data'].filter(chat => chat.name !== getAuthName());
@@ -128,7 +127,6 @@ function ChatPage(props) {
                     }
                 }
             })
-            // await getGroupAvatar(listChats);
             for (let i = 0; i < listChats.length; i++) {
                 const name = listChats[i].name;
                 const type = listChats[i].type;

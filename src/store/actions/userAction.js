@@ -118,3 +118,9 @@ export function setInitChat() {
         payload: null,
     }
 }
+export function clearCurrentChat() {
+    return {
+        type: "CLEAR_CURRENT_CHAT",
+        payload: null,
+    }
+}
