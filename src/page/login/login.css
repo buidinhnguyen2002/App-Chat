@@ -67,6 +67,54 @@
   font-size: 20px;
   font-weight: bold;
 }
+.login-background .login-container .tick-icon {
+  color: white;
+  background-color: #2ecc71;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 10px;
+}
+.login-background .login-container .success-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #2ecc71;
+  padding: 50px 80px;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  animation: slideIn 0.3s ease-in-out;
+  backdrop-filter: blur(10px);
+}
+.login-background .login-container .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+.login-background .login-container .success-message.show-overlay + .overlay {
+  opacity: 1;
+  visibility: visible;
+}
+.login-background .login-container .error-message {
+  color: red;
+  font-size: 16px;
+  margin-top: 10px;
+  text-align: center;
+}
 .login-background .img-decoration-container {
   position: absolute;
   width: 100%;
@@ -76,6 +124,21 @@
 .login-background .img-decoration-container img {
   position: absolute;
   object-fit: cover;
+}
+.login-background .img-decoration-container .img-polygon1 {
+  width: 150px;
+  bottom: 30px;
+  right: 60px;
+}
+.login-background .img-decoration-container .img-polygon2 {
+  width: 150px;
+  bottom: 0;
+  right: 0;
+}
+.login-background .img-decoration-container .img-polygon3 {
+  width: 150px;
+  bottom: -55px;
+  right: -65px;
 }
 .login-background .img-decoration-container .img-ellipse-wrapper {
   position: relative;
@@ -97,21 +160,6 @@
   top: 0;
   right: 0;
   width: 300px;
-}
-.login-background .img-decoration-container .img-polygon1 {
-  width: 150px;
-  bottom: 30px;
-  right: 60px;
-}
-.login-background .img-decoration-container .img-polygon2 {
-  width: 150px;
-  bottom: 0;
-  right: 0;
-}
-.login-background .img-decoration-container .img-polygon3 {
-  width: 150px;
-  bottom: -55px;
-  right: -65px;
 }
 
 /*# sourceMappingURL=login.css.map */
