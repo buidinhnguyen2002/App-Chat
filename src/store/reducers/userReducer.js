@@ -219,21 +219,12 @@ export default function userReducer(state = initialState, action) {
                 isCalling: action.payload,
             }
         }
-        case 'UPDATE_AVATAR': {
-            const currentChat = { ...state.currentChat };
-            currentChat.urlAvatar = action.payload.urlAvatar;
-            const chats = [...state.chats];
-            const chatsUpdate = chats.map(room => {
-                if(room.name === action.payload.nameChat){
-                    room.urlAvatar = action.payload.urlAvatar;
-                    return room;
-                }
-                return room;
-            });
+        case 'UPDATE_GROUP_AVATAR': {
+            const groupAvatars = [...state.avatarGroups];
+            groupAvatars.find(group => group.name === action.payload.nameChat).urlAvatar = action.payload.urlAvatar;
             return {
                 ...state,
-                currentChat: currentChat,
-                chats: chatsUpdate,
+                avatarGroups: groupAvatars,
             }
         }
         case 'UPDATE_MY_AVATAR': {

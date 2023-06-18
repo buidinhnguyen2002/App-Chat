@@ -18,18 +18,35 @@ import {
     receiveChat, receiveChatPeople, saveAllImage, saveGroupAvatar,
     saveListChat, savePeopleAvatar,
     saveToListChatsDetail,
-    saveToListChatsPeople, setInitChat, updateChat, updateChatPeople
+    saveToListChatsPeople, setInitChat, updateAvatar, updateChat, updateChatPeople
 } from "../../store/actions/userAction";
 import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
 import VideoCallScreen from "../../components/video_call_screen/video_call_screen";
 import {
-    decryptData, encryptData, getAuthName, getMeetingIdFromRequestAudioCall, getMeetingIdFromRequestCall,
+    decryptData,
+    encryptData,
+    getAuthName,
+    getMeetingIdFromRequestAudioCall,
+    getMeetingIdFromRequestCall,
     getMeetingRoom,
-    getNameParticipant, isAcceptCall, isAudioCall, isAudioCallFailed, isJoinRoomMeeting, isJoinRoomMeetingAudio,
-    isLeaveRoomMeeting, isLeaveRoomMeetingAudio, isMeetingEnd, isRejectCallPeople,
-    isRejectVideoCall, isRequestAudioCall, isRequestCall,
-    isVideoCall, isVideoCallFailed
+    getNameParticipant,
+    getURLUpdateGroupAvatar,
+    isAcceptCall,
+    isAudioCall,
+    isAudioCallFailed,
+    isJoinRoomMeeting,
+    isJoinRoomMeetingAudio,
+    isLeaveRoomMeeting,
+    isLeaveRoomMeetingAudio,
+    isMeetingEnd,
+    isRejectCallPeople,
+    isRejectVideoCall,
+    isRequestAudioCall,
+    isRequestCall,
+    isUpdateGroupAvatar,
+    isVideoCall,
+    isVideoCallFailed
 } from "../../util/function";
 import {
     HEADER_ACCEPT_VIDEO_CALL,
@@ -170,7 +187,9 @@ function ChatPage(props) {
                     const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
                         + ':' + date.getMinutes()+':' + date.getSeconds();
                     dataMessage.createAt = newTime;
-                    console.log(isRequestCall(dataMessage.mes))
+                    if(isUpdateGroupAvatar(dataMessage.mes)){
+                        dispatch(updateAvatar(dataMessage.to, getURLUpdateGroupAvatar(dataMessage.mes)));
+                    }
                     if(isRequestCall(dataMessage.mes)){
                         const roomRequest = {
                             meetId : getMeetingIdFromRequestCall(dataMessage.mes),

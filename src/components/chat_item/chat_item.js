@@ -10,7 +10,7 @@ import {
     isJSON,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
     isMeetingEnd, isRejectCallPeople,
-    isRejectRoomMeeting, isRequestAudioCall, isRequestCall,
+    isRejectRoomMeeting, isRequestAudioCall, isRequestCall, isUpdateGroupAvatar,
     isVideo, isVideoCall, isVideoCallFailed
 } from "../../util/function";
 function ChatItem(props) {
@@ -55,6 +55,7 @@ function ChatItem(props) {
     }
     function getNewMessage(msg, ownChat, type, to){
         const isMyChat = ownChat === myName;
+        if(isUpdateGroupAvatar(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã thay đổi ảnh nhóm.';
         if(isAudioCall(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã gọi cho ' + (to === myName ? 'bạn.': to);
         if(isVideoCall(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã gọi video cho ' + (to === myName ? 'bạn.': to);
         if(isVideo(msg)) return (isMyChat ? 'Bạn ' : type === 1 ?ownChat+ ': ': '') + 'đã gửi 1 video.';

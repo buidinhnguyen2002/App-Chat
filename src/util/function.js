@@ -4,7 +4,7 @@ import {
     HEADER_JOIN_ROOM_MEETING, HEADER_JOIN_ROOM_MEETING_AUDIO, HEADER_LEAVE_AUDIO_CALL,
     HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
     HEADER_MSG_VIDEO, HEADER_REJECT_CALL_PEOPLE,
-    HEADER_REJECT_VIDEO_CALL, HEADER_REQUEST_AUDIO_CALL, HEADER_REQUEST_CALL,
+    HEADER_REJECT_VIDEO_CALL, HEADER_REQUEST_AUDIO_CALL, HEADER_REQUEST_CALL, HEADER_UPDATE_GROUP_AVATAR,
     HEADER_VIDEO_CALL, HEADER_VIDEO_CALL_FAILED, USER_AVATAR_HOLDER
 } from "./constants";
 import CryptoJS from "crypto-js";
@@ -42,6 +42,13 @@ export const isAudioCall = (text) => {
 export const isRejectCallPeople = (text) => {
     if(text.startsWith(HEADER_REJECT_CALL_PEOPLE)) return true;
     return false;
+}
+export const isUpdateGroupAvatar = (text) => {
+    if(text.startsWith(HEADER_UPDATE_GROUP_AVATAR)) return true;
+    return false;
+}
+export const getURLUpdateGroupAvatar = (text) => {
+    return text.substring(HEADER_UPDATE_GROUP_AVATAR.length , text.length)
 }
 export const isAudioCallFailed = (text) => {
     if(text.startsWith(HEADER_AUDIO_CALL_FAILED)) return true;

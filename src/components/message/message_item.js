@@ -9,7 +9,7 @@ import {
     getURLVideo, isAcceptCall, isAudioCall, isAudioCallFailed, isConnectChatPeople,
     isJoinRoomMeeting, isJoinRoomMeetingAudio, isJSON,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio, isLink, isMeetingEnd, isRejectCallPeople,
-    isRejectRoomMeeting, isRequestAudioCall, isRequestCall,
+    isRejectRoomMeeting, isRequestAudioCall, isRequestCall, isUpdateGroupAvatar,
     isVideoCall, isVideoCallFailed
 } from "../../util/function";
 import {setAudioCall, setMeetingRoom} from "../../store/actions/meetingAction";
@@ -75,7 +75,8 @@ function MessageItem(props) {
         return decodeEntities(text);
     };
     const getMessage = () => {
-        const owner = (props.name === myName ? 'Bạn ':props.name)
+        const owner = (props.name === myName ? 'Bạn ':props.name);
+        if(isUpdateGroupAvatar(mesText)) return owner + ' đã thay đổi ảnh nhóm.';
         if(isConnectChatPeople(mesText)) return 'Giờ đây, các bạn có thể gọi và nhắn tin cho nhau.';
         if(isMeetingEnd(mesText)) return ' Cuộc gọi đã kết thúc.';
         if(isRejectCallPeople(mesText)) return  '';
