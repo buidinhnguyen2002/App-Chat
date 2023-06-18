@@ -2,6 +2,11 @@
 .link_preview{
   a.cl-white{
     color: $primary-color-white;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
   &-card{
     background-color: $primary-color-white;

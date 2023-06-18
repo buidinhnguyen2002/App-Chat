@@ -9,6 +9,7 @@
   }
   &-body{
     //position: relative;
+    background-color: $light-mode-color;
     height: calc(100% - 92px - 90px);
     overflow-x: hidden;
     overflow-y: scroll;

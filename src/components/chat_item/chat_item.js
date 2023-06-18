@@ -39,8 +39,8 @@ function ChatItem(props) {
     };
     const getMessageVideoCall = (isMyChat,mesText, ownChat, type, to) => {
         const owner = (isMyChat ? 'Bạn ' : type === 1 ?ownChat+ '': '');
-        if(isVideoCallFailed(mesText)) return (isMyChat ? ownChat : 'Bạn') + ' đã từ chối cuộc gọi video.';
-        if(isAudioCallFailed(mesText)) return (isMyChat ? ownChat : 'Bạn') + ' đã từ chối cuộc gọi thoại.';
+        if(isVideoCallFailed(mesText)) return (isMyChat ? to : 'Bạn') + ' đã từ chối cuộc gọi video.';
+        if(isAudioCallFailed(mesText)) return (isMyChat ? to : 'Bạn') + ' đã từ chối cuộc gọi thoại.';
         if(isRejectCallPeople(mesText)) return  owner + ' đã từ chối cuộc gọi.';
         if(isRequestCall(mesText)) return ownChat + ' đang gọi video cho bạn.';
         if(isRequestAudioCall(mesText)) return ownChat + ' đang gọi cho bạn.';
