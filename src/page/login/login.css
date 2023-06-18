@@ -67,6 +67,14 @@
   font-size: 20px;
   font-weight: bold;
 }
+.login-background .login-container .tick-icon {
+  color: green;
+  margin-right: 5px;
+}
+.login-background .login-container .tick-icon {
+  color: green;
+  margin-right: 5px;
+}
 .login-background .login-container .success-message {
   position: fixed;
   top: 50%;

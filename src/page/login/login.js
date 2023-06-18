@@ -101,13 +101,28 @@ function Login() {
         }
 
         callAPIRegister(userName, password);
-        setRegisterSuccess(true);
+        client.onmessage = (message) => {
+            const dataFromServer = JSON.parse(message.data);
+            console.log('reply' + message.data);
+            console.log(dataFromServer['status'], 'A');
 
-        setTimeout(() => {
-            setRegisterSuccess(false);
-            setStatus('login');
-        }, 1000);
+            if (dataFromServer['event'] === 'REGISTER') {
+                if (dataFromServer['status'] === 'success') {
+                    setRegisterSuccess(true);
+
+                    setTimeout(() => {
+                        setRegisterSuccess(false);
+                        setStatus('login');
+                    }, 1000);
+                } else {
+                    setError('Tên đăng nhập đã tồn tại. Vui lòng nhập tên khác!');
+                }
+            }
+        };
     };
+    useEffect(() => {
+        setError("");
+    }, [status]);
 
     const toggleShowPassword = (event) => {
         const name = event.target.parentElement.getAttribute('name');
@@ -144,9 +159,11 @@ function Login() {
                 {error && <p className="error-message">{error}</p>}
                 {registerSuccess && (
                     <div className="success-message">
+                        <span className="tick-icon">&#10004;</span>
                         <p>Đăng ký thành công!</p>
                     </div>
                 )}
+
                 <button className="btn-login col-12" onClick={status === 'login' ? handleLogin : handleRegister}>
                     {status === 'login' ? 'Login' : 'Register'}
                 </button>
