@@ -8,7 +8,7 @@ import {
     callAPICreateRoomChat, callAPIGetPeopleChatMes,
     callAPIGetRoomChatMes,
     callAPIGetUserList, callAPIJoinRoomChat,
-    callAPIReLogIn, callAPISendChatRoom, client,
+    callAPIReLogIn, callAPISendChatPeople, callAPISendChatRoom, client,
     reConnectionServer, waitConnection
 } from "../../service/loginService";
 import {useDispatch, useSelector} from "react-redux";
@@ -24,20 +24,25 @@ import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
 import VideoCallScreen from "../../components/video_call_screen/video_call_screen";
 import {
-    decryptData, encryptData, getAuthName,
+    decryptData, encryptData, getAuthName, getMeetingIdFromRequestAudioCall, getMeetingIdFromRequestCall,
     getMeetingRoom,
-    getNameParticipant, isAudioCall, isJoinRoomMeeting, isJoinRoomMeetingAudio,
-    isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
-    isRejectVideoCall,
-    isVideoCall
+    getNameParticipant, isAcceptCall, isAudioCall, isAudioCallFailed, isJoinRoomMeeting, isJoinRoomMeetingAudio,
+    isLeaveRoomMeeting, isLeaveRoomMeetingAudio, isMeetingEnd, isRejectCallPeople,
+    isRejectVideoCall, isRequestAudioCall, isRequestCall,
+    isVideoCall, isVideoCallFailed
 } from "../../util/function";
-import {HEADER_ACCEPT_VIDEO_CALL, HEADER_REJECT_VIDEO_CALL, HEADER_VIDEO_CALL} from "../../util/constants";
+import {
+    HEADER_ACCEPT_VIDEO_CALL,
+    HEADER_AUDIO_CALL,
+    HEADER_REJECT_VIDEO_CALL,
+    HEADER_VIDEO_CALL
+} from "../../util/constants";
 import ChatDetailHeader from "../../components/chat_detail_header/chat_detail_header";
 import {MeetingProvider} from "@videosdk.live/react-sdk";
 import {authToken} from "../../service/VideoCallService";
 import {
-    addParticipant,
-    removeParticipant,
+    addParticipant, rejectVideoCall,
+    removeParticipant, setAcceptCall,
     setAudioCall,
     setCalling,
     setMeetingRoom
@@ -51,10 +56,11 @@ function ChatPage(props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
     const audioCall = useSelector(state => state.meetingReducer.isAudioCall);
     const userCheck = useSelector(state => state.apiReducer.userCheck);
+    const meetingRoomData = useSelector(state => state.meetingReducer.meetingRoom);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [videoCall, setVideoCall] = useState(false);
-    const meetingRoom = useSelector(state => state.meetingReducer.meetingRoom);
+
     const handleLeaveVideoCall = () => {
         setVideoCall(false);
     }
@@ -151,8 +157,8 @@ function ChatPage(props) {
             });
             dispatch(saveToListChatsDetail(chatsRoom));
             dispatch(saveToListChatsPeople(chatPeople));
-            // await fetchAndSetAvatar(listRoom, "group_avatar/", true);
-            // await fetchAndSetAvatar(listPeople, "people_avatar/", false);
+            await fetchAndSetAvatar(listRoom, "group_avatar/", true);
+            await fetchAndSetAvatar(listPeople, "people_avatar/", false);
             dispatch(setInitChat());
             client.onmessage = (message) => {
                 const dataFromServer = JSON.parse(message.data);
@@ -164,19 +170,47 @@ function ChatPage(props) {
                     const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
                         + ':' + date.getMinutes()+':' + date.getSeconds();
                     dataMessage.createAt = newTime;
+                    console.log(isRequestCall(dataMessage.mes))
+                    if(isRequestCall(dataMessage.mes)){
+                        const roomRequest = {
+                            meetId : getMeetingIdFromRequestCall(dataMessage.mes),
+                            meetingName: dataMessage.to,
+                            owner: dataMessage.name,
+                        }
+                        dispatch(setMeetingRoom(roomRequest));
+                        dispatch(setCalling(true));
+                    }
+                    if(isRequestAudioCall(dataMessage.mes)){
+                        const roomRequest = {
+                            meetId : getMeetingIdFromRequestAudioCall(dataMessage.mes),
+                            meetingName: dataMessage.to,
+                            owner: dataMessage.name,
+                        }
+                        dispatch(setAudioCall(true));
+                        dispatch(setMeetingRoom(roomRequest));
+                        dispatch(setCalling(true));
+                    }
+                    if(isMeetingEnd(dataMessage.mes) || isAudioCallFailed(dataMessage.mes) || isVideoCallFailed(dataMessage.mes)){
+                        dispatch(rejectVideoCall());
+                    }
+                    if(isAcceptCall(dataMessage.mes)){
+                        dispatch(setAcceptCall(true));
+                    }
+                    if(isRejectCallPeople(dataMessage.mes)){
+                        dispatch(setAcceptCall(false));
+                    }
                     if(isVideoCall(dataMessage.mes)){
                         const meetingRoom = getMeetingRoom(dataMessage.mes);
                         dispatch(setMeetingRoom(meetingRoom));
                         dispatch(setCalling(true));
-                        dispatch(addParticipant());
-                        return;
+                        dispatch(addParticipant(dataMessage.name));
                     }
                     if(isAudioCall(dataMessage.mes)){
                         const meetingRoom = getMeetingRoom(dataMessage.mes);
                         dispatch(setMeetingRoom(meetingRoom));
                         dispatch(setCalling(true));
                         dispatch(setAudioCall(true));
-                        return;
+                        dispatch(addParticipant(dataMessage.name));
                     }
                     if(isJoinRoomMeeting(dataMessage.mes) || isJoinRoomMeetingAudio(dataMessage.mes)){
                         const participant = dataMessage.name;
@@ -244,6 +278,13 @@ function ChatPage(props) {
         }
         f();
     }, []);
+    const callPeople = () => {
+        if(currentAuth === meetingRoomData.owner) {
+            const headerMeeting = audioCall ? HEADER_AUDIO_CALL : HEADER_VIDEO_CALL;
+            callAPISendChatPeople(meetingRoomData.meetingName,headerMeeting+ JSON.stringify(meetingRoomData));
+            callAPIGetPeopleChatMes(meetingRoomData.meetingName);
+        }
+    }
     const fetchAndSetAvatar = async (list, folderPath, isGroup) => {
         const storage = getStorage();
         const folderRef = ref(storage, folderPath);
@@ -371,15 +412,17 @@ function ChatPage(props) {
             <div className="detail">
                 <Outlet/>
             </div>
-            {(meetingRoom != null) && <MeetingProvider
+            {(meetingRoomData != null) && <MeetingProvider
                 config={{
-                    meetingId: meetingRoom.meetId,
+                    meetingId: meetingRoomData.meetId,
                     micEnabled: true,
                     webcamEnabled: audioCall == true ? false : true,
                     name: currentAuth,
                 }}
                 token={authToken}
-            ><VideoCallScreen /></MeetingProvider>}
+            >
+                 <VideoCallScreen meetId={meetingRoomData.meetId}/>
+                </MeetingProvider>}
         </div>
     )
 }

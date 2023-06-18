@@ -5,13 +5,13 @@ import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/login
 import {useDispatch, useSelector} from "react-redux";
 import {saveToListChatsDetail} from "../../store/actions/userAction";
 import {
-    getAvatar,
+    getAvatar, isAudioCall, isAudioCallFailed,
     isJoinRoomMeeting, isJoinRoomMeetingAudio,
     isJSON,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
-    isMeetingEnd,
-    isRejectRoomMeeting,
-    isVideo
+    isMeetingEnd, isRejectCallPeople,
+    isRejectRoomMeeting, isRequestAudioCall, isRequestCall,
+    isVideo, isVideoCall, isVideoCallFailed
 } from "../../util/function";
 function ChatItem(props) {
     const [isChoose, setIsChoose] = useState(props.isChoose);
@@ -39,7 +39,12 @@ function ChatItem(props) {
     };
     const getMessageVideoCall = (isMyChat,mesText, ownChat, type, to) => {
         const owner = (isMyChat ? 'Bạn ' : type === 1 ?ownChat+ '': '');
-        if(isMeetingEnd(mesText)) return ' Cuộc gọi video đã kết thúc.';
+        if(isVideoCallFailed(mesText)) return (isMyChat ? ownChat : 'Bạn') + ' đã từ chối cuộc gọi video.';
+        if(isAudioCallFailed(mesText)) return (isMyChat ? ownChat : 'Bạn') + ' đã từ chối cuộc gọi thoại.';
+        if(isRejectCallPeople(mesText)) return  owner + ' đã từ chối cuộc gọi.';
+        if(isRequestCall(mesText)) return ownChat + ' đang gọi video cho bạn.';
+        if(isRequestAudioCall(mesText)) return ownChat + ' đang gọi cho bạn.';
+        if(isMeetingEnd(mesText)) return ' Cuộc gọi đã kết thúc.';
         if(isJoinRoomMeetingAudio(mesText)) return owner + ' đã tham gia cuộc gọi.';
         if(isJoinRoomMeeting(mesText)) return owner + ' đã tham gia đoạn chat video.';
         if(isRejectRoomMeeting(mesText)) return  owner + ' đã từ chối tham gia đoạn chat video.';
@@ -49,6 +54,8 @@ function ChatItem(props) {
     }
     function getNewMessage(msg, ownChat, type, to){
         const isMyChat = ownChat === myName;
+        if(isAudioCall(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã gọi cho ' + (to === myName ? 'bạn.': to);
+        if(isVideoCall(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã gọi video cho ' + (to === myName ? 'bạn.': to);
         if(isVideo(msg)) return (isMyChat ? 'Bạn ' : type === 1 ?ownChat+ ': ': '') + 'đã gửi 1 video.';
         const getMessageMeeting = getMessageVideoCall(isMyChat, msg, ownChat, type, to);
         if(getMessageMeeting != null) return getMessageMeeting;

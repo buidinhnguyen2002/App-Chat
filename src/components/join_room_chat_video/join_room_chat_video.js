@@ -1,4 +1,11 @@
 import "./join_room_chat_video.scss"
+import {HEADER_AUDIO_CALL, HEADER_VIDEO_CALL} from "../../util/constants";
+import {
+    callAPIGetPeopleChatMes,
+    callAPIGetRoomChatMes,
+    callAPISendChatPeople,
+    callAPISendChatRoom
+} from "../../service/loginService";
 function JoinRoomChatVideo(props){
     const getTitle = () => {
         if(props.meetingRoom.newRoom) return "Đoạn chat video đã kết thúc.";
@@ -12,8 +19,9 @@ function JoinRoomChatVideo(props){
         if(props.meetingRoom.join != null){
             return "Tham gia";
         }
-        return "Gọi.";
+        return "Gọi";
     }
+
     return (
         <div className={'join_room-container'}>
             <p className={'title'}>{getTitle()}</p>
