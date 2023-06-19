@@ -28,6 +28,7 @@ import ParticipantView from "../participant_view/participant_view";
 import JoinRoomChatVideo from "../join_room_chat_video/join_room_chat_video";
 import PresenterView from "../participant_view/PresenterView";
 import {deactivateRoom} from "../../service/VideoCallService";
+import {getNameChat} from "../../util/function";
 
 function VideoCallScreen(props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
@@ -36,6 +37,8 @@ function VideoCallScreen(props) {
     const isAudioCall = useSelector(state => state.meetingReducer.isAudioCall);
     const peopleAvarars = useSelector(state => state.userReducer.avatarPeople);
     const groupAvatars =  useSelector(state => state.userReducer.avatarGroups);
+    const groupNickName = useSelector(state => state.userReducer.nickNameGroups);
+    const peopleNickName = useSelector(state => state.userReducer.nickNamePeople);
     const dispatch = useDispatch();
     const receiveCall = useSelector(state => state.meetingReducer.isCalling);
     const meetingId = props.meetingId;
@@ -270,7 +273,8 @@ function VideoCallScreen(props) {
                                 {/*     alt=""/>*/}
                                 <img src={getAvatarCall(meetingRoom.owner,0)}
                                      alt=""/>
-                                 <p className={'name_call'}>{meetingRoom.owner}</p>
+                                 {/*<p className={'name_call'}>{meetingRoom.owner}</p>*/}
+                                <p className={'name_call'}>{getNameChat( 0 , peopleNickName, groupNickName, meetingRoom.owner)}</p>
                             </div>
                             <div className="connecting">
                                 <img src={connecting1} alt=""/>
@@ -282,7 +286,8 @@ function VideoCallScreen(props) {
                                 {/*     alt=""/>*/}
                                 <img src={getAvatarCall(meetingRoom.meetingName, meetingRoom.type) }
                                      alt=""/>
-                                <p className={'name_call'}>{meetingRoom.meetingName}</p>
+                                {/*<p className={'name_call'}>{meetingRoom.meetingName}</p>*/}
+                                <p className={'name_call'}>{getNameChat( meetingRoom.type , peopleNickName, groupNickName, meetingRoom.meetingName)}</p>
                             </div>
                         </div>
                         <p>Connecting...</p>
@@ -307,7 +312,8 @@ function VideoCallScreen(props) {
                         <div className="avatar from">
                             <img src={getAvatarCall(meetingRoom.owner,0)}
                                  alt=""/>
-                            <p className={'name_call'}>{meetingRoom.owner}</p>
+                            {/*<p className={'name_call'}>{meetingRoom.owner}</p>*/}
+                            <p className={'name_call'}>{getNameChat( 0 , peopleNickName, groupNickName, meetingRoom.owner)}</p>
                         </div>
                         <div className="connecting">
                             <img src={connecting1} alt=""/>
@@ -317,7 +323,8 @@ function VideoCallScreen(props) {
                         <div className="avatar to">
                             <img src={getAvatarCall(meetingRoom.meetingName, meetingRoom.type) }
                                  alt=""/>
-                            <p className={'name_call'}>{meetingRoom.meetingName}</p>
+                            {/*<p className={'name_call'}>{meetingRoom.meetingName}</p>*/}
+                            <p className={'name_call'}>{getNameChat( meetingRoom.type , peopleNickName, groupNickName, meetingRoom.meetingName)}</p>
                         </div>
                     </div>
                     <p>Connecting...</p>
