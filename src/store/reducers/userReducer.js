@@ -229,6 +229,32 @@ export default function userReducer(state = initialState, action) {
                 avatarGroups: groupAvatars,
             }
         }
+        case 'UPDATE_GROUP_NAME': {
+            const nickNameGroups = [...state.nickNameGroups];
+            const group = nickNameGroups.find(group => group.name === action.payload.nameChat);
+            if(group) {
+                group.nickName = action.payload.nickName;
+            }else{
+                nickNameGroups.push({name: action.payload.nameChat, nickName: action.payload.nickName});
+            }
+            return {
+                ...state,
+                nickNameGroups: nickNameGroups,
+            }
+        }
+        case 'UPDATE_PEOPLE_NAME': {
+            const nickNamePeople = [...state.nickNamePeople];
+            const people = nickNamePeople.find(people => people.name === action.payload.nameChat);
+            if(people) {
+                people.nickName = action.payload.nickName;
+            }else{
+                nickNamePeople.push({name: action.payload.nameChat, nickName: action.payload.nickName});
+            }
+            return {
+                ...state,
+                nickNamePeople: nickNamePeople,
+            }
+        }
         case 'UPDATE_MY_AVATAR': {
             const avatarPeople = [...state.avatarPeople];
             avatarPeople.find(people => people.name === action.payload.name).urlAvatar = action.payload.urlAvatar;

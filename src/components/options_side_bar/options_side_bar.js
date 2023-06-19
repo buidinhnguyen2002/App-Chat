@@ -4,8 +4,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import app, {storage} from "../../firebase";
 import {v4} from "uuid";
-import {updateAvatar} from "../../store/actions/userAction";
-import {GROUP_AVATAR_HOLDER, HEADER_UPDATE_GROUP_AVATAR, USER_AVATAR_HOLDER} from "../../util/constants";
+import {updateAvatar, updateGroupName, updatePeopleName} from "../../store/actions/userAction";
+import {
+    GROUP_AVATAR_HOLDER,
+    HEADER_UPDATE_GROUP_AVATAR,
+    HEADER_UPDATE_GROUP_NAME,
+    USER_AVATAR_HOLDER
+} from "../../util/constants";
 import {getAvatar, getNameChat} from "../../util/function";
 import {callAPIGetRoomChatMes, callAPISendChatRoom} from "../../service/loginService";
 import {getDatabase, set, ref as refFirebase} from "firebase/database";
@@ -46,6 +51,15 @@ function OptionsSideBar(props) {
         const nickName = document.getElementById('nickName').value;
         const database = getDatabase();
         set(refFirebase(database, path + currentChat.name), {nickName});
+        if(currentChat.type !==0){
+            callAPISendChatRoom(currentChat.name, HEADER_UPDATE_GROUP_NAME+ nickName);
+            callAPIGetRoomChatMes(currentChat.name);
+            dispatch(updateGroupName(currentChat.name, nickName));
+        }else{
+            dispatch(updatePeopleName(currentChat.name, nickName));
+        }
+        document.getElementById('nickName').value = '';
+        toggleOpenEditName();
     };
     const handleChooseImage = () => {
         fileInputRef.current.click();

@@ -18,7 +18,7 @@ import {
     receiveChat, receiveChatPeople, saveAllImage, saveGroupAvatar, saveGroupName,
     saveListChat, savePeopleAvatar, savePeopleNickName,
     saveToListChatsDetail,
-    saveToListChatsPeople, setInitChat, updateAvatar, updateChat, updateChatPeople
+    saveToListChatsPeople, setInitChat, updateAvatar, updateChat, updateChatPeople, updateGroupName
 } from "../../store/actions/userAction";
 import listChats from "../../components/list_chats/list-chats";
 import {storage} from "../../firebase";
@@ -26,7 +26,7 @@ import VideoCallScreen from "../../components/video_call_screen/video_call_scree
 import {
     decryptData,
     encryptData,
-    getAuthName,
+    getAuthName, getGroupNameChange,
     getMeetingIdFromRequestAudioCall,
     getMeetingIdFromRequestCall,
     getMeetingRoom,
@@ -44,7 +44,7 @@ import {
     isRejectVideoCall,
     isRequestAudioCall,
     isRequestCall,
-    isUpdateGroupAvatar,
+    isUpdateGroupAvatar, isUpdateGroupName,
     isVideoCall,
     isVideoCallFailed
 } from "../../util/function";
@@ -189,6 +189,7 @@ function ChatPage(props) {
                     const newTime = date.getFullYear()+ '-'+ date.getMonth() + '-'+ date.getDay() + ' ' + date.getHours()
                         + ':' + date.getMinutes()+':' + date.getSeconds();
                     dataMessage.createAt = newTime;
+                    if(isUpdateGroupName(dataMessage.mes)) dispatch(updateGroupName(dataMessage.to, getGroupNameChange(dataMessage.mes)));
                     if(isUpdateGroupAvatar(dataMessage.mes)){
                         dispatch(updateAvatar(dataMessage.to, getURLUpdateGroupAvatar(dataMessage.mes)));
                     }
