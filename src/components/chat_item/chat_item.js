@@ -5,7 +5,7 @@ import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/login
 import {useDispatch, useSelector} from "react-redux";
 import {saveToListChatsDetail} from "../../store/actions/userAction";
 import {
-    getAvatar, isAcceptCall, isAudioCall, isAudioCallFailed,
+    getAvatar, getNameChat, isAcceptCall, isAudioCall, isAudioCallFailed,
     isJoinRoomMeeting, isJoinRoomMeetingAudio,
     isJSON,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
@@ -22,6 +22,8 @@ function ChatItem(props) {
     const myName = useSelector(state => state.userReducer.username);
     const peopleAvarars = useSelector(state => state.userReducer.avatarPeople);
     const groupAvatars =  useSelector(state => state.userReducer.avatarGroups);
+    const groupNickName = useSelector(state => state.userReducer.nickNameGroups);
+    const peopleNickName = useSelector(state => state.userReducer.nickNamePeople);
     let newMess = null;
     let timeShort = "";
     if(chatData) {
@@ -90,7 +92,9 @@ function ChatItem(props) {
                 <div className="chat-wrapper">
                     <div className="chat_content-wrapper">
                         <div className="chat_name ">
-                            <h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{props.name}</h4>
+                            {/*<h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{props.name}</h4>*/}
+                            <h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{getNameChat(props.type === 0 ? 0 : 1, peopleNickName, groupNickName, props.name)}</h4>
+
                         </div>
                         <div className="chat_message">
                             <h5 className={`${props.isChoose ? 'chat_message-clWhite':'chat_message-clGrey'}`}>{newMess != null ?  getNewMessage(newMess.mes, newMess.name, newMess.type, newMess.to): ""}</h5>

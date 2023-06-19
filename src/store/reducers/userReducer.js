@@ -13,6 +13,8 @@ const initialState = {
     images: [],
     avatarPeople: [],
     avatarGroups: [],
+    nickNameGroups: [],
+    nickNamePeople: [],
 };
 let isInit = true;
 
@@ -245,6 +247,18 @@ export default function userReducer(state = initialState, action) {
             return {
                 ...state,
                 avatarGroups: action.payload,
+            }
+        }
+        case 'SAVE_GROUP_NAME': {
+            return {
+                ...state,
+                nickNameGroups: action.payload,
+            }
+        }
+        case 'SAVE_PEOPLE_NICK_NAME': {
+            return {
+                ...state,
+                nickNamePeople: action.payload,
             }
         }
         case 'ADD_PEOPLE': {

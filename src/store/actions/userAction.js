@@ -124,3 +124,15 @@ export function clearCurrentChat() {
         payload: null,
     }
 }
+export function saveGroupName(listGroupName) {
+    return {
+        type: "SAVE_GROUP_NAME",
+        payload: listGroupName,
+    }
+}
+export function savePeopleNickName(listPeoplNickName) {
+    return {
+        type: "SAVE_PEOPLE_NICK_NAME",
+        payload: listPeoplNickName,
+    }
+}

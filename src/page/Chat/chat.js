@@ -15,8 +15,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     addPeople, changeCurrentChat,
     loginSuccess,
-    receiveChat, receiveChatPeople, saveAllImage, saveGroupAvatar,
-    saveListChat, savePeopleAvatar,
+    receiveChat, receiveChatPeople, saveAllImage, saveGroupAvatar, saveGroupName,
+    saveListChat, savePeopleAvatar, savePeopleNickName,
     saveToListChatsDetail,
     saveToListChatsPeople, setInitChat, updateAvatar, updateChat, updateChatPeople
 } from "../../store/actions/userAction";
@@ -67,9 +67,11 @@ import {
 import CryptoJS from "crypto-js";
 import store from "../../store/store";
 import {setError, setUserExist} from "../../store/actions/apiAction";
+import { getDatabase, ref as refFirebase, child, get } from "firebase/database";
 
 function ChatPage(props) {
     const currentAuth = useSelector(state => state.userReducer.username);
+    const chats = useSelector(state => state.userReducer.chats);
     const currentChat = useSelector(state => state.userReducer.currentChat);
     const audioCall = useSelector(state => state.meetingReducer.isAudioCall);
     const userCheck = useSelector(state => state.apiReducer.userCheck);
@@ -175,6 +177,8 @@ function ChatPage(props) {
             await fetchAndSetAvatar(listRoom, "group_avatar/", true);
             await fetchAndSetAvatar(listPeople, "people_avatar/", false);
             dispatch(setInitChat());
+            getNickName(1);
+            getNickName(0);
             client.onmessage = (message) => {
                 const dataFromServer = JSON.parse(message.data);
                 console.log(dataFromServer, 'check user')
@@ -344,73 +348,42 @@ function ChatPage(props) {
             console.error("Error listing folders:", error);
         }
     }
-    const getPeopleAvatar = async (listPeople) => {
-        const storage = getStorage();
-        const folderRef = ref(storage, "people_avatar/");
-        try {
-            const result = await listAll(folderRef);
-            let avatarPeoples = [];
-            for (const folder of result.prefixes) {
-                for (let i = 0; i < listPeople.length; i++) {
-                    const people = listPeople[i];
-                    const stor = getStorage();
-                    if (folder.name === people) {
-                        const path = folder.fullPath + '/avatar';
-                        const imageRef = ref(stor, path);
-                        try {
-                            const downloadURL = await getDownloadURL(imageRef);
-                            const avatar = {
-                                name: people,
-                                urlAvatar: downloadURL,
-                            }
-                            avatarPeoples.push(avatar);
-                        } catch (error) {
-                            console.log(error);
+
+    const getNickName = (type) => {
+        let listNickName = [];
+        const path = type === 1 ? 'group_nick_name/': 'people_nick_name/';
+        const dbRef = refFirebase(getDatabase());
+        get(child(dbRef, `${path}`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                Object.keys(data).forEach((name) => {
+                    const item = data[name];
+                    if(type === 1){
+                        if(chats.find(chat => chat.type === 1 && chat.name === name) !== null){
+                            listNickName.push({name: name, nickName: item.nickName});
+                        }else{
+                            listNickName.push({name: name, nickName: name});
                         }
-                    } else {
-                        const avatar = {
-                            name: people,
-                            urlAvatar: 'data:image/jpeg;base64,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',
+                    }else{
+                        if(chats.find(chat =>chat.type === 0 && chat.name === name) !== null){
+                            listNickName.push({name: name, nickName: item.nickName});
+                        }else{
+                            listNickName.push({name: name, nickName: name});
                         }
-                        avatarPeoples.push(avatar);
                     }
+                });
+                if(type === 1){
+                    dispatch(saveGroupName(listNickName));
+                }else{
+                    dispatch(savePeopleNickName(listNickName));
                 }
+            } else {
+                console.log("No data available");
             }
-            dispatch(savePeopleAvatar(avatarPeoples));
-        } catch (error) {
-            console.error("Error listing folders:", error);
-        }
+        }).catch((error) => {
+            console.error(error);
+        });
     }
-    const getGroupAvatar = async (list) => {
-        const storage = getStorage();
-        const folderRef = ref(storage, "group_avatar/");
-        try {
-            const result = await listAll(folderRef);
-            for (const folder of result.prefixes) {
-                for (let i = 0; i < list.length; i++) {
-                    const chat = list[i];
-                    if (chat.type === 0) continue;
-                    const chatName = chat.name;
-                    const stor = getStorage();
-                    if (folder.name === chatName) {
-                        const path = folder.fullPath + '/avatar';
-                        const imageRef = ref(stor, path);
-                        try {
-                            const downloadURL = await getDownloadURL(imageRef);
-                            chat.urlAvatar = downloadURL;
-                        } catch (error) {
-                            chat.urlAvatar = "https://png.pngtree.com/element_our/png_detail/20181021/group-avatar-icon-design-vector-png_141882.jpg";
-                        }
-                    } else {
-                        chat.urlAvatar = "https://png.pngtree.com/element_our/png_detail/20181021/group-avatar-icon-design-vector-png_141882.jpg";
-                    }
-                }
-            }
-            dispatch(saveListChat(list));
-        } catch (error) {
-            console.error("Error listing folders:", error);
-        }
-    };
     const fetchAndSetMyImage = (myName) => {
         const imageListRef = ref(storage, `images/${myName}/`);
         listAll(imageListRef).then((response)=> {

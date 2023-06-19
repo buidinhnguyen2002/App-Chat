@@ -150,16 +150,6 @@ export function getTimeHourAndMinute(msg) {
     return newTime;
 }
 export const getAvatar = (type, peopleAvarars, groupAvatars, name) => {
-    // let urlAvatar ='';
-    // if(currentChat.type == 0){
-    //     const avatar = peopleAvarars.find(ava => ava.name === currentChat.name);
-    //     urlAvatar = avatar ? avatar.urlAvatar : USER_AVATAR_HOLDER;
-    // }else{
-    //     const avatar = groupAvatars.find(ava => ava.name === currentChat.name);
-    //     urlAvatar = avatar ? avatar.urlAvatar : GROUP_AVATAR_HOLDER
-    // }
-    // return urlAvatar;
-
     let urlAvatar ='';
     if(type == 0){
         const avatar = peopleAvarars.find(ava => ava.name === name);
@@ -169,4 +159,16 @@ export const getAvatar = (type, peopleAvarars, groupAvatars, name) => {
         urlAvatar = avatar ? avatar.urlAvatar : GROUP_AVATAR_HOLDER
     }
     return urlAvatar;
+}
+export const getNameChat = (type, peopleNickName, groupNickName, name) => {
+    let nickName ='';
+    if(type == 0){
+        const people = peopleNickName.find(people => people.name === name);
+        nickName = people ? people.nickName : name;
+    }else{
+        const group = groupNickName.find(group => group.name === name);
+        nickName = group ? group.nickName : name;
+        console.log(group);
+    }
+    return nickName;
 }
