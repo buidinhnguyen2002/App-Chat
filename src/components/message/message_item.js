@@ -6,7 +6,7 @@ import {HEADER_MSG_VIDEO, USER_AVATAR_HOLDER} from "../../util/constants";
 import {
     getCurrentTimeHourAndMinute,
     getMeetingRoom, getMeetingRoomAudio, getTimeHourAndMinute,
-    getURLVideo, isAcceptCall, isAudioCall, isAudioCallFailed, isConnectChatPeople,
+    getURLVideo, isAcceptCall, isAudioCall, isAudioCallFailed, isConnectChatPeople, isJoinGroup,
     isJoinRoomMeeting, isJoinRoomMeetingAudio, isJSON,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio, isLink, isMeetingEnd, isRejectCallPeople,
     isRejectRoomMeeting, isRequestAudioCall, isRequestCall, isUpdateGroupAvatar, isUpdateGroupName,
@@ -76,6 +76,7 @@ function MessageItem(props) {
     };
     const getMessage = () => {
         const owner = (props.name === myName ? 'Bạn ':props.name);
+        if(isJoinGroup(mesText)) return owner + ' đã tham gia nhóm.';
         if(isUpdateGroupName(mesText)) return owner + ' đã thay đổi tên nhóm.';
         if(isUpdateGroupAvatar(mesText)) return owner + ' đã thay đổi ảnh nhóm.';
         if(isConnectChatPeople(mesText)) return 'Giờ đây, các bạn có thể gọi và nhắn tin cho nhau.';
