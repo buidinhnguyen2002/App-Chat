@@ -4,7 +4,7 @@ import {
     HEADER_JOIN_ROOM_MEETING, HEADER_JOIN_ROOM_MEETING_AUDIO, HEADER_LEAVE_AUDIO_CALL,
     HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
     HEADER_MSG_VIDEO, HEADER_REJECT_CALL_PEOPLE,
-    HEADER_REJECT_VIDEO_CALL, HEADER_REQUEST_AUDIO_CALL, HEADER_REQUEST_CALL,
+    HEADER_REJECT_VIDEO_CALL, HEADER_REQUEST_AUDIO_CALL, HEADER_REQUEST_CALL, HEADER_UPDATE_GROUP_AVATAR,
     HEADER_VIDEO_CALL, HEADER_VIDEO_CALL_FAILED, USER_AVATAR_HOLDER
 } from "./constants";
 import CryptoJS from "crypto-js";
@@ -42,6 +42,13 @@ export const isAudioCall = (text) => {
 export const isRejectCallPeople = (text) => {
     if(text.startsWith(HEADER_REJECT_CALL_PEOPLE)) return true;
     return false;
+}
+export const isUpdateGroupAvatar = (text) => {
+    if(text.startsWith(HEADER_UPDATE_GROUP_AVATAR)) return true;
+    return false;
+}
+export const getURLUpdateGroupAvatar = (text) => {
+    return text.substring(HEADER_UPDATE_GROUP_AVATAR.length , text.length)
 }
 export const isAudioCallFailed = (text) => {
     if(text.startsWith(HEADER_AUDIO_CALL_FAILED)) return true;
@@ -143,16 +150,6 @@ export function getTimeHourAndMinute(msg) {
     return newTime;
 }
 export const getAvatar = (type, peopleAvarars, groupAvatars, name) => {
-    // let urlAvatar ='';
-    // if(currentChat.type == 0){
-    //     const avatar = peopleAvarars.find(ava => ava.name === currentChat.name);
-    //     urlAvatar = avatar ? avatar.urlAvatar : USER_AVATAR_HOLDER;
-    // }else{
-    //     const avatar = groupAvatars.find(ava => ava.name === currentChat.name);
-    //     urlAvatar = avatar ? avatar.urlAvatar : GROUP_AVATAR_HOLDER
-    // }
-    // return urlAvatar;
-
     let urlAvatar ='';
     if(type == 0){
         const avatar = peopleAvarars.find(ava => ava.name === name);
@@ -162,4 +159,16 @@ export const getAvatar = (type, peopleAvarars, groupAvatars, name) => {
         urlAvatar = avatar ? avatar.urlAvatar : GROUP_AVATAR_HOLDER
     }
     return urlAvatar;
+}
+export const getNameChat = (type, peopleNickName, groupNickName, name) => {
+    let nickName ='';
+    if(type == 0){
+        const people = peopleNickName.find(people => people.name === name);
+        nickName = people ? people.nickName : name;
+    }else{
+        const group = groupNickName.find(group => group.name === name);
+        nickName = group ? group.nickName : name;
+        console.log(group);
+    }
+    return nickName;
 }

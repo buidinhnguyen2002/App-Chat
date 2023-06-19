@@ -9,9 +9,11 @@ import {useNavigate} from "react-router-dom";
 import MessageItem from "../message/message_item";
 import chat from "../../page/Chat/chat";
 import {isJSON} from "../../util/function";
+import ImageBackground from "../../Assets/Image/Call Service.png";
 
 function WindowChat(props) {
     const currentChats = useSelector(state => state.userReducer.currentChat);
+    const chats = useSelector(state => state.userReducer.chats);
     const chatData = currentChats ? [...currentChats.chatData].reverse() : [];
     const dispatch = useDispatch();
     const scrollTargetRef = useRef(null);
@@ -37,21 +39,22 @@ function WindowChat(props) {
     };
 
     return (
-        <div className={"window-chat"}>
-            <div className="window-chat-header">
-                <ChatDetailHeader/>
+        chats.length === 0 ? <div className="chat_setting-detail">
+            <img src={ImageBackground} alt=""/>
+        </div> : <div className={"window-chat"}>
+                <div className="window-chat-header">
+                    <ChatDetailHeader/>
+                </div>
+                <div className="window-chat-body d-flex" style={{flexDirection: "column"}}>
+                    {chatData.map((msg, index) => (
+                        <div ref={chatData.length - 1 === index ? scrollTargetRef : null}
+                             className={"msgItem" + `${chatData.length - 1 === index ? " alo" : " loa"}`} key={msg.id}>
+                            <MessageItem key={msg.id} name={msg.name}  type={msg.type} mes={msg.mes} createAt={msg.createAt}/>
+                        </div>
+                    ))}
+                </div>
+                <InputMessage/>
             </div>
-            <div className="window-chat-body d-flex" style={{flexDirection: "column"}}>
-                {chatData.map((msg, index) => (
-                    <div ref={chatData.length - 1 === index ? scrollTargetRef : null}
-                         className={"msgItem" + `${chatData.length - 1 === index ? " alo" : " loa"}`} key={msg.id}>
-                        <MessageItem key={msg.id} name={msg.name}  type={msg.type} mes={msg.mes} createAt={msg.createAt}/>
-                        {/*<MessageItem key={msg.id} name={msg.name}  type={msg.type} mes={convertEntitiesToEmoji(msg.mes)}/>*/}
-                    </div>
-                ))}
-            </div>
-            <InputMessage/>
-        </div>
     );
 }
 

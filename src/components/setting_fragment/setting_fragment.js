@@ -2,12 +2,16 @@ import ImageBackground from "../../Assets/Image/Call Service.png";
 import "./setting_fragment.scss";
 import {useNavigate} from "react-router-dom";
 import {callAPILogout} from "../../service/loginService";
+import {useDispatch} from "react-redux";
+import {clearCurrentChat} from "../../store/actions/userAction";
 
 
 export default function SettingFragment(props) {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     function logout() {
         callAPILogout();
+        dispatch(clearCurrentChat());
         navigate("/");
     }
     return <div className={"chat_setting"}>

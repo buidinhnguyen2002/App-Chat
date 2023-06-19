@@ -5,12 +5,12 @@ import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/login
 import {useDispatch, useSelector} from "react-redux";
 import {saveToListChatsDetail} from "../../store/actions/userAction";
 import {
-    getAvatar, isAcceptCall, isAudioCall, isAudioCallFailed,
+    getAvatar, getNameChat, isAcceptCall, isAudioCall, isAudioCallFailed,
     isJoinRoomMeeting, isJoinRoomMeetingAudio,
     isJSON,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
     isMeetingEnd, isRejectCallPeople,
-    isRejectRoomMeeting, isRequestAudioCall, isRequestCall,
+    isRejectRoomMeeting, isRequestAudioCall, isRequestCall, isUpdateGroupAvatar,
     isVideo, isVideoCall, isVideoCallFailed
 } from "../../util/function";
 function ChatItem(props) {
@@ -22,6 +22,8 @@ function ChatItem(props) {
     const myName = useSelector(state => state.userReducer.username);
     const peopleAvarars = useSelector(state => state.userReducer.avatarPeople);
     const groupAvatars =  useSelector(state => state.userReducer.avatarGroups);
+    const groupNickName = useSelector(state => state.userReducer.nickNameGroups);
+    const peopleNickName = useSelector(state => state.userReducer.nickNamePeople);
     let newMess = null;
     let timeShort = "";
     if(chatData) {
@@ -55,6 +57,7 @@ function ChatItem(props) {
     }
     function getNewMessage(msg, ownChat, type, to){
         const isMyChat = ownChat === myName;
+        if(isUpdateGroupAvatar(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã thay đổi ảnh nhóm.';
         if(isAudioCall(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã gọi cho ' + (to === myName ? 'bạn.': to);
         if(isVideoCall(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã gọi video cho ' + (to === myName ? 'bạn.': to);
         if(isVideo(msg)) return (isMyChat ? 'Bạn ' : type === 1 ?ownChat+ ': ': '') + 'đã gửi 1 video.';
@@ -89,7 +92,9 @@ function ChatItem(props) {
                 <div className="chat-wrapper">
                     <div className="chat_content-wrapper">
                         <div className="chat_name ">
-                            <h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{props.name}</h4>
+                            {/*<h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{props.name}</h4>*/}
+                            <h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{getNameChat(props.type === 0 ? 0 : 1, peopleNickName, groupNickName, props.name)}</h4>
+
                         </div>
                         <div className="chat_message">
                             <h5 className={`${props.isChoose ? 'chat_message-clWhite':'chat_message-clGrey'}`}>{newMess != null ?  getNewMessage(newMess.mes, newMess.name, newMess.type, newMess.to): ""}</h5>

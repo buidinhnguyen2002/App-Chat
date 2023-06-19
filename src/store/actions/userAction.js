@@ -78,7 +78,7 @@ export function saveAllImage(images) {
 }
 export function updateAvatar(nameChat, urlAvatar) {
     return {
-        type: "UPDATE_AVATAR",
+        type: "UPDATE_GROUP_AVATAR",
         payload: {
             nameChat,
             urlAvatar,
@@ -116,5 +116,23 @@ export function setInitChat() {
     return {
         type: "SET_INIT_CHAT",
         payload: null,
+    }
+}
+export function clearCurrentChat() {
+    return {
+        type: "CLEAR_CURRENT_CHAT",
+        payload: null,
+    }
+}
+export function saveGroupName(listGroupName) {
+    return {
+        type: "SAVE_GROUP_NAME",
+        payload: listGroupName,
+    }
+}
+export function savePeopleNickName(listPeoplNickName) {
+    return {
+        type: "SAVE_PEOPLE_NICK_NAME",
+        payload: listPeoplNickName,
     }
 }

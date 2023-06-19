@@ -2,30 +2,26 @@ import "./options_side_bar.scss";
 import React, {useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {storage} from "../../firebase";
+import app, {storage} from "../../firebase";
 import {v4} from "uuid";
 import {updateAvatar} from "../../store/actions/userAction";
-import {GROUP_AVATAR_HOLDER, USER_AVATAR_HOLDER} from "../../util/constants";
-import {getAvatar} from "../../util/function";
+import {GROUP_AVATAR_HOLDER, HEADER_UPDATE_GROUP_AVATAR, USER_AVATAR_HOLDER} from "../../util/constants";
+import {getAvatar, getNameChat} from "../../util/function";
+import {callAPIGetRoomChatMes, callAPISendChatRoom} from "../../service/loginService";
+import {getDatabase, set, ref as refFirebase} from "firebase/database";
+
+
 function OptionsSideBar(props) {
     const currentChat = useSelector(state => state.userReducer.currentChat);
     const peopleAvarars = useSelector(state => state.userReducer.avatarPeople);
     const groupAvatars =  useSelector(state => state.userReducer.avatarGroups);
+    const groupNickName = useSelector(state => state.userReducer.nickNameGroups);
+    const peopleNickName = useSelector(state => state.userReducer.nickNamePeople);
     const [isOpenOptionsChat, setOpenOptionsChat] = useState(false);
+    const [isOpenEditName, setOpenEditName] = useState(false);
     const fileInputRef = useRef(null);
     const dispatch = useDispatch();
 
-    // const getAvatar = () => {
-    //     let urlAvatar ='';
-    //     if(currentChat.type == 0){
-    //         const avatar = peopleAvarars.find(ava => ava.name === currentChat.name);
-    //         urlAvatar = avatar ? avatar.urlAvatar : USER_AVATAR_HOLDER;
-    //     }else{
-    //         const avatar = groupAvatars.find(ava => ava.name === currentChat.name);
-    //         urlAvatar = avatar ? avatar.urlAvatar : GROUP_AVATAR_HOLDER
-    //     }
-    //     return urlAvatar;
-    // }
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         const fileReader = new FileReader();
@@ -36,16 +32,27 @@ function OptionsSideBar(props) {
             null,()=> {
                 getDownloadURL(uploadTask.snapshot.ref)
                     .then((downloadURL) => {
+                        callAPISendChatRoom(currentChat.name, HEADER_UPDATE_GROUP_AVATAR + downloadURL);
                         dispatch(updateAvatar(currentChat.name, downloadURL));
+                        callAPIGetRoomChatMes(currentChat.name);
                     })
                     .catch((error) => {
                         console.error("Lỗi khi lấy URL tải xuống:", error);
                     });
             })
     };
+    const handleUploadName = () => {
+        const path = currentChat.type !==0 ? 'group_nick_name/':'people_nick_name/';
+        const nickName = document.getElementById('nickName').value;
+        const database = getDatabase();
+        set(refFirebase(database, path + currentChat.name), {nickName});
+    };
     const handleChooseImage = () => {
         fileInputRef.current.click();
     };
+    const toggleOpenEditName = () => {
+        setOpenEditName(!isOpenEditName);
+    }
     function ItemOptionChat(props) {
         return <div className="drop_down-item" onClick={props.onClick}>
             {props.isChooseImage && <input className={"input_file_img"} type="file" accept="image/*" onChange={handleFileChange} ref={fileInputRef}/>}
@@ -61,14 +68,19 @@ function OptionsSideBar(props) {
             <div className="avatar-container">
                 { currentChat && <img src={getAvatar(currentChat.type === 0 ? 0 : 1, peopleAvarars, groupAvatars, currentChat.name)} alt=""/>}
             </div>
-            <p className={"title"}>{currentChat ? currentChat.name : "NULL"}</p>
+            {/*<p className={"title"}>{currentChat ? currentChat.name : "NULL"}</p>*/}
+            <p className={"title"}>{currentChat ? getNameChat(currentChat.type === 0 ? 0 : 1, peopleNickName, groupNickName, currentChat.name):''}</p>
             <div className="options_chat">
                 <div className="options_chat-item" onClick={toggleShowOptionsChat}>
                     <span>Tùy chỉnh đoạn chat</span>
                     <i className="fa-solid fa-chevron-down" style={{transform: isOpenOptionsChat ? "rotate(180deg)": ""}}></i>
                 </div>
                 {isOpenOptionsChat && <div className="drop_down">
-                    <ItemOptionChat icon={'bi bi-pencil'} title={'Đổi tên đoạn chat'}/>
+                    <ItemOptionChat icon={'bi bi-pencil'} title={currentChat.type !== 0 ?'Đổi tên đoạn chat': 'Đặt biệt danh'} onClick={toggleOpenEditName}/>
+                    {isOpenEditName && <div className="edit_name-chat">
+                        <input id={'nickName'} type="text" placeholder={currentChat.type !== 0 ? 'Nhập tên mới...': 'Nhập biệt danh...'}/>
+                        <button onClick={handleUploadName}>Đổi</button>
+                    </div>}
                     {currentChat.type !== 0 && <ItemOptionChat icon={'bi bi-image'} title={'Thay đổi ảnh'} isChooseImage={true} onClick={handleChooseImage}/>}
                     <ItemOptionChat icon={'fa-solid fa-thumbs-up'} title={'Thay đổi biểu tượng cảm xúc'}/>
                 </div>}

@@ -13,7 +13,7 @@ import {setAudioCall, setMeetingRoom} from "../../store/actions/meetingAction";
 import {callAPISendChatRoom} from "../../service/loginService";
 import {GROUP_AVATAR_HOLDER, HEADER_VIDEO_CALL, USER_AVATAR_HOLDER} from "../../util/constants";
 import OptionsSideBar from "../options_side_bar/options_side_bar";
-import {getAvatar} from "../../util/function";
+import {getAvatar, getNameChat} from "../../util/function";
 
 
 function ChatDetailHeader (props) {
@@ -22,20 +22,11 @@ function ChatDetailHeader (props) {
     const myName = useSelector(state => state.userReducer.username);
     const peopleAvarars = useSelector(state => state.userReducer.avatarPeople);
     const groupAvatars =  useSelector(state => state.userReducer.avatarGroups);
+    const groupNickName = useSelector(state => state.userReducer.nickNameGroups);
+    const peopleNickName = useSelector(state => state.userReducer.nickNamePeople);
     const [meetingId, setMeetingId] = useState(null);
     const dispatch = useDispatch();
     const [openOptionChat, setOpenOptionChat] = useState(false);
-    // const getAvatar = () => {
-    //     let urlAvatar ='';
-    //     if(currentChat.type == 0){
-    //         const avatar = peopleAvarars.find(ava => ava.name === currentChat.name);
-    //         urlAvatar = avatar ? avatar.urlAvatar : USER_AVATAR_HOLDER;
-    //     }else{
-    //         const avatar = groupAvatars.find(ava => ava.name === currentChat.name);
-    //         urlAvatar = avatar ? avatar.urlAvatar : GROUP_AVATAR_HOLDER
-    //     }
-    //     return urlAvatar;
-    // }
     const getMeetingAndToken = async (id) => {
         const meetingId = id == null ? await createMeeting({token: authToken}): id;
         setMeetingId(meetingId);
@@ -72,7 +63,8 @@ function ChatDetailHeader (props) {
                     <div className="chat_detail_header-wrapper">
                         <div className="chat_content-wrapper">
                             <div className="chat_name ">
-                                <h4 className='chat_name-clBlack'>{currentChat ? currentChat.name:''}</h4>
+                                {/*<h4 className='chat_name-clBlack'>{currentChat ? currentChat.name:''}</h4>*/}
+                                <h4 className='chat_name-clBlack'>{currentChat ? getNameChat(currentChat.type === 0 ? 0 : 1, peopleNickName, groupNickName, currentChat.name):''}</h4>
                             </div>
                             <div className="chat_message">
                                 <h5 className='chat_message-clGrey'>Online</h5>
