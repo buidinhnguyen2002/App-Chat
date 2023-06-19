@@ -16,7 +16,7 @@ function LinkPreview(props) {
                         <h2>{data.title}</h2>
                     </div>}
                     {data && <div className="favicon-container">
-                        <img src={data.favicon} alt="Favicon"/>
+                        {data.favicon && <img src={data.favicon} alt="Favicon"/>}
                         <span className={"domain"}>{data.domain}</span>
                     </div>}
                 </div>

@@ -4,6 +4,7 @@ import ReactPlayer from "react-player";
 import {useDispatch, useSelector} from "react-redux";
 import "./participant_view.scss"
 import {addParticipant} from "../../store/actions/meetingAction";
+import {getNameChat} from "../../util/function";
 
 function ParticipantView(props) {
     const myName = useSelector(state => state.userReducer.username);
@@ -11,6 +12,8 @@ function ParticipantView(props) {
     const [openMic, setOpenMic] = useState(true);
     const [openCamera, setOpenCamera] = useState(true);
     const [openScreenShare, setOpenScreenShare] = useState(false);
+    const groupNickName = useSelector(state => state.userReducer.nickNameGroups);
+    const peopleNickName = useSelector(state => state.userReducer.nickNamePeople);
     const { webcamStream, micStream, webcamOn, micOn, isLocal, displayName } =
         useParticipant(props.participantId, );
     const { leave, toggleMic, toggleWebcam, disableWebcam, participants } = useMeeting();
@@ -69,7 +72,8 @@ function ParticipantView(props) {
                     />
                 ) : <div className={`holder_participant ${props.isItemSideBar ? 'sidebar_item': ''}`}>
                     <div className={`title-container `}>
-                        <p>{displayName}</p>
+                        {/*<p>{displayName}</p>*/}
+                        <p>{getNameChat( 0 , peopleNickName, groupNickName, displayName)}</p>
                     </div>
                 </div>}
             </div> : <div className={` participant_view ${displayName === myName ? 'my_view': ''}`} style={displayName === myName ? {width: "20%", height: "auto"} :{width: "100%", height: "100%"}}>
@@ -91,7 +95,8 @@ function ParticipantView(props) {
                  />
              ) : <div className={`holder_participant ${displayName === myName ? 'my_holder': ''}`}>
                  <div className={`title-container `}>
-                     <p>{displayName}</p>
+                     {/*<p>{displayName}</p>*/}
+                     <p>{getNameChat( 0 , peopleNickName, groupNickName, displayName)}</p>
                  </div>
              </div>}
          </div>

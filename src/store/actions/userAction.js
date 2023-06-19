@@ -85,6 +85,24 @@ export function updateAvatar(nameChat, urlAvatar) {
         },
     }
 }
+export function updateGroupName(nameChat, nickName) {
+    return {
+        type: "UPDATE_GROUP_NAME",
+        payload: {
+            nameChat,
+            nickName,
+        },
+    }
+}
+export function updatePeopleName(nameChat, nickName) {
+    return {
+        type: "UPDATE_PEOPLE_NAME",
+        payload: {
+            nameChat,
+            nickName,
+        },
+    }
+}
 export function updateMyAvatar(name,urlAvatar) {
     return {
         type: "UPDATE_MY_AVATAR",

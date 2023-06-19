@@ -54,6 +54,9 @@
       padding: 0 15px 15px;
       img{
         margin-right: 10px;
+        width: 32px;
+        height: 32px;
+        object-fit: cover;
       }
       .domain{
         @include styleText(600, 18px, 18px, $primary-color-subtext);

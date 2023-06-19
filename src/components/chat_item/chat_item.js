@@ -10,7 +10,7 @@ import {
     isJSON,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
     isMeetingEnd, isRejectCallPeople,
-    isRejectRoomMeeting, isRequestAudioCall, isRequestCall, isUpdateGroupAvatar,
+    isRejectRoomMeeting, isRequestAudioCall, isRequestCall, isUpdateGroupAvatar, isUpdateGroupName,
     isVideo, isVideoCall, isVideoCallFailed
 } from "../../util/function";
 function ChatItem(props) {
@@ -57,6 +57,7 @@ function ChatItem(props) {
     }
     function getNewMessage(msg, ownChat, type, to){
         const isMyChat = ownChat === myName;
+        if(isUpdateGroupName(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã thay đổi tên nhóm.';
         if(isUpdateGroupAvatar(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã thay đổi ảnh nhóm.';
         if(isAudioCall(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã gọi cho ' + (to === myName ? 'bạn.': to);
         if(isVideoCall(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã gọi video cho ' + (to === myName ? 'bạn.': to);
@@ -92,7 +93,6 @@ function ChatItem(props) {
                 <div className="chat-wrapper">
                     <div className="chat_content-wrapper">
                         <div className="chat_name ">
-                            {/*<h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{props.name}</h4>*/}
                             <h4 className={`${props.isChoose ? 'chat_name-clWhite':'chat_name-clBlack'}`}>{getNameChat(props.type === 0 ? 0 : 1, peopleNickName, groupNickName, props.name)}</h4>
 
                         </div>

@@ -1,11 +1,24 @@
 import {
-    GROUP_AVATAR_HOLDER, HEADER_ACCEPT_VIDEO_CALL,
-    HEADER_AUDIO_CALL, HEADER_AUDIO_CALL_FAILED, HEADER_CONNECT_CHAT_PEOPLE,
-    HEADER_JOIN_ROOM_MEETING, HEADER_JOIN_ROOM_MEETING_AUDIO, HEADER_LEAVE_AUDIO_CALL,
-    HEADER_LEAVE_VIDEO_CALL, HEADER_MEETING_END,
-    HEADER_MSG_VIDEO, HEADER_REJECT_CALL_PEOPLE,
-    HEADER_REJECT_VIDEO_CALL, HEADER_REQUEST_AUDIO_CALL, HEADER_REQUEST_CALL, HEADER_UPDATE_GROUP_AVATAR,
-    HEADER_VIDEO_CALL, HEADER_VIDEO_CALL_FAILED, USER_AVATAR_HOLDER
+    GROUP_AVATAR_HOLDER,
+    HEADER_ACCEPT_VIDEO_CALL,
+    HEADER_AUDIO_CALL,
+    HEADER_AUDIO_CALL_FAILED,
+    HEADER_CONNECT_CHAT_PEOPLE,
+    HEADER_JOIN_ROOM_MEETING,
+    HEADER_JOIN_ROOM_MEETING_AUDIO,
+    HEADER_LEAVE_AUDIO_CALL,
+    HEADER_LEAVE_VIDEO_CALL,
+    HEADER_MEETING_END,
+    HEADER_MSG_VIDEO,
+    HEADER_REJECT_CALL_PEOPLE,
+    HEADER_REJECT_VIDEO_CALL,
+    HEADER_REQUEST_AUDIO_CALL,
+    HEADER_REQUEST_CALL,
+    HEADER_UPDATE_GROUP_AVATAR,
+    HEADER_UPDATE_GROUP_NAME,
+    HEADER_VIDEO_CALL,
+    HEADER_VIDEO_CALL_FAILED,
+    USER_AVATAR_HOLDER
 } from "./constants";
 import CryptoJS from "crypto-js";
 
@@ -49,6 +62,13 @@ export const isUpdateGroupAvatar = (text) => {
 }
 export const getURLUpdateGroupAvatar = (text) => {
     return text.substring(HEADER_UPDATE_GROUP_AVATAR.length , text.length)
+}
+export const isUpdateGroupName = (text) => {
+    if(text.startsWith(HEADER_UPDATE_GROUP_NAME)) return true;
+    return false;
+}
+export const getGroupNameChange = (text) => {
+    return text.substring(HEADER_UPDATE_GROUP_NAME.length , text.length)
 }
 export const isAudioCallFailed = (text) => {
     if(text.startsWith(HEADER_AUDIO_CALL_FAILED)) return true;
@@ -168,7 +188,6 @@ export const getNameChat = (type, peopleNickName, groupNickName, name) => {
     }else{
         const group = groupNickName.find(group => group.name === name);
         nickName = group ? group.nickName : name;
-        console.log(group);
     }
     return nickName;
 }
