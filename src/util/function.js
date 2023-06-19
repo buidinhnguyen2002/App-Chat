@@ -3,7 +3,7 @@ import {
     HEADER_ACCEPT_VIDEO_CALL,
     HEADER_AUDIO_CALL,
     HEADER_AUDIO_CALL_FAILED,
-    HEADER_CONNECT_CHAT_PEOPLE,
+    HEADER_CONNECT_CHAT_PEOPLE, HEADER_JOIN_GROUP,
     HEADER_JOIN_ROOM_MEETING,
     HEADER_JOIN_ROOM_MEETING_AUDIO,
     HEADER_LEAVE_AUDIO_CALL,
@@ -58,6 +58,10 @@ export const isRejectCallPeople = (text) => {
 }
 export const isUpdateGroupAvatar = (text) => {
     if(text.startsWith(HEADER_UPDATE_GROUP_AVATAR)) return true;
+    return false;
+}
+export const isJoinGroup = (text) => {
+    if(text.startsWith(HEADER_JOIN_GROUP)) return true;
     return false;
 }
 export const getURLUpdateGroupAvatar = (text) => {

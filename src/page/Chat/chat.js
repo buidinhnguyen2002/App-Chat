@@ -50,7 +50,7 @@ import {
 } from "../../util/function";
 import {
     HEADER_ACCEPT_VIDEO_CALL,
-    HEADER_AUDIO_CALL,
+    HEADER_AUDIO_CALL, HEADER_JOIN_GROUP,
     HEADER_REJECT_VIDEO_CALL,
     HEADER_VIDEO_CALL
 } from "../../util/constants";
@@ -258,12 +258,14 @@ function ChatPage(props) {
                     const data = dataFromServer['data'];
                     console.log(dataFromServer);
                     const namePeople = document.getElementById('roomName').value;
-                    dispatch(addPeople(namePeople));
-                    dispatch(changeCurrentChat(namePeople, 0));
-                    // if(data.status === true){
-                    //     dispatch(addPeople(userCheck));
-                    // }
-                    // dispatch(setError('User not exist.'));
+                    // dispatch(addPeople(namePeople));
+                    // dispatch(changeCurrentChat(namePeople, 0));
+                    if(data.status === true){
+                        dispatch(addPeople(namePeople));
+                        dispatch(changeCurrentChat(namePeople, 0));
+                    }else{
+                        dispatch(setError('User not exist.'));
+                    }
                 }
                 if (dataFromServer['event'] === 'GET_USER_LIST') {
                     const responseListChat = dataFromServer['data'].filter(chat => chat.name !== getAuthName());
@@ -288,6 +290,7 @@ function ChatPage(props) {
                     console.log(dataFromServer)
                     if (status === 'success') {
                         const roomName = document.getElementById('roomName').value;
+                        callAPISendChatRoom(roomName, HEADER_JOIN_GROUP);
                         callAPIGetUserList();
                         callAPIGetRoomChatMes(roomName);
                         dispatch(setError(null));
