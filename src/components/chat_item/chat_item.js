@@ -5,7 +5,7 @@ import {callAPIGetRoomChatMes, client, waitConnection} from "../../service/login
 import {useDispatch, useSelector} from "react-redux";
 import {saveToListChatsDetail} from "../../store/actions/userAction";
 import {
-    getAvatar, getNameChat, isAcceptCall, isAudioCall, isAudioCallFailed, isConnectChatPeople,
+    getAvatar, getNameChat, isAcceptCall, isAudioCall, isAudioCallFailed, isConnectChatPeople, isJoinGroup,
     isJoinRoomMeeting, isJoinRoomMeetingAudio,
     isJSON,
     isLeaveRoomMeeting, isLeaveRoomMeetingAudio,
@@ -57,6 +57,7 @@ function ChatItem(props) {
     }
     function getNewMessage(msg, ownChat, type, to){
         const isMyChat = ownChat === myName;
+        if(isJoinGroup(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã tham gia nhóm.';
         if(isConnectChatPeople(msg)) return 'Giờ đây, các bạn có thể gọi và nhắn tin cho nhau.';
         if(isUpdateGroupName(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã thay đổi tên nhóm.';
         if(isUpdateGroupAvatar(msg)) return (isMyChat ? 'Bạn ' : ownChat) + ' đã thay đổi ảnh nhóm.';
